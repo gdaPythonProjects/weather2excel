@@ -1,0 +1,35 @@
+par,val,unit
+api_name,OpenWeather,
+api_doc,https://openweathermap.org/current,
+version,2.5,
+url_current_city_endpoint,http://api.openweathermap.org/data/2.5/weather?q={city}&units=metric&APPID={token} ,
+url_current_lonlat_endpoint,http://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&units=metric&APPID={token} ,
+url_forecast_city_endpoint,,
+url_forecast_city_endpoint,,
+request_limit,60,1/h
+pressure,main.pressure,hPa
+humidity,main.humidity,%
+temperature,main.temp,°C
+apparent-temperature,,°C
+dew-point,,°C
+clouds,clouds.all,%
+wind-speed,wind.speed,m/s
+wind-direction,wind.deg,°
+precip-intensity,rain.[1h],mm/h
+precip-accumulation,rain.[3h],mm
+visibility,visibility,m
+uv,,
+so2,,
+no2,,
+co,,
+o3,,
+pm25,,
+pm10,,
+weather-text,weather.description,
+weather-alert,,
+weather-icon,weather.icon,
+lon,coord.lon,
+lat,coord.lat,
+timestamp,dt,
+ok_key,cod,
+ok_value,200,
