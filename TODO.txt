@@ -56,14 +56,16 @@ TODO
 	* obsługa błędów związanych z wykorzystaniem strony (status code HTTP, ale także inne wynikające z odpwiedzi z danego API np. brak miasta itp.)
 
 
-2. Stworzenie klasy "factors" lub tablicy z danymi o jednostkach fizycznych(nazwa, jednostka, typ, wartość min, wartość max) w celu ułatwienia ujednolicenia(konwersji) jednostek 
+2. Stworzenie klasy "factors" z danymi o jednostkach fizycznych(nazwa, jednostka, typ, wartość min, wartość max) w celu ułatwienia ujednolicenia(konwersji) jednostek 
+   Metody do wypisywania infomracji o danej wielkości, sprawdzenie czy mieści się w przedziale <min;max>
    Dane ładowane z pliku units.csv - możliwość dodawania nowych wielkości bez zmian w kodzie
 3. Utworzenie trybów a) pogoda obecna b) prognoza pogody 
 4. Przekazywanie danych do programu w postaci argumentów: 
-  w2e.py -mode=current --city="Gdynia"
-  w2e.py -mode=forecast --city="Gdynia"
-  w2e.py -mode=current --lon=19.23 --lat=54.23
-  w2e.py -mode=forecast --lon=19.23--lat=54.23
+  w2e.py -mode=current --city="Gdynia"         - aktualna pogoda w Gdynia
+  w2e.py -mode=forecast --city="Gdynia"        - prognoza pogody dla Gdyni
+  w2e.py -mode=current --lon=19.23 --lat=54.23 - aktulna pogoda dla współrzędnych dł.geog. 19.23 i szer. geogr. 54.23 
+  w2e.py -mode=forecast --lon=19.23--lat=54.23 - prognoza pogody dla współrzędnych dł.geog. 19.23 i szer. geogr. 54.23 
+  w2e.py -mode=check_keys                      - weryfikacja kluczy/tokenów do API
 
 5. Obróbka danych pogodowych z tablicy wynikowej ( średnia,mediana, odchylenie standardowe)
 6. Zapis wyników do Excela (do ustalenia co tam ma być zapisywane i jak)
