@@ -4,31 +4,37 @@ from weatherApis import *
 import csv
 import json # only for development
 
-CITY="Gdynia"
-#MODE="current"
-MODE="forecast"
-LANG="pl"
-DAYS=5
+# startowe wartości głownych zmiennych, które są potrzebne aby program działał poprawnie
+# użytkownik możę je zmienić w dalszym menu
 
-weatherDataset=[]
+CITY = "gdynia"  # nazwy miast z małych liter aby łatwiej było operać na API
+# współrzedne dla Gyni pobrane z portalu https://www.wspolrzedne-gps.pl/
+LON = 54.23  # długość geograficzna
+LAT = 19.23  # szerokość geograficzna
+MODE = "current"  # "current" podaję aktualne dane, alternatywny tryb -> "forecast" - prognoza, ale tylko dla pogody
+LANG = "pl"  # język do komunikacji z API, TODO zastanowić się czy ta zmienna ma być tutaj, czy w weatherApis.py?
+DAYS = 5  # ilość dni do przodu na które można uzyskać prognoze pogody
 
-#TODO for loop all  .csv files from /config// directory
-APIS=["APIXU.csv","OpenWeather.csv","WAQI.csv","Weatherbit.csv","DarkSky.csv"]
-#APIS=["OpenWeather.csv"]
+weatherDataset = []
+
+# TODO for loop all  .csv files from /config// directory
+APIS = ["APIXU.csv", "OpenWeather.csv", "WAQI.csv", "Weatherbit.csv", "DarkSky.csv"]
+
+# APIS = ["OpenWeather.csv"]
 
 for API in APIS:
-  wa = WeatherApis()
-  wa.read_conf(API)   #wa.print_config()
-  #wa.print_api_verification()
-  if wa.get_weather(MODE, LANG, DAYS, CITY):
-    weatherDataset.append( wa.parse_result(MODE, DAYS) )
-  else:
-    print("Problem z uzyskaniem danych z "+wa.config["api_name"]+". Adres: "+wa.url_search)
+    wa = WeatherApis()
+    wa.read_conf(API)   # wa.print_config()
+
+    # wa.print_api_verification()
+    if wa.get_weather(MODE, LANG, DAYS, CITY):
+        weatherDataset.append( wa.parse_result(MODE, DAYS) )
+    else:
+        print("Problem z uzyskaniem danych z " + wa.config["api_name"] + ". Adres: " + wa.url_search)
 
 with open('data.json', 'w') as outfile:
-  for WD in weatherDataset:
-    json.dump(WD, outfile)
-    print(json.dumps(WD, sort_keys=False, indent=4))
-#print(WeatherDataset)
+    for WD in weatherDataset:
+        json.dump(WD, outfile)
+        print(json.dumps(WD, sort_keys=False, indent=4))
 
-
+# print(WeatherDataset)

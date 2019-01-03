@@ -67,6 +67,8 @@ TODO
   w2e.py -mode=forecast --lon=19.23--lat=54.23 - prognoza pogody dla współrzędnych dł.geog. 19.23 i szer. geogr. 54.23 
   w2e.py -mode=check_keys                      - weryfikacja kluczy/tokenów do API
 
+  Alternatywnie (dodatkowo) przekazanie danych do programu w formie menu wyboru dla użytkownika
+
 5. Obróbka danych pogodowych z tablicy wynikowej ( średnia,mediana, odchylenie standardowe)
 6. Zapis wyników do Excela (do ustalenia co tam ma być zapisywane i jak)
  np. YYYY-MM-DD HH-MM <temeratura> <wilgotność> <prędkość wiatru> itp

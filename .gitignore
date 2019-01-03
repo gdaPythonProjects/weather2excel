@@ -1,5 +1,10 @@
 tmp/
 
+.idea
+
+# tu ukryte są klucze API, które tak jak Łukasz napisał mają być tylko lokalnie
+config
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
