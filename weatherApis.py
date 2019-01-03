@@ -8,10 +8,11 @@ from unit_converter.converter import convert, converts
 
 API_PATH ="config/API/"
 API_KEY_PATH ="config/API_keys/"
+REPL_DICT = {}
 
 #load units configuration
 factorsDict=load_units_config()
-list_factors_unis(factorsDict)
+#list_factors_unis(factorsDict)
 factors = get_factors(factorsDict)
 
 class WeatherApis:
@@ -45,28 +46,44 @@ class WeatherApis:
     if len(args) == 4:# building url with city
       self.url_search = self.config["url_"+args[0]+"_city_endpoint"].replace("{city}", args[3])
       if len(self.url_search)<10:
-        return self.get_weather(args[0],args[1],args[2],str(18.53188),str(54.51889)) #TODO #getLONLATfromCity
+        return self.get_weather(args[0],args[1],args[2],str(54.51889),str(18.53188)) #TODO #getLONLATfromCity
     elif len(args) == 5:# building url with lon/lat
-      #print(args)
-      self.url_search = self.config["url_"+args[0]+"_lonlat_endpoint"].replace("{lon}", args[3]).replace("{lat}", args[4])
-      #self.url_search = self.url_search.replace("{lat}", args[4]) #print(r.status_code)#print(r.headers) #print(r.content) #print(r.json())    #print(self.url_search_city)
+      self.url_search = self.config["url_"+args[0]+"_lonlat_endpoint"].replace("{lat}", str(args[4])).replace("{lon}", str(args[3]))
     else:
-      return False
+      return False  #print( "REPL:    "+self._replacer(self.url_search, {"{token}":self.api_token,"{lang}":args[1]} )  )
     
-    self.url_search = self.url_search.replace("{token}", self.api_token) #print("URL= "+self.url_search)
-    self.url_search = self.url_search.replace("{lang}", args[1])
-    self.url_search = self.url_search.replace("{days}", str(args[2])) 
+    self.url_search = self._replacer(self.url_search, {"{token}":self.api_token, "{lang}":args[1], "{days}":str(args[2]) })
+
     print("URL_SEARCH: "+self.url_search)
+    headers = self._set_headers(args[0])  #print(headers)
     try:
-      r = requests.get(self.url_search)
+      r = requests.get(self.url_search,headers=headers)
       self.JSON = r.json()
       if r.status_code == 200 and self._check_result():
         return True
     except:
       return False
 
+  def _set_headers(self,mode):
+    R={}
+    headers = self.config["header_request"]
+    if headers!="":
+      h = headers.split(';')
+      for idx, val in enumerate(h):
+        kv = val.split(":")
+        kv[1] = kv[1].replace("{token}", self.api_token) 
+        R[kv[0]] = kv[1]
+    return R
+
+
+  def _replacer(self, input_string, replace):
+    for key,val in replace.items():
+      input_string = input_string.replace(key, str(val))    #print(key, '->', val)
+    return input_string
 
   def _check_result(self): #print("ok_value=")print(self.config["ok_value"])print("ok_JSON")print(self.JSON[ self.config["ok_key"]  ])
+    if self.config["ok_key"]=="":
+      return True
     try:
       if( str(self.JSON[ self.config["ok_key"]  ]) == str(self.config["ok_value"]) ):
         return True
@@ -89,7 +106,12 @@ class WeatherApis:
           if mode=="current":
             json_path = self.config[f]
           else:
-            json_path = self.config["forecast_root"]+".["+str(day_number)+"]."+self.config[f]
+            if self.config["forecast_root"]!="":
+              json_path = self.config["forecast_root"]+".["+str(day_number)+"]."+self.config[f]
+            else:
+              json_path = "["+str(day_number)+"]."+self.config[f]
+            #print("JSON_PATH: "+json_path)
+
           try:
             x = parse(json_path).find(self.JSON)   
 

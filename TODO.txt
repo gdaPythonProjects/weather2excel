@@ -61,11 +61,12 @@ TODO
    Dane ładowane z pliku units.csv - możliwość dodawania nowych wielkości bez zmian w kodzie
 3. Utworzenie trybów a) pogoda obecna b) prognoza pogody 
 4. Przekazywanie danych do programu w postaci argumentów: 
-  w2e.py -mode=current --city="Gdynia"         - aktualna pogoda w Gdynia
-  w2e.py -mode=forecast --city="Gdynia"        - prognoza pogody dla Gdyni
-  w2e.py -mode=current --lon=19.23 --lat=54.23 - aktulna pogoda dla współrzędnych dł.geog. 19.23 i szer. geogr. 54.23 
-  w2e.py -mode=forecast --lon=19.23--lat=54.23 - prognoza pogody dla współrzędnych dł.geog. 19.23 i szer. geogr. 54.23 
-  w2e.py -mode=check_keys                      - weryfikacja kluczy/tokenów do API
+  weather2excel.py --mode=current --city="Gdynia" --lang=pl      - aktualna pogoda w Gdynia z opisem w języku polskim
+  weather2excel.py --mode=forecast --city="Gdynia" --days=5        - prognoza pogody dla Gdyni na 5 dni
+  weather2excel.py --mode=current --lon=19.23 --lat=54.23 - aktulna pogoda dla współrzędnych dł.geog. 19.23 i szer. geogr. 54.23 
+  weather2excel.py --mode=forecast --lon=19.23 --lat=54.23 - prognoza pogody dla współrzędnych dł.geog. 19.23 i szer. geogr. 54.23 
+  weather2excel.py --mode=check_keys                      - weryfikacja kluczy/tokenów do API
+
 
   Alternatywnie (dodatkowo) przekazanie danych do programu w formie menu wyboru dla użytkownika
 

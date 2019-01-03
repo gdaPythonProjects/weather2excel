@@ -4,8 +4,6 @@ from weatherApis import *
 import csv
 import json # only for development
 
-# startowe wartości głownych zmiennych, które są potrzebne aby program działał poprawnie
-# użytkownik możę je zmienić w dalszym menu
 
 CITY = "gdynia"  # nazwy miast z małych liter aby łatwiej było operać na API
 # współrzedne dla Gdyni pobrane z portalu https://www.wspolrzedne-gps.pl/
@@ -14,6 +12,7 @@ LAT = 19.23  # szerokość geograficzna
 MODE = "current"  # "current" podaję aktualne dane, alternatywny tryb -> "forecast" - prognoza, ale tylko dla pogody
 LANG = "pl"  # język do komunikacji z API, TODO zastanowić się czy ta zmienna ma być tutaj, czy w weatherApis.py?
 DAYS = 5  # ilość dni do przodu na które można uzyskać prognoze pogody
+
 
 
 # funkcja pobierająca dane o miejscu od użytkownika i zmieniająca odpowiednie zmienne dla API pogodowych
@@ -186,14 +185,13 @@ APIS = ["APIXU.csv", "OpenWeather.csv", "WAQI.csv", "Weatherbit.csv", "DarkSky.c
 # APIS = ["OpenWeather.csv"]
 
 for API in APIS:
-    wa = WeatherApis()
-    wa.read_conf(API)   # wa.print_config()
-
-    # wa.print_api_verification()
-    if wa.get_weather(MODE, LANG, DAYS, CITY):
-        weatherDataset.append( wa.parse_result(MODE, DAYS) )
-    else:
-        print("Problem z uzyskaniem danych z " + wa.config["api_name"] + ". Adres: " + wa.url_search)
+  wa = WeatherApis()
+  wa.read_conf(API)   #wa.print_config()
+  #wa.print_api_verification()
+  if wa.get_weather(MODE, LANG, DAYS, CITY):
+    weatherDataset.append( wa.parse_result(MODE, DAYS) )
+  else:
+    print("Problem z uzyskaniem danych z "+wa.config["api_name"]+". Adres: "+wa.url_search)
 
 with open('data.json', 'w') as outfile:
     for WD in weatherDataset:
