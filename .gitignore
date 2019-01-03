@@ -1,9 +1,9 @@
 tmp/
 
-.idea
+.idea/
 
 # tu ukryte są klucze API, które tak jak Łukasz napisał mają być tylko lokalnie
-config
+config/API_keys/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
