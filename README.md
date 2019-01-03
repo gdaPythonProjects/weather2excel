@@ -11,6 +11,7 @@ Klucz/token do korzystania z danego API powinien zostać zapisany w odpowiednim 
 # Zależności:
 > pip3 install unit-converter\
 > pip3 install --upgrade jsonpath-ng
+> pip3 install requests
 
 # Uruchomienie
 > python3 weather2excel.py
