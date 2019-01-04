@@ -18,13 +18,15 @@ DAYS = 5  # ilość dni do przodu na które można uzyskać prognoze pogody
 weatherDataset = []
 
 # TODO for loop all  .csv files from /config// directory
-APIS = ["APIXU.csv", "OpenWeather.csv", "WAQI.csv", "Weatherbit.csv", "DarkSky.csv", "Climacell.csv"]
+#APIS = ["APIXU.csv", "OpenWeather.csv", "WAQI.csv", "Weatherbit.csv", "DarkSky.csv", "Climacell.csv"]
 
-#APIS = ["Climacell.csv"]
+APIS = ["APIXU.csv"]
 
 for API in APIS:
   wa = WeatherApis()
-  wa.read_conf(API)   #wa.print_config()
+  if wa.read_conf(API) == False:
+    continue  
+  #wa.print_config()
   #wa.print_api_verification()
   if wa.get_weather(MODE, LANG, DAYS, LON, LAT):
     weatherDataset.append( wa.parse_result(MODE, DAYS) )

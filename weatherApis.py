@@ -29,17 +29,23 @@ class WeatherApis:
 
 
   def read_conf(self,file):
-    with open(API_PATH+file, 'r') as csvfile:
-      reader = csv.DictReader(csvfile, delimiter=',', quotechar='\"')
-      for row in reader:
-        par = row["par"].strip()
-        val = row["val"].strip()
-        unit = row["unit"].strip()
-        self.config[ par ] = val
-        self.config[ par+"_u" ] = unit
+    try:
+      with open(API_PATH+file, 'r') as csvfile:
+        reader = csv.DictReader(csvfile, delimiter=',', quotechar='\"')
+        for row in reader:
+          par = row["par"].strip()
+          val = row["val"].strip()
+          unit = row["unit"].strip()
+          self.config[ par ] = val
+          if factorsDict[par].type!="":
+            self.config[ par+"_u" ] = unit
+    except EnvironmentError:
+      print("*!!* Brak pliku konfiguracyjnego: "+file)
+      return False
 
     self.config["filename"] = file
     self.api_token = self._read_api_token(file)#print(self.api_token)
+    return True
 
 
   def get_weather(self, *args):  # MODE-0, LANG-1, DAYS-2, city-3     MODE-0, LANG-1, DAYS-2,lon-3, lat-4
@@ -91,8 +97,8 @@ class WeatherApis:
   def _check_result(self): #print("ok_value=") print(self.config["ok_key"])#print("ok_JSON")print(self.JSON[ self.config["ok_key"]  ])
     if self.config["ok_key"]=="":
       return True
+    
     try:
-      
       if self.config["ok_value"] == "<exist>" and self.JSON[ self.config["ok_key"]  ]!="":
         return True
       elif  str(self.JSON[ self.config["ok_key"]  ]) == str(self.config["ok_value"]) :
