@@ -41,10 +41,13 @@ class WeatherApis:
             self.config[ par+"_u" ] = unit
     except EnvironmentError:
       print("*!!* Brak pliku konfiguracyjnego: "+file)
+      return False    #self.config["filename"] = file
+    
+    self.api_token = self._read_api_token(file)#print(self.api_token)    except:
+    if self.api_token == False:
+      print("*!!* W folderze config/API_keys/ brak pliku z kluczem(tokenem) dla API: "+self.config[ "api_name"]  )
       return False
-
-    self.config["filename"] = file
-    self.api_token = self._read_api_token(file)#print(self.api_token)
+    
     return True
 
 

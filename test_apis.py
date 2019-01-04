@@ -20,7 +20,7 @@ weatherDataset = []
 # TODO for loop all  .csv files from /config// directory
 #APIS = ["APIXU.csv", "OpenWeather.csv", "WAQI.csv", "Weatherbit.csv", "DarkSky.csv", "Climacell.csv"]
 
-APIS = ["APIXU.csv"]
+APIS = ["APIXU.csv", "OpenWeather.csv"]
 
 for API in APIS:
   wa = WeatherApis()
@@ -36,6 +36,6 @@ for API in APIS:
 with open('data.json', 'w') as outfile:
     for WD in weatherDataset:
         json.dump(WD, outfile)
-        print(json.dumps(WD, sort_keys=False, indent=4))
+        #print(json.dumps(WD, sort_keys=False, indent=4))
 
 # print(WeatherDataset)
