@@ -6,6 +6,7 @@ from weatherApis import *
 # from Factors import *
 import csv
 import json # only for development
+import os
 
 CITY = "gdynia"  # nazwy miast z małych liter aby łatwiej było operać na API
 # współrzedne dla Gdyni pobrane z portalu https://www.wspolrzedne-gps.pl/
@@ -20,18 +21,18 @@ weatherDataset = []
 # TODO for loop all  .csv files from /config// directory
 #APIS = ["APIXU.csv", "OpenWeather.csv", "WAQI.csv", "Weatherbit.csv", "DarkSky.csv", "Climacell.csv"]
 
-APIS = ["APIXU.csv", "OpenWeather.csv"]
+"""APIS = ["APIXU.csv", "OpenWeather.csv"]
 
-for API in APIS:
-  wa = WeatherApis()
-  if wa.read_conf(API) == False:
-    continue  
-  #wa.print_config()
-  #wa.print_api_verification()
-  if wa.get_weather(MODE, LANG, DAYS, LON, LAT):
-    weatherDataset.append( wa.parse_result(MODE, DAYS) )
-  else:
-    print("Problem z uzyskaniem danych z "+wa.config["api_name"]+". Adres: "+wa.url_search)
+for API in APIS:"""
+for API in os.listdir("config\API_keys"):
+        if API.endswith(".csv"):
+          wa = WeatherApis()
+          if wa.read_conf(API) == False:
+            continue
+          if wa.get_weather(MODE, LANG, DAYS, LON, LAT):
+            weatherDataset.append( wa.parse_result(MODE, DAYS) )
+          else:
+            print("Problem z uzyskaniem danych z "+wa.config["api_name"]+". Adres: "+wa.url_search)
 
 with open('data.json', 'w') as outfile:
     for WD in weatherDataset:
