@@ -6,8 +6,13 @@ url_current_city_endpoint,http://api.waqi.info/feed/{city}/?token={token},
 url_current_lonlat_endpoint,"http://api.waqi.info/feed/geo:{lat},{lon}/?token={token}",
 url_forecast_city_endpoint,,
 url_forecast_lonlat_endpoint,,
-header_request,,
+header_request_current,,
+header_request_forecast,,
 forecast_root,,
+method_current,get,
+method_forecast,get,
+post_data_current,,
+post_data_foreast,,
 request_limit,60,1/h
 pressure,data.iaqi.p.v,hPa
 humidity,data.iaqi.h.v,%

@@ -6,8 +6,13 @@ url_current_city_endpoint,http://api.openweathermap.org/data/2.5/weather?q={city
 url_current_lonlat_endpoint,http://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&units=metric&APPID={token} &lang={lang},
 url_forecast_city_endpoint,http://api.openweathermap.org/data/2.5/forecast?q={city}&units=metric&APPID={token}&lang={lang},
 url_forecast_lonlat_endpoint,http://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&units=metric&APPID={token}&lang={lang},
-header_request,,
+header_request_current,,
+header_request_forecast,,
 forecast_root,list,
+method_current,get,
+method_forecast,get,
+post_data_current,,
+post_data_foreast,,
 request_limit,60,1/h
 pressure,main.pressure,hPa
 humidity,main.humidity,%
@@ -17,8 +22,8 @@ dew-point,,°C
 clouds,clouds.all,%
 wind-speed,wind.speed,m/s
 wind-direction,wind.deg,°
-precip-intensity,rain[1h],mm/h
-precip-accumulation,rain[3h],mm
+precip-intensity,rain.[1h],mm/h
+precip-accumulation,rain.[3h],mm
 visibility,visibility,m
 uv,,
 pressure-forecast,main.pressure,hPa
@@ -29,8 +34,8 @@ dew-point-forecast,,°C
 clouds-forecast,clouds.all,%
 wind-speed-forecast,wind.speed,m/s
 wind-direction-forecast,wind.deg,°
-precip-intensity-forecast,rain[”1h”],mm/h
-precip-accumulation-forecast,rain[”3h”],mm
+precip-intensity-forecast,rain.”1h”,mm/h
+precip-accumulation-forecast,rain.”3h”,mm
 visibility-forecast,,m
 uv-forecast,,
 temperature-min-forecast,main.temp_min,°C

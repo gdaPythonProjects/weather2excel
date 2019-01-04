@@ -55,18 +55,25 @@ class WeatherApis:
     self.url_search = self._replacer(self.url_search, {"{token}":self.api_token, "{lang}":args[1], "{days}":str(args[2]) })
 
     print("URL_SEARCH: "+self.url_search)
-    headers = self._set_headers(args[0])  #print(headers)
+    headers = self._set_headers(args[0])  #print("headers: "+str(headers))
     try:
-      r = requests.get(self.url_search,headers=headers)
-      self.JSON = r.json()
+      if self.config["method_"+args[0]] == "get":
+        print("GET REQUEST......")
+        r = requests.get(self.url_search,headers=headers)
+      else: #POST
+        data = self._replacer(self.config["post_data_"+args[0]], {"{lon}":args[3], "{lat}":args[4] })   #print("POST DATA: "+data)
+        r = requests.post(self.url_search, headers=headers, data = data )
+
+      self.JSON = r.json()#print(self.JSON)
       if r.status_code == 200 and self._check_result():
         return True
     except:
+      #raise
       return False
 
   def _set_headers(self,mode):
     R={}
-    headers = self.config["header_request"]
+    headers = self.config["header_request_"+mode]
     if headers!="":
       h = headers.split(';')
       for idx, val in enumerate(h):
@@ -81,13 +88,14 @@ class WeatherApis:
       input_string = input_string.replace(key, str(val))    #print(key, '->', val)
     return input_string
 
-  def _check_result(self): #print("ok_value=")print(self.config["ok_value"])print("ok_JSON")print(self.JSON[ self.config["ok_key"]  ])
+  def _check_result(self): #print("ok_value=") print(self.config["ok_key"])#print("ok_JSON")print(self.JSON[ self.config["ok_key"]  ])
     if self.config["ok_key"]=="":
       return True
     try:
-      if( str(self.JSON[ self.config["ok_key"]  ]) == str(self.config["ok_value"]) ):
+      
+      if self.config["ok_value"] == "<exist>" and self.JSON[ self.config["ok_key"]  ]!="":
         return True
-      elif self.config["ok_value"] == "<exist>" and self.JSON[ self.config["ok_key"]  ]!="":
+      elif  str(self.JSON[ self.config["ok_key"]  ]) == str(self.config["ok_value"]) :
         return True
     except:
       print("*** W odpowiedzi z serwera brak wymaganego pola: '"+self.config["ok_key"]+"'" )
@@ -161,7 +169,7 @@ class WeatherApis:
 
 
   def _check_api_key(self):
-    self.get_weather("Gdynia")
+    self.get_weather("current","en",1,0,0)
     return self._check_result()
 
 

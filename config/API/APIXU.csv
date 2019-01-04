@@ -6,8 +6,13 @@ url_current_city_endpoint,http://api.apixu.com/v1/current.json?key={token}&q={ci
 url_current_lonlat_endpoint,"http://api.apixu.com/v1/current.json?key={token}&q={lat},{lon}&lang={lang}",
 url_forecast_city_endpoint,http://api.apixu.com/v1/forecast.json?key={token}&q={city}&days={days}&lang={lang},
 url_forecast_lonlat_endpoint,"http://api.apixu.com/v1/forecast.json?key={token}&q={lat},{lon}&days={days}&lang={lang}",
-header_request,,
+header_request_current,,
+header_request_forecast,,
 forecast_root,forecast.forecastday,
+method_current,get,
+method_forecast,get,
+post_data_current,,
+post_data_foreast,,
 request_limit,60,1/h
 pressure,current.pressure_mb,hPa
 humidity,current.humidity,%
