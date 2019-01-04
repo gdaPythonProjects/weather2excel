@@ -165,8 +165,9 @@ elif option == "3":
 else:
     print("Coś poszło nie tak przy wybieraniu opcji!")
 
-# kontrolny wydruk zmiennych
+# kontrolny wydruk zmiennych podanych przez użytkownika
 print("")
-print(CITY)
-print(LON)
-print(LAT)
+print("Kontrolny wydruk zmiennych")
+print("CITY: ", CITY)
+print("LON: ", LON)
+print("LAT: ", LAT)
