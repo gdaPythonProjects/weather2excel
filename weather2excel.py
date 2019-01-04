@@ -39,13 +39,15 @@ if option == "1":
     MODE = "current"  # tryb pokazywania aktualnych danych
     print("Aktualne dane\n")
 
-    get_place_from_user()
+    # funckja pobiera zmienne globalne, użytkownik wprowadza miejsce, dla którego chce otrzymać informacje pogodowe
+    # i funkcja zwraca wskazane miejsce ponownie do zmiennych globalnych
+    CITY, LON, LAT = get_place_from_user(CITY, LON, LAT)
 
 elif option == "2":
     MODE = "forecast"  # tryb pokazywania prognozy pogody
     print("Prognoza pogody\n")
 
-    get_place_from_user()
+    CITY, LON, LAT = get_place_from_user(CITY, LON, LAT)
 
 elif option == "3":
     print("Ostatnio wyszukiwane\n")
