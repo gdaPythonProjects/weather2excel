@@ -22,8 +22,8 @@ dew-point,,°C
 clouds,clouds.all,%
 wind-speed,wind.speed,m/s
 wind-direction,wind.deg,°
-precip-intensity,rain.[1h],mm/h
-precip-accumulation,rain.[3h],mm
+precip-intensity,"rain.[""1h""]",mm/h
+precip-accumulation,"rain.[""3h""]",mm
 visibility,visibility,m
 uv,,
 pressure-forecast,main.pressure,hPa
@@ -34,8 +34,8 @@ dew-point-forecast,,°C
 clouds-forecast,clouds.all,%
 wind-speed-forecast,wind.speed,m/s
 wind-direction-forecast,wind.deg,°
-precip-intensity-forecast,rain.”1h”,mm/h
-precip-accumulation-forecast,rain.”3h”,mm
+precip-intensity-forecast,"rain.[""1h""]",mm/h
+precip-accumulation-forecast,"rain.[""3h""]",mm
 visibility-forecast,,m
 uv-forecast,,
 temperature-min-forecast,main.temp_min,°C
