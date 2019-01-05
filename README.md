@@ -14,14 +14,14 @@ W celu wykorzystnia aplikacji należy zarejestorwać się w co najmniej jednym z
   <td></a></td>
  </tr>
  </table>
- 1. https://www.apixu.com
- 2. https://darksky.net
- 3. https://www.weatherbit.io
- 4. https://openweathermap.org
- 5. http://aqicn.org
- 6. https://www.climacell.co
- 7. https://airly.eu
-
+ 1. https://www.apixu.com <br>
+ 2. https://darksky.net <br>
+ 3. https://www.weatherbit.io <br>
+ 4. https://openweathermap.org <br>
+ 5. http://aqicn.org <br>
+ 6. https://www.climacell.co <br>
+ 7. https://airly.eu <br>
+<br>
 Klucz/token do korzystania z danego API powinien zostać zapisany w odpowiednim pliku w /config/API_keys/ w postaci: nazwa_portalu.key
 
 # Zależności:
