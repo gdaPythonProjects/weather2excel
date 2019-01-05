@@ -63,7 +63,7 @@ def list_factors_unis(factorsDict):
 def get_factors(factorsDict):
   f = []
   for key,value in factorsDict.items():
-    if(factorsDict[key].type=="w" or factorsDict[key].type=="p" or factorsDict[key].type=="wf"):
+    if(factorsDict[key].type=="w" or factorsDict[key].type=="p" or factorsDict[key].type=="wf" or factorsDict[key].type=="t"):
       f.append(key)
   return f
 

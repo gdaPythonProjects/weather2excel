@@ -28,7 +28,7 @@ visibility,visibility.value,km
 uv,,
 pressure-forecast,,
 humidity-forecast,,
-temperature-forecast,,
+temperature-forecast,$[0].temp[0].min.value,
 apparent-temperature-forecast,,
 dew-point-forecast,,
 clouds-forecast,,
@@ -40,7 +40,7 @@ visibility-forecast,,
 uv-forecast,,
 temperature-min-forecast,temp.[0].min.value,°C
 apparent-temperature-min-forecast,feels_like.[0].min.value,°C
-temperature-max-forecast,Temp.[1].max.value,°C
+temperature-max-forecast,temp.[1].max.value,°C
 apparent-temperature-max-forecast,feels_like.[1].max.value,°C
 so2,,
 no2,,
@@ -48,6 +48,10 @@ co,,
 o3,,
 pm25,,
 pm10,,
+pm1,,
+pm25-forecast,,
+pm10-forecast,,
+pm1-forecast,,
 weather-text,,
 weather-alert,,
 weather-icon,,

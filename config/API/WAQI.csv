@@ -48,6 +48,10 @@ co,data.iaqi.co.v,ppm
 o3,data.iaqi.o3.v,ppm
 pm25,data.iaqi.pm25.v,ppm
 pm10,data.iaqi.pm10.v,ppm
+pm1,,
+pm25-forecast,,
+pm10-forecast,,
+pm1-forecast,,
 weather-text,,
 weather-alert,,
 weather-icon,,

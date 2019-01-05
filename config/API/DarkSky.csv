@@ -48,6 +48,10 @@ co,,ppm
 o3,,ppm
 pm25,,ppm
 pm10,,ppm
+pm1,,
+pm25-forecast,,
+pm10-forecast,,
+pm1-forecast,,
 weather-text,currently.summary,
 weather-alert,,
 weather-icon,currently.icon,

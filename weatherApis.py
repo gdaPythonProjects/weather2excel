@@ -2,7 +2,8 @@
 import re
 import csv
 import requests
-from jsonpath_ng import jsonpath, parse
+from jsonpath_ng import jsonpath#, parse
+from jsonpath_ng.ext import parse
 from factors import *
 from unit_converter.converter import convert, converts
 
@@ -126,13 +127,18 @@ class WeatherApis:
             if self.config["forecast_root"]!="":
               json_path = self.config["forecast_root"]+".["+str(day_number)+"]."+self.config[f]
             else:
-              json_path = "["+str(day_number)+"]."+self.config[f]
-            #print("JSON_PATH: "+json_path)
+              if "@" in self.config[f]:
+                json_path = self.config[f].replace("nnn",str(day_number))
+              else:
+                json_path = "["+str(day_number)+"]."+self.config[f]
+          
+          #print("JSON_PATH: "+json_path)
 
           try:
             x = parse(json_path).find(self.JSON)   
-
-            for match in x:#print("JSON_PATH: "+json_path+"  "+str(match.full_path) )
+            #print(x)
+            for match in x:
+              #print("JSON_PATH: "+json_path+"  val:"+str(match.value) )
               if str(factorsDict[f].unit) == str(self.config[f+"_u"]): 
                 WDS[f] = match.value
               else:
@@ -153,11 +159,11 @@ class WeatherApis:
           except (KeyError, AttributeError, NameError) as e:
               print("* Problem KeyError with field: "+f+" in "+self.config["api_name"])#("+e.errno+": "+e.strerror+")"
               WDS[f] = "_"
-              #raise
+              raise
           except:
               WDS[f] = "__"
               print("** Problem with field: "+f+" in "+self.config["api_name"])
-              #raise
+              raise
         else:
           WDS[f] = "*";# no information found
       DATA[day_number] = WDS
