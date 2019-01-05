@@ -1,13 +1,14 @@
 # weather2excel
 W celu wykorzystnia aplikacji należy zarejestorwać się w co najmniej jednym z serwisów:
- 1) https://www.apixu.com ![Logo](icons/apixu.png)
+ 1) https://www.apixu.com ![Logo](logo/apixu.png)
  2) https://darksky.net
  3) https://www.weatherbit.io
  4) https://openweathermap.org
  5) http://aqicn.org
- 6) https://www.climacell.co/
+ 6) https://www.climacell.co
+ 7) https://airly.eu
 
-Klucz/token do korzystania z danego API powinien zostać zapisany w odpowiednim pliku w /config/API_keys/.
+Klucz/token do korzystania z danego API powinien zostać zapisany w odpowiednim pliku w /config/API_keys/ nazwa_portalu.key
 
 # Zależności:
 > pip3 install unit-converter\
