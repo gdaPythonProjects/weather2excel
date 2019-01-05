@@ -163,7 +163,7 @@ class WeatherApis:
           except:
               WDS[f] = "__"
               print("** Problem with field: "+f+" in "+self.config["api_name"])
-              raise
+              #raise
         else:
           WDS[f] = "*";# no information found
       DATA[day_number] = WDS
