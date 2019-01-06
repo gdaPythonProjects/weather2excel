@@ -11,7 +11,7 @@ W celu wykorzystnia aplikacji należy zarejestorwać się w co najmniej jednym z
   <td><a href='http://aqicn.org' target='_blank'><img src='logo/waqi.jpeg'></a></td>
   <td><a href='https://www.climacell.co' target='_blank'><img src='logo/climacell.png'></a></td>
   <td><a href='https://airly.eu' target='_blank'><img src='logo/airly.jpg'></a></td>
-  <td><a href='https://www.airvisual.com' target='_blank'><img src='logo/airvisual.jpg'></a></td>
+  <td><a href='https://www.airvisual.com' target='_blank'><img src='logo/airvisual.png'></a></td>
  </tr>
  </table>
  1. https://www.apixu.com <br>
@@ -22,6 +22,8 @@ W celu wykorzystnia aplikacji należy zarejestorwać się w co najmniej jednym z
  6. https://www.climacell.co <br>
  7. https://airly.eu <br>
  8. https://www.airvisual.com<br>
+<br>
+<img src='logo/tabela_api.png'><
 <br>
 Klucz/token do korzystania z danego API powinien zostać zapisany w odpowiednim pliku w /config/API_keys/ w postaci: nazwa_portalu.key
 
