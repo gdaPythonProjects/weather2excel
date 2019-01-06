@@ -26,11 +26,25 @@ number_of_arguments = len(sys.argv)
 # jeżeli użytkownik podał jakiekolwiek argumenty to rozpocznij działanie programu na parametrach
 if number_of_arguments > 1:
     parser = argparse.ArgumentParser()
-    parser.add_argument("-c", "--city", nargs="*", dest="city_name", default="Gdynia",
-                        help="pobiera nazwę miasta (domyślnie Gdynia)")
+
+    # deklaracja parametru startowego --city (nazwy miasta). nargs z wartością "*" pozwala na pobranie 1 lub więcej
+    # wartości dla danego parametru - tutaj potrzebne, bo nazwy miast mogą być wielowyrazowe
+    parser.add_argument("-c", "--city", nargs="*", dest="city_name", default=None,
+                        help="pobiera nazwę miasta. Brak wartości domyślnej")
+
+    # deklaracja parametru startowego --longitude (długości geograficznej)
+    parser.add_argument("-lon", "--longitude", type=float, nargs=1, dest="longitude", default=None,
+                        help="pobiera wartość długości geograficznej w formie liczby całkowitej lub ułamka "
+                             "dziesiętnego. Pamiętaj, że część całości od ułamka oddziela '.' (KROPKA) ! "
+                             "Brak wartości domyślnej.")
 
     # tworzy słownik argumentów
     args = parser.parse_args()
+
+    # kontrolnie drukuje cały złownik argumentów
+    print(args)
+
+    # TODO napisać "zabezpieczenie" na wypadek gdyby użytkownik podał jednocześnie nazwę miasta oraz namiary GPS
 
     # wyczyść nazwę miasta
     CITY = ""
@@ -41,6 +55,12 @@ if number_of_arguments > 1:
 
         # dodawaj kolejne wyrazy do zmiennej CITY (zmienna typu string)
         CITY = CITY + " " + word_of_city_name
+
+    # pobierz wartość parematru longitude i zapisz do zmiennej globalnej LON
+    # TODO zmienić obsługę błędów tak aby nie przerywało skryptu gdy użytkownik poda litery
+    # TODO zmienić obsługę błędów tak aby nie przerywało skryptu gdy użytkownik poda więcej niż 1 liczbę
+    # TODO zmienić obsługę błędów tak aby nie przerywało skryptu gdy użytkownik poda zamiast kropki przecinek (automatyczna zamiana)
+    LON = args.longitude[0]
 
 # Jeżeli użytkownik nie podał argumentów, albo podał je błędnie to rozpocznij program od standardowego menu
 #
