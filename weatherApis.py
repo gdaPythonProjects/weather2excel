@@ -21,7 +21,7 @@ TIME_ZONES = {}
 factorsDict=load_units_config()
 #list_factors_unis(factorsDict)
 factors = get_factors(factorsDict)
-TIME_ZONES = load_timezones()
+#TIME_ZONES = load_timezones()
 
 # API returning name of time zones
 

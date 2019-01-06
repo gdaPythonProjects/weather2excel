@@ -36,9 +36,21 @@ for API in APIS:
     else:
       print("Problem z uzyskaniem danych z "+wa.config["api_name"]+". Adres: "+wa.url_search)
 
+CSV="api_name,"
+for f in factors:
+    CSV = CSV +f+","
+    CSV=CSV+"\r\n"
 
+for wynikiAPI in weatherDataset:
+    for dzien in wynikiAPI:
+        if(dzien!="api_name"):#print("-----    Wyniki/prognoza z "+wynikiAPI["api_name"]+"  DLA DNIA NUMER: "+str(dzien))
+            for prognoza in wynikiAPI[dzien]:
+                CSV = CSV + "\"" + str(wynikiAPI[dzien][prognoza]) + "\","
+                CSV=CSV+"\r\n"
 
-
+f = open( 'wyniki.csv', 'w' )
+f.write( CSV )
+f.close()
 
 with open('data.json', 'w') as outfile:
     for WD in weatherDataset:
