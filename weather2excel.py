@@ -38,6 +38,12 @@ if number_of_arguments > 1:
                              "dziesiętnego. Pamiętaj, że część całości od ułamka oddziela '.' (KROPKA) ! "
                              "Brak wartości domyślnej.")
 
+    # deklaracja parametru startowego --latitude (szerokości geograficznej)
+    parser.add_argument("-lat", "--latitude", type=float, nargs=1, dest="latitude", default=None,
+                        help="pobiera wartość szerokości geograficznej w formie liczby całkowitej lub ułamka "
+                             "dziesiętnego. Pamiętaj, że część całości od ułamka oddziela '.' (KROPKA) ! "
+                             "Brak wartości domyślnej.")
+
     # tworzy słownik argumentów
     args = parser.parse_args()
 
@@ -61,6 +67,8 @@ if number_of_arguments > 1:
     # TODO zmienić obsługę błędów tak aby nie przerywało skryptu gdy użytkownik poda więcej niż 1 liczbę
     # TODO zmienić obsługę błędów tak aby nie przerywało skryptu gdy użytkownik poda zamiast kropki przecinek (automatyczna zamiana)
     LON = args.longitude[0]
+
+    LAT = args.latitude[0]
 
 # Jeżeli użytkownik nie podał argumentów, albo podał je błędnie to rozpocznij program od standardowego menu
 #
