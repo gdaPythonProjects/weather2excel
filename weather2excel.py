@@ -33,13 +33,13 @@ if number_of_arguments > 1:
                         help="pobiera nazwę miasta. Brak wartości domyślnej")
 
     # deklaracja parametru startowego --longitude (długości geograficznej)
-    parser.add_argument("-lon", "--longitude", type=float, nargs=1, dest="longitude", default=None,
+    parser.add_argument("-lon", "--longitude", type=float, nargs="*", dest="longitude", default=None,
                         help="pobiera wartość długości geograficznej w formie liczby całkowitej lub ułamka "
                              "dziesiętnego. Pamiętaj, że część całości od ułamka oddziela '.' (KROPKA) ! "
                              "Brak wartości domyślnej.")
 
     # deklaracja parametru startowego --latitude (szerokości geograficznej)
-    parser.add_argument("-lat", "--latitude", type=float, nargs=1, dest="latitude", default=None,
+    parser.add_argument("-lat", "--latitude", type=float, nargs="*", dest="latitude", default=None,
                         help="pobiera wartość szerokości geograficznej w formie liczby całkowitej lub ułamka "
                              "dziesiętnego. Pamiętaj, że część całości od ułamka oddziela '.' (KROPKA) ! "
                              "Brak wartości domyślnej.")
@@ -62,12 +62,14 @@ if number_of_arguments > 1:
         # dodawaj kolejne wyrazy do zmiennej CITY (zmienna typu string)
         CITY = CITY + " " + word_of_city_name
 
-    # pobierz wartość parematru longitude i zapisz do zmiennej globalnej LON
+    # pobierz wartość parematru longitude i zapisz do zmiennej globalnej LON, podanie większej ilości wartości przez
+    # użytkownika będzie ignorowane - zostanie pobrana tlyko pierwsza wartość
     # TODO zmienić obsługę błędów tak aby nie przerywało skryptu gdy użytkownik poda litery
-    # TODO zmienić obsługę błędów tak aby nie przerywało skryptu gdy użytkownik poda więcej niż 1 liczbę
     # TODO zmienić obsługę błędów tak aby nie przerywało skryptu gdy użytkownik poda zamiast kropki przecinek (automatyczna zamiana)
     LON = args.longitude[0]
 
+    # pobierz wartość parematru latitude i zapisz do zmiennej globalnej LAT, podanie większej ilości wartości przez
+    # użytkownika będzie ignorowane - zostanie pobrana tlyko pierwsza wartość
     LAT = args.latitude[0]
 
 # Jeżeli użytkownik nie podał argumentów, albo podał je błędnie to rozpocznij program od standardowego menu
