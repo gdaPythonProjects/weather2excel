@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 from ui_functions import *
-import sys  # potrzebna do sprawdzenia czy użytkownik podał jakiekolwiek parametry na wejściu
+import sys  # potrzebna do sprawdzenia, czy użytkownik podał jakiekolwiek parametry na wejściu
 import argparse  # do obsługi parametrów wejściowych
 
 # zmienne startowe
@@ -13,21 +13,34 @@ MODE = "forecast"  # "current" podaję aktualne dane, alternatywny tryb -> "fore
 LANG = "pl"  # język do komunikacji z API, TODO zastanowić się czy ta zmienna ma być tutaj, czy w weatherApis.py?
 DAYS = 5  # ilość dni do przodu na które można uzyskać prognoze pogody
 
-print("Kontrolne wyświetlanie parametrów starytowych w czystej formie")
+print("Kontrolne wyświetlanie parametrów startowych w czystej formie")
 print("Number of arguments: ", len(sys.argv))
 print("The arguments are: ", str(sys.argv))
 print("")
 
+# sprawdź ilość argumentów podanych na starcie przez użytkownika
+# zawsze jest minimum 1 - nazwa skryptu. Jeżeli ejst ich więcej to znaczy, ze użytkownik podał parametry startowe.
+# Jeżeli tlyko 1 to znaczy, że uruchomił skrypt bez parametrów
 number_of_arguments = len(sys.argv)
 
 # jeżeli użytkownik podał jakiekolwiek argumenty to rozpocznij działanie programu na parametrach
 if number_of_arguments > 1:
     parser = argparse.ArgumentParser()
-    parser.add_argument("-c", "--city", nargs="*", dest="city_name", default="AAA",
-                        help="pobiera nazwę miasta (domyślnie AAA)")
+    parser.add_argument("-c", "--city", nargs="*", dest="city_name", default="Gdynia",
+                        help="pobiera nazwę miasta (domyślnie Gdynia)")
 
+    # tworzy słownik argumentów
     args = parser.parse_args()
-    print(args.city_name)
+
+    # wyczyść nazwę miasta
+    CITY = ""
+
+    # przejdź przez całą listę wyrazów, z których może się składać nazwa miasta. Miasto mogą być 1 wyrazowe
+    # np.: Gdynia, Sopot, Wejherowo, albo wielowyrazowe: Stalowa Wola, Kędzierzyn Koźle
+    for word_of_city_name in args.city_name:
+
+        # dodawaj kolejne wyrazy do zmiennej CITY (zmienna typu string)
+        CITY = CITY + " " + word_of_city_name
 
 # Jeżeli użytkownik nie podał argumentów, albo podał je błędnie to rozpocznij program od standardowego menu
 #
