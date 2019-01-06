@@ -5,18 +5,32 @@ import requests
 from jsonpath_ng import jsonpath#, parse
 from jsonpath_ng.ext import parse
 from factors import *
+import json # only for development
 from unit_converter.converter import convert, converts
+import time
+import datetime as dt
+import dateutil.parser
+from datetime import timedelta
 
 API_PATH ="config/API/"
 API_KEY_PATH ="config/API_keys/"
-REPL_DICT = {}
+TIME_ZONES = {}
+
 
 #load units configuration
 factorsDict=load_units_config()
 #list_factors_unis(factorsDict)
 factors = get_factors(factorsDict)
+TIME_ZONES = load_timezones()
+
+# API returning name of time zones
+
 
 class WeatherApis:
+
+  TZ_API = ["APIXU","DarkSky"]
+  TZ=""
+
   def __init__(self):
     self.url_search=""
     self.api_token=""
@@ -67,18 +81,19 @@ class WeatherApis:
     print("URL_SEARCH: "+self.url_search)
     headers = self._set_headers(args[0])  #print("headers: "+str(headers))
     try:
-      if self.config["method_"+args[0]] == "get":
-        print("GET REQUEST......")
+      if self.config["method_"+args[0]] == "get":#print("GET REQUEST......")
         r = requests.get(self.url_search,headers=headers)
       else: #POST
         data = self._replacer(self.config["post_data_"+args[0]], {"{lon}":args[3], "{lat}":args[4] })   #print("POST DATA: "+data)
         r = requests.post(self.url_search, headers=headers, data = data )
 
       self.JSON = r.json()#print(self.JSON)
+      self._write_JSON_resp_to_file()
+      print("STATUS CODE:"+str(r.status_code))
       if r.status_code == 200 and self._check_result():
         return True
     except:
-      #raise
+      raise
       return False
 
   def _set_headers(self,mode):
@@ -115,9 +130,11 @@ class WeatherApis:
 
   def parse_result(self, mode, days):
     DATA = {}
+    #global TZ,TZ_API
     DATA["api_name"]=self.config["api_name"]
     for day_number in range(0,days):
       WDS = {}
+      WDS["api_name"]=self.config["api_name"]
       for f in factors:
         if f in self.config and self.config[f]!="":#print(self.config[f])
           WDS[f] = "#"   # no information defined in config file
@@ -156,16 +173,26 @@ class WeatherApis:
                 WDS[f]="<"
               if(WDS[f] != "_" and not factorsDict[f].check_upper_limit(WDS[f])):
                 WDS[f]=">"
+
           except (KeyError, AttributeError, NameError) as e:
               print("* Problem KeyError with field: "+f+" in "+self.config["api_name"])#("+e.errno+": "+e.strerror+")"
               WDS[f] = "_"
-              raise
+              #raise
           except:
               WDS[f] = "__"
               print("** Problem with field: "+f+" in "+self.config["api_name"])
               #raise
         else:
           WDS[f] = "*";# no information found
+
+      if WeatherApis.TZ =="" and self.config["api_name"] in WeatherApis.TZ_API: 
+        WeatherApis.TZ = self._get_timezone_offset( WDS["timezone"] )
+      
+      #convert time to DD/MM/YYY HH:MM 
+      WDS["timestamp"] = self._convert_datetime_to_human(WDS["timestamp"],WeatherApis.TZ)
+      WDS["timestamp-forecast"] = self._convert_datetime_to_human(WDS["timestamp-forecast"],WeatherApis.TZ)
+      
+      
       DATA[day_number] = WDS
       if(mode == "current"):
         break
@@ -187,6 +214,14 @@ class WeatherApis:
     self.get_weather("current","en",1,0,0)
     return self._check_result()
 
+  def _get_timezone_offset(self, timezone):
+    global TIME_ZONES
+    try:
+      return TIME_ZONES[ timezone ]
+    except KeyError:
+      return ""
+      
+
 
   def print_api_verification(self):
     if self._check_api_key() == True:
@@ -199,6 +234,42 @@ class WeatherApis:
   def is_correct(self):#check if object is complete //TODO
     self.correct = 1
 
+  ### helper method to write JSON from API response to file
+  def _write_JSON_resp_to_file(self):
+      with open(self.config["api_name"]+'.json', 'w') as outfile:
+          json.dump(self.JSON, outfile)
+  
+  def _convert_datetime_to_human(self,time,tz):    #print("TIME======"+str(time) + "   TZ="+str(tz))
+      t_str=""
+      H = M = 0
+      try:
+        arrHM = str(tz).split(":")
+        if len(arrHM) == 2:
+          H = int(arrHM[0])
+          M = int(arrHM[1])
+      except ValueError:
+        print("--> Time zone parsing problem...")
+
+      isEpoch = re.search("\d{10,}", str(time))
+      if isEpoch:
+        try:
+          t = dt.datetime.utcfromtimestamp(time) + timedelta(seconds=0, minutes=M, hours=H)
+          t_str = t.strftime("%Y/%m/%d %H:%M")
+        except:
+          print("--> Adding timezone to time problem")
+        return t_str
+
+      isISO8601 = re.search("^\d{4}-\d{2}-\d{2}T", time)
+      if isISO8601:
+        try:
+          t = dateutil.parser.parse(time) + timedelta(seconds=0, minutes=M, hours=H)
+          t_str = t.strftime("%Y/%m/%d %H:%M")
+        except:
+          print("--> Adding timezone to time problem")
+        return t_str
+
+      return "#"+str(time)
+  
   #def setApiToken(token)
   #def santizizeSearch
   #def getLONLATfromCity

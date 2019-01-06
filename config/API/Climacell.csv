@@ -13,7 +13,7 @@ method_current,post,
 method_forecast,get,
 post_data_current,"{""geocode"": {""lon"": {lon},""lat"": {lat}},""location_id"": """"}",
 post_data_foreast,,
-request_limit,,
+request_limit,1000,/24h
 pressure,baro_pressure.value,kPa
 humidity,humidity.value,%
 temperature,temp.value,°C
@@ -60,7 +60,7 @@ weather-alert-forecast,,
 weather-icon-forecast,,
 lon,,
 lat,,
-timestamp,observation_time,
+timestamp,observation_time.value,
 timestamp-forecast,,
 timezone,,
 ok_key,,

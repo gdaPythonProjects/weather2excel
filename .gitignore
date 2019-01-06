@@ -1,5 +1,6 @@
 tmp/
-
+#json files 
+*.json
 .idea/
 
 # tu ukryte są klucze API, które tak jak Łukasz napisał mają być tylko lokalnie

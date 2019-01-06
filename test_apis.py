@@ -10,8 +10,8 @@ import os
 
 CITY = "gdynia"  # nazwy miast z małych liter aby łatwiej było operać na API
 # współrzedne dla Gdyni pobrane z portalu https://www.wspolrzedne-gps.pl/
-LON = 19.940984  # długość geograficzna
-LAT = 50.062006  # szerokość geograficzna
+LON = 18.5318800  # długość geograficzna
+LAT = 54.5188900  # szerokość geograficzna
 MODE = "current"  # "current" podaję aktualne dane, alternatywny tryb -> "forecast" - prognoza, ale tylko dla pogody
 LANG = "pl"  # język do komunikacji z API, TODO zastanowić się czy ta zmienna ma być tutaj, czy w weatherApis.py?
 DAYS = 5  # ilość dni do przodu na które można uzyskać prognoze pogody
@@ -19,9 +19,10 @@ DAYS = 5  # ilość dni do przodu na które można uzyskać prognoze pogody
 weatherDataset = []
 
 # TODO for loop all  .csv files from /config// directory
-#APIS = ["APIXU.csv", "OpenWeather.csv", "WAQI.csv", "Weatherbit.csv", "DarkSky.csv", "Climacell.csv","Airly.csv"]
+APIS = ["APIXU.csv", "OpenWeather.csv", "WAQI.csv", "Weatherbit.csv", "DarkSky.csv", "Climacell.csv","Airly.csv","Airvisual.csv"]
 
-APIS = ["Airvisual.csv","APIXU.csv"]
+
+#APIS = ["APIXU.csv"]
 
 
 """for API in os.listdir("config/API/"):"""
@@ -36,7 +37,11 @@ for API in APIS:
       print("Problem z uzyskaniem danych z "+wa.config["api_name"]+". Adres: "+wa.url_search)
 
 
+
+
+
 with open('data.json', 'w') as outfile:
     for WD in weatherDataset:
         json.dump(WD, outfile)
-        print(json.dumps(WD, sort_keys=False, indent=4))
+        #print(json.dumps(WD, sort_keys=False, indent=4))
+

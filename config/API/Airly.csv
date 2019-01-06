@@ -13,7 +13,7 @@ method_current,get,
 method_forecast,get,
 post_data_current,,
 post_data_foreast,,
-request_limit,,
+request_limit,1000,/24h
 pressure,$.current.values[?(@.name=='PRESSURE')].value,hPa
 humidity,$.current.values[?(@.name=='HUMIDITY')].value,%
 temperature,$.current.values[?(@.name=='TEMPERATURE')].value,°C
@@ -60,7 +60,7 @@ weather-alert-forecast,,
 weather-icon-forecast,,
 lon,,
 lat,,
-timestamp,,
+timestamp,$.current.fromDateTime,
 timestamp-forecast,,
 timezone,,
 ok_key,current,

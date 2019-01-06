@@ -1,5 +1,5 @@
 # weather2excel
-W celu wykorzystnia aplikacji należy zarejestorwać się w co najmniej jednym z serwisów:
+W celu wykorzystnia aplikacji należy zarejestorwać się w co najmniej jednym z 8 serwisów:
 <table>
  <tr>
   <td><a href='https://www.apixu.com' target='_blank'><img src='logo/apixu.png'></a></td>
@@ -23,10 +23,9 @@ W celu wykorzystnia aplikacji należy zarejestorwać się w co najmniej jednym z
  7. https://airly.eu <br>
  8. https://www.airvisual.com<br>
 <br>
-<img src='logo/tabela_api.png'><
-<br>
 Klucz/token do korzystania z danego API powinien zostać zapisany w odpowiednim pliku w /config/API_keys/ w postaci: nazwa_portalu.key
-
+<br>Tabela przedstawiająca ogólne możliwe do wykorzystania funkcjonalności Weather API<br>
+<img src='logo/tabela_api.png'>
 # Zależności:
 > pip3 install unit-converter\
 > pip3 install --upgrade jsonpath-ng\

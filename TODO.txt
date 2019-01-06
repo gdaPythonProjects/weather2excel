@@ -78,3 +78,6 @@ TODO
 9. Towrzenie pliku README.txt
 10. Stworzenie metod pomocniczych wypisujących używane jednostki, dostępne i skonfigurowane API itp.
 11. Stworzenie pliku z zaleznościami aplikacji i jego obługa ( w celu ułatwienia instalacji)
+[12]. Stworzenie tabeli z podsumowaniem API
+13. Airly sprawdzić jednostki zanieczyszczeń
+14. Error codes http

@@ -55,6 +55,14 @@ def load_units_config():
         factorsDict[ row["par"].strip() ] = WeatherFactors(row["par"],row["unit"],row["type"],row["min_val"],row["max_val"],row["alert_min_val"],row["alert_max_val"])
   return factorsDict
 
+def load_timezones():
+  factorsDict={}
+  with open("config/.units/timezones.csv", 'r') as csvfile:
+      reader = csv.DictReader(csvfile, delimiter=',', quotechar='\"')
+      for row in reader:
+        factorsDict[ row["TZ"].strip() ] = row["UTC_offset"].strip() 
+  return factorsDict
+
 def list_factors_unis(factorsDict):
   for key, value in factorsDict.items():
     if(factorsDict[key].type=="w" or factorsDict[key].type=="p"):
@@ -63,7 +71,7 @@ def list_factors_unis(factorsDict):
 def get_factors(factorsDict):
   f = []
   for key,value in factorsDict.items():
-    if(factorsDict[key].type=="w" or factorsDict[key].type=="p" or factorsDict[key].type=="wf" or factorsDict[key].type=="t"):
+    if(factorsDict[key].type=="w" or factorsDict[key].type=="p" or factorsDict[key].type=="wf" or factorsDict[key].type=="t" or factorsDict[key].type=="tz"):
       f.append(key)
   return f
 

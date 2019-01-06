@@ -13,7 +13,7 @@ method_current,get,
 method_forecast,get,
 post_data_current,,
 post_data_foreast,,
-request_limit,,
+request_limit,330,/24h
 pressure,data.current.weather.pr,hPa
 humidity,data.current.weather.hu,%
 temperature,data.current.weather.tp,°C
