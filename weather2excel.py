@@ -29,24 +29,28 @@ option = ""  # zmienna określająca, którą opcję wybrał uzytkownik
 if number_of_arguments > 1:
     parser = argparse.ArgumentParser()
 
-    # TODO poprawienie informacji o wartościach domyślnych
-
     # deklaracja parametru startowego --city (nazwy miasta). nargs z wartością "*" pozwala na pobranie 1 lub więcej
     # wartości dla danego parametru - tutaj potrzebne, bo nazwy miast mogą być wielowyrazowe
+    # wartość domyślna zapisana w zmiennych globalnych na początku programu zamiast tutaj w parserze, aby uniknąć
+    #  późniejszych problemów
     parser.add_argument("-c", "--city", nargs="*", dest="city_name", default=None,
-                        help="pobiera nazwę miasta. Brak wartości domyślnej")
+                        help="pobiera nazwę miasta. Wartość domyślna: Gdynia")
 
     # deklaracja parametru startowego --longitude (długości geograficznej)
+    # wartość domyślna zapisana w zmiennych globalnych na początku programu zamiast tutaj w parserze, aby uniknąć
+    #  późniejszych problemów
     parser.add_argument("-lon", "--longitude", type=float, nargs="*", dest="longitude", default=None,
                         help="pobiera wartość długości geograficznej w formie liczby całkowitej lub ułamka "
                              "dziesiętnego. Pamiętaj, że część całości od ułamka oddziela '.' (KROPKA) ! "
-                             "Brak wartości domyślnej.")
+                             "Wartość domyślna: 54.23 (dla Gdyni).")
 
     # deklaracja parametru startowego --latitude (szerokości geograficznej)
+    # wartość domyślna zapisana w zmiennych globalnych na początku programu zamiast tutaj w parserze, aby uniknąć
+    #  późniejszych problemów
     parser.add_argument("-lat", "--latitude", type=float, nargs="*", dest="latitude", default=None,
                         help="pobiera wartość szerokości geograficznej w formie liczby całkowitej lub ułamka "
                              "dziesiętnego. Pamiętaj, że część całości od ułamka oddziela '.' (KROPKA) ! "
-                             "Brak wartości domyślnej.")
+                             "Wartość domyślna: 19.23 (dla Gdyni).")
 
     # tworzy słownik argumentów
     args = parser.parse_args()
@@ -122,7 +126,8 @@ Co chcesz zrobić?
     # pobierz wartość parematru longitude i zapisz do zmiennej globalnej LON, podanie większej ilości wartości przez
     # użytkownika będzie ignorowane - zostanie pobrana tlyko pierwsza wartość
     # TODO zmienić obsługę błędów tak aby nie przerywało skryptu gdy użytkownik poda litery przy -lon lub -lat
-    # TODO zmienić obsługę błędów tak aby nie przerywało skryptu gdy użytkownik poda zamiast kropki przecinek (automatyczna zamiana)
+    # TODO zmienić obsługę błędów tak aby nie przerywało skryptu gdy użytkownik poda zamiast kropki przecinek
+    #  (automatyczna zamiana)
     # jeżeli został podany parametr -lon to przepisz wartość do zmiennej globalnej LON, jak nie został podany, czyli
     # domyślnie jest None to pomiń ten krok i pozostaw niezmienioną wartość LON
     if args.longitude is not None:
@@ -144,7 +149,8 @@ if number_of_arguments <= 1:
 
     # menu startowe
     print("""Weather to Excel
-Tutaj możesz sprawdzić aktualną pogodę dla danego miejsca oraz aktualne zanieczysczenie powietrza, albo sprawdzić prognozę pogody.
+Tutaj możesz sprawdzić aktualną pogodę dla danego miejsca oraz aktualne zanieczysczenie powietrza, albo sprawdzić
+prognozę pogody.
     
 Co chcesz zrobić?
   1. Pokaz aktualne dane.
@@ -169,7 +175,7 @@ Co chcesz zrobić?
         MODE = "current"  # tryb pokazywania aktualnych danych
         print("Aktualne dane\n")
 
-        # funckja pobiera zmienne globalne, użytkownik wprowadza miejsce, dla którego chce otrzymać informacje pogodowe
+        # funkcja pobiera zmienne globalne, użytkownik wprowadza miejsce, dla którego chce otrzymać informacje pogodowe
         # i funkcja zwraca wskazane miejsce ponownie do zmiennych globalnych
         CITY, LON, LAT = get_place_from_user(CITY, LON, LAT)
 
