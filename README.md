@@ -26,10 +26,12 @@ W celu wykorzystnia aplikacji należy zarejestorwać się w co najmniej jednym z
 Klucz/token do korzystania z danego API powinien zostać zapisany w odpowiednim pliku w /config/API_keys/ w postaci: nazwa_portalu.key
 <br>Tabela przedstawiająca ogólne możliwe do wykorzystania funkcjonalności Weather API<br>
 <img src='logo/tabela_api.png'>
+
 # Zależności:
 > pip3 install unit-converter\
 > pip3 install --upgrade jsonpath-ng\
-> pip3 install requests
+> pip3 install requests\
+> pip3 install python-dateutil
 
 # Uruchomienie
 > python3 weather2excel.py
