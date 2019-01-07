@@ -23,9 +23,13 @@ print("")
 # Jeżeli tlyko 1 to znaczy, że uruchomił skrypt bez parametrów
 number_of_arguments = len(sys.argv)
 
+option = ""  # zmienna określająca, którą opcję wybrał uzytkownik
+
 # jeżeli użytkownik podał jakiekolwiek argumenty to rozpocznij działanie programu na parametrach
 if number_of_arguments > 1:
     parser = argparse.ArgumentParser()
+
+    # TODO poprawienie informacji o wartościach domyślnych
 
     # deklaracja parametru startowego --city (nazwy miasta). nargs z wartością "*" pozwala na pobranie 1 lub więcej
     # wartości dla danego parametru - tutaj potrzebne, bo nazwy miast mogą być wielowyrazowe
@@ -50,7 +54,57 @@ if number_of_arguments > 1:
     # kontrolnie drukuje cały złownik argumentów
     print(args)
 
-    # TODO napisać "zabezpieczenie" na wypadek gdyby użytkownik podał jednocześnie nazwę miasta oraz namiary GPS
+    # "zabezpieczenie" na wypadek gdyby użytkownik podał jednocześnie nazwę miasta oraz namiary GPS
+    if (args.city_name is not None) and ((args.longitude is not None) or (args.latitude is not None)):
+        print("""
+OSTRZEZENIE! Zostały podane jednocześnie: nazwa miasta i współrzędne GPS!
+
+Co chcesz zrobić?
+    1. Skorzystać z podanej nazwy miejscowości.
+    2. Skorzystać z podanych współrzędnych GPS.
+    3. Przejść do menu startowego.
+    4. Zakończyć działanie programu.
+""")
+
+        # wykonuj pętlę dopóki użytkownik nie poda prawidłowego numeru opcji
+        while option != "1" and option != "2" and option != "3" and option != "4":
+            # użytkownik wporwadza numer komendy - numer jest w postaci string, aby uniknąć błędów związanych z podaniem
+            # nieprawdiłowego znaku lub ciągu znaków
+            option = input("Wprowadź numer opcji (1/2/3/4) i naciśnij ENTER: ")
+            print("")  # nowa linia dla poprawy czytelności
+
+            # sprawdź, czy podana opcja jest poprawna, jeżeli nie to wyświetl komunikat o złym wyborze
+            if option != "1" and option != "2" and option != "3" and option != "4":
+                print("Nie ma takiej opcji! Spróbuj jeszcze raz...\n")
+
+        # reaguj na prawidłowo wybraną opcję
+        if option == "1":
+            # wyzeruj zmienne -lon i -lat
+            args.longitude = None
+            args.latitude = None
+
+        elif option == "2":
+            # wyczyść nazwę miasta
+            args.city_name = None
+
+        elif option == "3":
+            # ustawienie number_of_arguments na 0 spowoduje wywołanie menu start w dalszej części programu poprzez
+            # zasymulowanie jakby argumenty nie zostały podane (powinno być 1, ale podanie wartości 0 zasugeruje, że
+            # to jest sztucznie wytworzona zmiana)
+            number_of_arguments = 0
+
+            # wyczyść wszystkie dane podane w parametrach przez użytkownika
+            args.city_name = None
+            args.longitude = None
+            args.latitude = None
+
+        elif option == "4":
+            print("Zakończono działanie programu.")
+            exit()
+
+        else:
+            print("Coś poszło nie tak!")
+            exit()  # kończy natychmiast program aby uniknąć potencjalnych błedów z powodu wybrania opcji, której nie ma
 
     # jeżeli został podany parametr -c to przepisz wartość do zmiennej globalnej CITY, jak nie został podany, czyli
     # domyślnie jest None to pomiń ten krok i pozostaw niezmienioną wartość CITY
@@ -67,7 +121,7 @@ if number_of_arguments > 1:
 
     # pobierz wartość parematru longitude i zapisz do zmiennej globalnej LON, podanie większej ilości wartości przez
     # użytkownika będzie ignorowane - zostanie pobrana tlyko pierwsza wartość
-    # TODO zmienić obsługę błędów tak aby nie przerywało skryptu gdy użytkownik poda litery
+    # TODO zmienić obsługę błędów tak aby nie przerywało skryptu gdy użytkownik poda litery przy -lon lub -lat
     # TODO zmienić obsługę błędów tak aby nie przerywało skryptu gdy użytkownik poda zamiast kropki przecinek (automatyczna zamiana)
     # jeżeli został podany parametr -lon to przepisz wartość do zmiennej globalnej LON, jak nie został podany, czyli
     # domyślnie jest None to pomiń ten krok i pozostaw niezmienioną wartość LON
@@ -98,7 +152,7 @@ Co chcesz zrobić?
   3. Ostatnio wyszukiwane.
 """)
 
-    option = ""  # zmienna określająca, którą opcję wybrał uzytkownik
+    option = ""  # resetuję zmienną
 
     # wykonuj pętlę dopóki użytkownik nie poda prawidłowego numeru opcji
     while option != "1" and option != "2" and option != "3":
@@ -131,6 +185,7 @@ Co chcesz zrobić?
 
     else:
         print("Coś poszło nie tak przy wybieraniu opcji!")
+        exit()  # kończy natychmiast program aby uniknąć potencjalnych błedów z powodu wybrania opcji, której nie ma
 
 # kontrolny wydruk zmiennych podanych przez użytkownika
 print("")
