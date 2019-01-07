@@ -52,25 +52,34 @@ if number_of_arguments > 1:
 
     # TODO napisać "zabezpieczenie" na wypadek gdyby użytkownik podał jednocześnie nazwę miasta oraz namiary GPS
 
-    # wyczyść nazwę miasta
-    CITY = ""
+    # jeżeli został podany parametr -c to przepisz wartość do zmiennej globalnej CITY, jak nie został podany, czyli
+    # domyślnie jest None to pomiń ten krok i pozostaw niezmienioną wartość CITY
+    if args.city_name is not None:
+        # wyczyść nazwę miasta
+        CITY = ""
 
-    # przejdź przez całą listę wyrazów, z których może się składać nazwa miasta. Miasto mogą być 1 wyrazowe
-    # np.: Gdynia, Sopot, Wejherowo, albo wielowyrazowe: Stalowa Wola, Kędzierzyn Koźle
-    for word_of_city_name in args.city_name:
+        # przejdź przez całą listę wyrazów, z których może się składać nazwa miasta. Miasto mogą być 1 wyrazowe
+        # np.: Gdynia, Sopot, Wejherowo, albo wielowyrazowe: Stalowa Wola, Kędzierzyn Koźle
+        for word_of_city_name in args.city_name:
 
-        # dodawaj kolejne wyrazy do zmiennej CITY (zmienna typu string)
-        CITY = CITY + " " + word_of_city_name
+            # dodawaj kolejne wyrazy do zmiennej CITY (zmienna typu string)
+            CITY = CITY + " " + word_of_city_name
 
     # pobierz wartość parematru longitude i zapisz do zmiennej globalnej LON, podanie większej ilości wartości przez
     # użytkownika będzie ignorowane - zostanie pobrana tlyko pierwsza wartość
     # TODO zmienić obsługę błędów tak aby nie przerywało skryptu gdy użytkownik poda litery
     # TODO zmienić obsługę błędów tak aby nie przerywało skryptu gdy użytkownik poda zamiast kropki przecinek (automatyczna zamiana)
-    LON = args.longitude[0]
+    # jeżeli został podany parametr -lon to przepisz wartość do zmiennej globalnej LON, jak nie został podany, czyli
+    # domyślnie jest None to pomiń ten krok i pozostaw niezmienioną wartość LON
+    if args.longitude is not None:
+        LON = args.longitude[0]
 
     # pobierz wartość parematru latitude i zapisz do zmiennej globalnej LAT, podanie większej ilości wartości przez
     # użytkownika będzie ignorowane - zostanie pobrana tlyko pierwsza wartość
-    LAT = args.latitude[0]
+    # jeżeli został podany parametr -lat to przepisz wartość do zmiennej globalnej LAT, jak nie został podany, czyli
+    # domyślnie jest None to pomiń ten krok i pozostaw niezmienioną wartość LAT
+    if args.latitude is not None:
+        LAT = args.latitude[0]
 
 # Jeżeli użytkownik nie podał argumentów, albo podał je błędnie to rozpocznij program od standardowego menu
 #
