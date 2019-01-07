@@ -93,7 +93,7 @@ class WeatherApis:
       if r.status_code == 200 and self._check_result():
         return True
     except:
-      raise
+      #raise
       return False
 
   def _set_headers(self,mode):
@@ -135,12 +135,17 @@ class WeatherApis:
     for day_number in range(0,days):
       WDS = {}
       WDS["api_name"]=self.config["api_name"]
+      
       for f in factors:
         if f in self.config and self.config[f]!="":#print(self.config[f])
           WDS[f] = "#"   # no information defined in config file
           if mode=="current":
             json_path = self.config[f]
+            if factorsDict[f].type == "wf":
+              continue
           else:
+            if factorsDict[f].type == "w":
+              continue
             if self.config["forecast_root"]!="":
               json_path = self.config["forecast_root"]+".["+str(day_number)+"]."+self.config[f]
             else:
@@ -222,7 +227,6 @@ class WeatherApis:
       return ""
       
 
-
   def print_api_verification(self):
     if self._check_api_key() == True:
       result = "OK"
@@ -234,11 +238,13 @@ class WeatherApis:
   def is_correct(self):#check if object is complete //TODO
     self.correct = 1
 
+
   ### helper method to write JSON from API response to file
   def _write_JSON_resp_to_file(self):
       with open(self.config["api_name"]+'.json', 'w') as outfile:
           json.dump(self.JSON, outfile)
   
+
   def _convert_datetime_to_human(self,time,tz):    #print("TIME======"+str(time) + "   TZ="+str(tz))
       t_str=""
       H = M = 0

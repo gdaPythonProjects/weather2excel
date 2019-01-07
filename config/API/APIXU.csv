@@ -13,7 +13,7 @@ method_current,get,
 method_forecast,get,
 post_data_current,,
 post_data_foreast,,
-request_limit,60,1/h
+request_limit,330,/24h
 pressure,current.pressure_mb,hPa
 humidity,current.humidity,%
 temperature,current.temp_c,°C
@@ -61,7 +61,7 @@ weather-icon-forecast,day.condition.icon,
 lon,location.lon,
 lat,location.lat,
 timestamp,current.last_updated_epoch,
-timestamp-forecast,,
+timestamp-forecast,date_epoch,
 timezone,location.tz_id,
 ok_key,location,
 ok_value,<exist>,

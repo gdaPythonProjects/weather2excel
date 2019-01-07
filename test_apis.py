@@ -14,7 +14,7 @@ LON = 18.5318800  # długość geograficzna
 LAT = 54.5188900  # szerokość geograficzna
 MODE = "current"  # "current" podaję aktualne dane, alternatywny tryb -> "forecast" - prognoza, ale tylko dla pogody
 LANG = "pl"  # język do komunikacji z API, TODO zastanowić się czy ta zmienna ma być tutaj, czy w weatherApis.py?
-DAYS = 5  # ilość dni do przodu na które można uzyskać prognoze pogody
+DAYS = 3  # ilość dni do przodu na które można uzyskać prognoze pogody
 
 weatherDataset = []
 
@@ -51,6 +51,7 @@ for wynikiAPI in weatherDataset:
 f = open( 'wyniki.csv', 'w' )
 f.write( CSV )
 f.close()
+
 
 with open('data.json', 'w') as outfile:
     for WD in weatherDataset:
