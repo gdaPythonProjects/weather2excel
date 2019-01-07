@@ -20,7 +20,7 @@ print("")
 
 # sprawdź ilość argumentów podanych na starcie przez użytkownika
 # zawsze jest minimum 1 - nazwa skryptu. Jeżeli ejst ich więcej to znaczy, ze użytkownik podał parametry startowe.
-# Jeżeli tlyko 1 to znaczy, że uruchomił skrypt bez parametrów
+# Jeżeli tylko 1 to znaczy, że uruchomił skrypt bez parametrów
 number_of_arguments = len(sys.argv)
 
 option = ""  # zmienna określająca, którą opcję wybrał uzytkownik
@@ -73,7 +73,7 @@ Co chcesz zrobić?
         # wykonuj pętlę dopóki użytkownik nie poda prawidłowego numeru opcji
         while option != "1" and option != "2" and option != "3" and option != "4":
             # użytkownik wporwadza numer komendy - numer jest w postaci string, aby uniknąć błędów związanych z podaniem
-            # nieprawdiłowego znaku lub ciągu znaków
+            #  nieprawdiłowego znaku lub ciągu znaków
             option = input("Wprowadź numer opcji (1/2/3/4) i naciśnij ENTER: ")
             print("")  # nowa linia dla poprawy czytelności
 
@@ -93,8 +93,8 @@ Co chcesz zrobić?
 
         elif option == "3":
             # ustawienie number_of_arguments na 0 spowoduje wywołanie menu start w dalszej części programu poprzez
-            # zasymulowanie jakby argumenty nie zostały podane (powinno być 1, ale podanie wartości 0 zasugeruje, że
-            # to jest sztucznie wytworzona zmiana)
+            #  zasymulowanie jakby argumenty nie zostały podane (powinno być 1, ale podanie wartości 0 zasugeruje, że
+            #  to jest sztucznie wytworzona zmiana)
             number_of_arguments = 0
 
             # wyczyść wszystkie dane podane w parametrach przez użytkownika
@@ -111,40 +111,40 @@ Co chcesz zrobić?
             exit()  # kończy natychmiast program aby uniknąć potencjalnych błedów z powodu wybrania opcji, której nie ma
 
     # jeżeli został podany parametr -c to przepisz wartość do zmiennej globalnej CITY, jak nie został podany, czyli
-    # domyślnie jest None to pomiń ten krok i pozostaw niezmienioną wartość CITY
+    #  domyślnie jest None to pomiń ten krok i pozostaw niezmienioną wartość CITY
     if args.city_name is not None:
         # wyczyść nazwę miasta
         CITY = ""
 
         # przejdź przez całą listę wyrazów, z których może się składać nazwa miasta. Miasto mogą być 1 wyrazowe
-        # np.: Gdynia, Sopot, Wejherowo, albo wielowyrazowe: Stalowa Wola, Kędzierzyn Koźle
+        #  np.: Gdynia, Sopot, Wejherowo, albo wielowyrazowe: Stalowa Wola, Kędzierzyn Koźle
         for word_of_city_name in args.city_name:
 
             # dodawaj kolejne wyrazy do zmiennej CITY (zmienna typu string)
             CITY = CITY + " " + word_of_city_name
 
     # pobierz wartość parematru longitude i zapisz do zmiennej globalnej LON, podanie większej ilości wartości przez
-    # użytkownika będzie ignorowane - zostanie pobrana tlyko pierwsza wartość
+    #  użytkownika będzie ignorowane - zostanie pobrana tlyko pierwsza wartość
     # TODO zmienić obsługę błędów tak aby nie przerywało skryptu gdy użytkownik poda litery przy -lon lub -lat
     # TODO zmienić obsługę błędów tak aby nie przerywało skryptu gdy użytkownik poda zamiast kropki przecinek
     #  (automatyczna zamiana)
     # jeżeli został podany parametr -lon to przepisz wartość do zmiennej globalnej LON, jak nie został podany, czyli
-    # domyślnie jest None to pomiń ten krok i pozostaw niezmienioną wartość LON
+    #  domyślnie jest None to pomiń ten krok i pozostaw niezmienioną wartość LON
     if args.longitude is not None:
         LON = args.longitude[0]
 
     # pobierz wartość parematru latitude i zapisz do zmiennej globalnej LAT, podanie większej ilości wartości przez
-    # użytkownika będzie ignorowane - zostanie pobrana tlyko pierwsza wartość
+    #  użytkownika będzie ignorowane - zostanie pobrana tlyko pierwsza wartość
     # jeżeli został podany parametr -lat to przepisz wartość do zmiennej globalnej LAT, jak nie został podany, czyli
-    # domyślnie jest None to pomiń ten krok i pozostaw niezmienioną wartość LAT
+    #  domyślnie jest None to pomiń ten krok i pozostaw niezmienioną wartość LAT
     if args.latitude is not None:
         LAT = args.latitude[0]
 
 # Jeżeli użytkownik nie podał argumentów, albo podał je błędnie to rozpocznij program od standardowego menu
 #
 # osobny 'if' zamiast komendy 'else' do poprzedniego 'if'a' z powodu, że gdy użytkownik źle przekaże argumenty to
-# pozostaje możliwość skorzystania ze standardowego menu (wcześniejszy blok kodu ustawi number_of_arguments = 0, co
-# oznacza, że coś poszło nie tak, ale użytkownik chce skorzystać z standardowego menu)
+#  pozostaje możliwość skorzystania ze standardowego menu (wcześniejszy blok kodu ustawi number_of_arguments = 0, co
+#  oznacza, że coś poszło nie tak, ale użytkownik chce skorzystać z standardowego menu)
 if number_of_arguments <= 1:
 
     # menu startowe
@@ -163,7 +163,7 @@ Co chcesz zrobić?
     # wykonuj pętlę dopóki użytkownik nie poda prawidłowego numeru opcji
     while option != "1" and option != "2" and option != "3":
         # użytkownik pworwadza numer komendy - numer jest w postaci string, aby uniknąć błędów związanych z podaniem
-        # nieprawdiłowego znaku lub ciągu znaków
+        #  nieprawdiłowego znaku lub ciągu znaków
         option = input("Wprowadź numer opcji (1/2/3) i naciśnij ENTER: ")
 
         # sprawdź czy podana opcja jest poprawna, jeżeli nie to wyświetl komunikat o złym wyborze
@@ -176,7 +176,7 @@ Co chcesz zrobić?
         print("Aktualne dane\n")
 
         # funkcja pobiera zmienne globalne, użytkownik wprowadza miejsce, dla którego chce otrzymać informacje pogodowe
-        # i funkcja zwraca wskazane miejsce ponownie do zmiennych globalnych
+        #  i funkcja zwraca wskazane miejsce ponownie do zmiennych globalnych
         CITY, LON, LAT = get_place_from_user(CITY, LON, LAT)
 
     elif option == "2":
