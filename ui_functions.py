@@ -4,6 +4,46 @@
 # Stworzona by utrzymacz czystość i przejrzystość w weather2excel.py
 
 
+def check_GPS_value_from_user(data_from_user, MIN_expected_value, MAX_expected_value):
+    # pobieram dane dla współrzędnej geograficznej, oczekuję liczby w zakresie od MIN_expected_value do
+    #  MAX_expected_value (dla longitude 0-180, dla latitude 0-90)
+
+    range_is_correct = 0
+    value_GPS = None
+
+    try:
+        # jeżeli użytkownik użył przecinka do oddzielenia części całości od ułamkowej to zamień go na kropkę
+        if "," in data_from_user:
+            data_from_user = data_from_user.replace(",", ".")
+
+        # konwertuj do typu float i zobacz czy wyskoczy błąd
+        value_GPS = float(data_from_user)
+
+    except ValueError:
+        # jeżeli nie da się konwertować do float to ustaw flagę type_is_correct na 0
+        type_is_correct = 0
+
+    else:  # jeżeli pójdzie dobrze oznacz type_is_correct na 1 jako prawidłowy
+        type_is_correct = 1
+
+    # jeżeli typ jest poprawny (float) to sprawdź, czy jest w prawidłowym zakresie
+    if type_is_correct == 1:
+
+        if MIN_expected_value < value_GPS < MAX_expected_value:
+            # jezeli wartość jest w prawidłowym zakresie to ustaw range_is_correct na 1
+            range_is_correct = 1
+
+        else:
+            # jeżeli jest poza zakresem to ustaw range_is_correct na 0 oraz wyczyść wartość value_GPS
+            range_is_correct = 0
+            value_GPS = None
+
+    # zwróć informację czy typ oraz zakres jest prawidłowy oraz przetworzoną wartość współrzędnej GPS
+    #  (tylko jak jest poprawna, w innym wypadku zwróć None
+    return type_is_correct, range_is_correct, value_GPS
+
+# koniec check_GPS_value_from_user()
+
 # funkcja pobierająca dane o miejscu od użytkownika i zmieniająca odpowiednie zmienne dla API pogodowych
 def get_place_from_user(city_name, longitude, latitude):
 
