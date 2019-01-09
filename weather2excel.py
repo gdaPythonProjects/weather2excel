@@ -1,10 +1,12 @@
 #!/usr/bin/python
 
+# region import
 from ui_functions import *
 import sys  # potrzebna do sprawdzenia, czy użytkownik podał jakiekolwiek parametry na wejściu
 import argparse  # do obsługi parametrów wejściowych
+# endregion
 
-# zmienne startowe
+# region zmienne startowe
 CITY = "gdynia"  # nazwy miast z małych liter aby łatwiej było operać na API
 # współrzedne dla Gdyni pobrane z portalu https://www.wspolrzedne-gps.pl/
 LON = 54.23  # długość geograficzna
@@ -17,15 +19,19 @@ WHAT_CHECK = "weather"  # "weather" podaje dane dla pogody, "pollution" dla zani
 LANG = "pl"  # język do komunikacji z API, TODO zastanowić się czy ta zmienna ma być tutaj, czy w weatherApis.py?
 DAYS = 5  # ilość dni do przodu na które można uzyskać prognoze pogody
 
+option = None  # zmienna określająca, którą opcję wybrał uzytkownik
+error_in_start_parameters = 0  # zmienna określająca czy wszystkie parametry zostały podane poprawnie przez Użytkownika
+# endregion
+
 # wyświetl wiadomość powitalną
 welcome_message()
+
+# region parametry startowe - przechwytywanie i wstępna obsługa
 
 # sprawdź ilość argumentów podanych na starcie przez użytkownika
 # zawsze jest minimum 1 - nazwa skryptu. Jeżeli ejst ich więcej to znaczy, ze użytkownik podał parametry startowe.
 # Jeżeli tylko 1 to znaczy, że uruchomił skrypt bez parametrów
 number_of_arguments = len(sys.argv)
-
-option = None  # zmienna określająca, którą opcję wybrał uzytkownik
 
 # jeżeli użytkownik podał jakiekolwiek argumenty to rozpocznij działanie programu na parametrach
 if number_of_arguments > 1:
@@ -72,11 +78,9 @@ if number_of_arguments > 1:
 
     # tworzy słownik argumentów
     args = parser.parse_args()
+# endregion
 
-    # zmienna określająca czy wszystkie parametry zostały podane poprawnie przez Użytkownika
-    error_in_start_parameters = 0
-
-    # "zabezpieczenie" na wypadek gdyby użytkownik spróbował podać jednocześnie nazwę miasta oraz namiary GPS
+# region gdy użytkownik spróbował jednocześnie podać nazwę miasta oraz namiary GPS w parametrach startpwych...
     if (args.city_name is not None) and ((args.longitude is not None) or (args.latitude is not None)):
         print("""
 OSTRZEZENIE! Podjęto próbę jednoczesnego podania: nazwy miasta i współrzędnych GPS!
@@ -129,9 +133,10 @@ Co chcesz zrobić?
         else:
             print("Coś poszło nie tak!")
             exit()  # kończy natychmiast program aby uniknąć potencjalnych błedów z powodu wybrania opcji, której nie ma
+# endregion
 
-    # jeżeli został podany parametr -c oraz użytkownik nie podał parametrów -lon i -lat
-    #  to przepisz wartość do zmiennej globalnej CITY, a jak nie została podana nowa wartość dla niego (domyślnie
+# region został wywołany parametr -city
+    #  to przepisz jego wartość do zmiennej globalnej CITY, a jak nie została podana nowa wartość dla niego (domyślnie
     #  w parserze argumentów startowych jest None) to pomiń ten krok i pozostaw niezmienioną wartość CITY (zgodną
     #  z wartością domyslną podaną dla zmiennych globalnych na poczatku)
     if (args.city_name is not None) and (args.longitude is None) and (args.latitude is None):
@@ -146,11 +151,12 @@ Co chcesz zrobić?
             CITY = CITY + " " + word_of_city_name
 
         error_in_start_parameters = 0
+# endregion
 
-    # jeżeli zostały podane parametry -lon i -lat, ale nie został podany -city to pobierz dane z tych parametrów
-    #  i przekaż je do zmiennych globlanych LON i LAT. Podanie przez użytkownika większej ilości liczb dla danego
-    #  parametru (np.: -lon 34.5 78 43.2) będzie zignorowane i zostanie pobrana tylko pierwsza wartość
-    #  (tu w przykładzie 34.5)
+# region jeżeli zostały wywołane parametry -lon i -lat
+    #  to pobierz dane z tych parametrów i przekaż je do zmiennych globlanych LON i LAT. Podanie przez użytkownika
+    #  większej ilości liczb dla danego parametru (np.: -lon 34.5 78 43.2) będzie zignorowane i zostanie pobrana tylko
+    #  pierwsza wartość (tu w przykładzie 34.5)
     elif (args.city_name is None) and (args.longitude is not None) and (args.latitude is not None):
 
         # sprawdzam, czy wartości podane przez użytkownika z pomocą parametrów są prawidłowe
@@ -171,7 +177,9 @@ Co chcesz zrobić?
 
     else:
         error_in_start_parameters = 1
+# endregion
 
+# region obsługa błędnie podanych parametrów
     # wyświetl info o błędzie we współrzędnych wtedy gdy taki błąd znajdziesz oraz gdy użytkownik rzeczywiście
     #  podał jakikolwiek argument
     if error_in_start_parameters == 1 and number_of_arguments > 1:
@@ -214,20 +222,11 @@ Co chcesz zrobić?
         else:
             print("Coś poszło nie tak!")
             exit()  # kończy natychmiast program aby uniknąć potencjalnych błedów z powodu wybrania opcji, której nie ma
-    # koniec reakcji na błędy w parametrach
+# endregion
 
-    # pobierz wartość parematru latitude i zapisz do zmiennej globalnej LAT, podanie większej ilości wartości przez
-    #  użytkownika będzie ignorowane - zostanie pobrana tlyko pierwsza wartość
-    # jeżeli został podany parametr -lat to przepisz wartość do zmiennej globalnej LAT, jak nie został podany, czyli
-    #  domyślnie jest None to pomiń ten krok i pozostaw niezmienioną wartość LAT
-#    if args.latitude is not None:
-#        LAT = args.latitude[0]
-
-# Jeżeli użytkownik nie podał argumentów, albo podał je błędnie to rozpocznij program od standardowego menu
-#
-# osobny 'if' zamiast komendy 'else' do poprzedniego 'if'a' z powodu, że gdy użytkownik źle przekaże argumenty to
-#  pozostaje możliwość skorzystania ze standardowego menu (wcześniejszy blok kodu ustawi number_of_arguments = 0, co
-#  oznacza, że coś poszło nie tak, ale użytkownik chce skorzystać z standardowego menu)
+# region menu startowe
+# Jeżeli użytkownik nie podał argumentów, albo podał je błędnie number_of_arguments == 0) to rozpocznij program od
+#  menu startowego
 if number_of_arguments <= 1:
 
     # menu startowe
@@ -277,11 +276,13 @@ Co chcesz zrobić?
     else:
         print("Coś poszło nie tak przy wybieraniu opcji!")
         exit()  # kończy natychmiast program aby uniknąć potencjalnych błedów z powodu wybrania opcji, której nie ma
+# endregion
 
-# kontrolny wydruk zmiennych podanych przez użytkownika
+# region kontrolny wydruk zmiennych podanych przez użytkownika
 print("")
 print("Kontrolny wydruk zmiennych")
 print("CITY: ", CITY)
 print("LON: ", LON)
 print("LAT: ", LAT)
 print("MODE: ", MODE)
+# endregion
