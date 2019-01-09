@@ -3,7 +3,7 @@ api_name,World Air Quality Index,
 api_doc,https://aqicn.org/json-api/doc/,
 version,,
 url_current_city_endpoint,http://api.waqi.info/feed/{city}/?token={token},
-url_current_lonlat_endpoint,"http://api.waqi.info/feed/geo:{lat},{lon}/?token={token}",
+url_current_lonlat_endpoint,http://api.waqi.info/feed/geo:{lat};{lon}/?token={token},
 url_forecast_city_endpoint,,
 url_forecast_lonlat_endpoint,,
 header_request_current,,
@@ -13,7 +13,7 @@ method_current,get,
 method_forecast,get,
 post_data_current,,
 post_data_foreast,,
-request_limit,60,1/h
+request_limit,1440,/24h
 pressure,data.iaqi.p.v,hPa
 humidity,data.iaqi.h.v,%
 temperature,data.iaqi.t.v,°C
@@ -65,3 +65,4 @@ timestamp-forecast,,
 timezone,data.time.tz,
 ok_key,status,
 ok_value,ok,
+error-message,message,
