@@ -169,6 +169,9 @@ Co chcesz zrobić?
     2. Zakończyć działanie programu.
 """)
 
+        # zerowanie
+        option = 0
+
         # wykonuj pętlę dopóki użytkownik nie poda prawidłowego numeru opcji
         while option != "1" and option != "2":
             # użytkownik wporwadza numer komendy - numer jest w postaci string, aby uniknąć błędów związanych z podaniem
