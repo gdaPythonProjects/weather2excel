@@ -61,11 +61,10 @@ if number_of_arguments > 1:
     # zmienna określająca czy pwszystkie parametry zostały podane poprawnie przez Użytkownika
     error_in_start_parameters = 0
 
-    # "zabezpieczenie" na wypadek gdyby użytkownik podał jednocześnie nazwę miasta oraz namiary GPS
+    # "zabezpieczenie" na wypadek gdyby użytkownik spróbował podać jednocześnie nazwę miasta oraz namiary GPS
     if (args.city_name is not None) and ((args.longitude is not None) or (args.latitude is not None)):
-        # TODO zmienić komunikat na podjęto próbę podania jednoczesnie... - brak kontroli poprawności na tym etapie kodu
         print("""
-OSTRZEZENIE! Zostały podane jednocześnie: nazwa miasta i współrzędne GPS!
+OSTRZEZENIE! Podjęto próbę jednoczesnego podania: nazwy miasta i współrzędnych GPS!
 
 Co chcesz zrobić?
     1. Skorzystać z podanej nazwy miejscowości.
