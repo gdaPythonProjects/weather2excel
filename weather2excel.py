@@ -13,6 +13,9 @@ MODE = "forecast"  # "current" podaję aktualne dane, alternatywny tryb -> "fore
 LANG = "pl"  # język do komunikacji z API, TODO zastanowić się czy ta zmienna ma być tutaj, czy w weatherApis.py?
 DAYS = 5  # ilość dni do przodu na które można uzyskać prognoze pogody
 
+# wyświetl wiadomość powitalną
+welcome_message()
+
 # sprawdź ilość argumentów podanych na starcie przez użytkownika
 # zawsze jest minimum 1 - nazwa skryptu. Jeżeli ejst ich więcej to znaczy, ze użytkownik podał parametry startowe.
 # Jeżeli tylko 1 to znaczy, że uruchomił skrypt bez parametrów
@@ -23,6 +26,9 @@ option = ""  # zmienna określająca, którą opcję wybrał uzytkownik
 # jeżeli użytkownik podał jakiekolwiek argumenty to rozpocznij działanie programu na parametrach
 if number_of_arguments > 1:
     parser = argparse.ArgumentParser()
+
+    # TODO dodać opcję wyboru prognoza / aktualna
+    # TODO dodać opcję pogoda / zanieczyszczenie powietrza
 
     # deklaracja parametru startowego --city (nazwy miasta). nargs z wartością "*" pozwala na pobranie 1 lub więcej
     # wartości dla danego parametru - tutaj potrzebne, bo nazwy miast mogą być wielowyrazowe
@@ -208,10 +214,7 @@ Co chcesz zrobić?
 if number_of_arguments <= 1:
 
     # menu startowe
-    print("""Weather to Excel
-Tutaj możesz sprawdzić aktualną pogodę dla danego miejsca oraz aktualne zanieczysczenie powietrza, albo sprawdzić
-prognozę pogody.
-    
+    print("""    
 Co chcesz zrobić?
   1. Pokaz aktualne dane.
   2. Pokaż prognozę pogody.
