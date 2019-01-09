@@ -39,7 +39,7 @@ if number_of_arguments > 1:
     # deklaracja parametru startowego --longitude (długości geograficznej)
     # wartość domyślna zapisana w zmiennych globalnych na początku programu zamiast tutaj w parserze, aby uniknąć
     #  późniejszych problemów
-    parser.add_argument("-lon", "--longitude", type=float, nargs="*", dest="longitude", default=None,
+    parser.add_argument("-lon", "--longitude", nargs="*", dest="longitude", default=None,
                         help="pobiera wartość długości geograficznej w formie liczby całkowitej lub ułamka "
                              "dziesiętnego. Pamiętaj, że część całości od ułamka oddziela '.' (KROPKA) ! "
                              "Wartość domyślna: 54.23 (dla Gdyni).")
@@ -47,7 +47,7 @@ if number_of_arguments > 1:
     # deklaracja parametru startowego --latitude (szerokości geograficznej)
     # wartość domyślna zapisana w zmiennych globalnych na początku programu zamiast tutaj w parserze, aby uniknąć
     #  późniejszych problemów
-    parser.add_argument("-lat", "--latitude", type=float, nargs="*", dest="latitude", default=None,
+    parser.add_argument("-lat", "--latitude", nargs="*", dest="latitude", default=None,
                         help="pobiera wartość szerokości geograficznej w formie liczby całkowitej lub ułamka "
                              "dziesiętnego. Pamiętaj, że część całości od ułamka oddziela '.' (KROPKA) ! "
                              "Wartość domyślna: 19.23 (dla Gdyni).")
@@ -58,8 +58,12 @@ if number_of_arguments > 1:
     # kontrolnie drukuje cały złownik argumentów
     print(args)
 
+    # zmienna określająca czy pwszystkie parametry zostały podane poprawnie przez Użytkownika
+    error_in_start_parameters = 0
+
     # "zabezpieczenie" na wypadek gdyby użytkownik podał jednocześnie nazwę miasta oraz namiary GPS
     if (args.city_name is not None) and ((args.longitude is not None) or (args.latitude is not None)):
+        # TODO zmienić komunikat na podjęto próbę podania jednoczesnie... - brak kontroli poprawności na tym etapie kodu
         print("""
 OSTRZEZENIE! Zostały podane jednocześnie: nazwa miasta i współrzędne GPS!
 
@@ -125,20 +129,40 @@ Co chcesz zrobić?
             # dodawaj kolejne wyrazy do zmiennej CITY (zmienna typu string)
             CITY = CITY + " " + word_of_city_name
 
+        error_in_start_parameters = 0
+
     # jeżeli zostały podane parametry -lon i -lat, ale nie został podany -city to pobierz dane z tych parametrów
     #  i przekaż je do zmiennych globlanych LON i LAT. Podanie przez użytkownika większej ilości liczb dla danego
     #  parametru (np.: -lon 34.5 78 43.2) będzie zignorowane i zostanie pobrana tylko pierwsza wartość
     #  (tu w przykładzie 34.5)
-    elif (args.longitude is not None) and (args.latitude is not None) and (args.city_name is None):
-        # TODO zmienić obsługę błędów tak aby nie przerywało skryptu gdy użytkownik poda litery przy -lon lub -lat
-        # TODO zmienić obsługę błędów tak aby nie przerywało skryptu gdy użytkownik poda zamiast kropki przecinek
-        #  (automatyczna zamiana)
-        LON = args.longitude[0]
-        LAT = args.latitude[0]
+    elif (args.city_name is None) and (args.longitude is not None) and (args.latitude is not None):
+
+        # sprawdzam, czy wartości podane przez użytkownika z pomocą parametrów są prawidłowe
+        is_correct_value_LON, is_correct_range_LON, LON = check_GPS_value_from_user(args.longitude[0], 0, 180)
+        print("Dla LON: ", is_correct_value_LON, is_correct_range_LON, LON)
+        is_correct_value_LAT, is_correct_range_LAT, LAT = check_GPS_value_from_user(args.latitude[0], 0, 90)
+        print("Dla LAT: ", is_correct_value_LAT, is_correct_range_LAT, LAT)
+
+        # jeżeli wszystko jest ok to ustawiam flagę error_in_start_parameters na 0
+        if (is_correct_value_LON == 1 and
+                is_correct_range_LON == 1 and
+                is_correct_value_LAT == 1 and
+                is_correct_range_LAT == 1):
+
+            error_in_start_parameters = 0
+
+        # jeżeli jest jakikolwiek błąd przy sprawdzaniu poprawności to ustawiam error_in_start_parameters na 1
+        else:
+            error_in_start_parameters = 1
 
     else:
+        error_in_start_parameters = 1
+
+    # wyświetl info o błędzie we współrzędnych wtedy gdy taki błąd znajdziesz oraz gdy użytkownik rzeczywiście
+    #  podał jakikolwiek argument
+    if error_in_start_parameters == 1 and number_of_arguments > 1:
         print("""
-BŁĄD! Podana tylko jedna współrzędna GPS.
+BŁĄD! Podana tylko jedna współrzędna GPS lub współrzędne podane niepoprawnie (wartość nieliczbowa bądź poza zakresem).
 
 Co chcesz zrobić?
     1. Przejść do menu startowego.
@@ -175,13 +199,14 @@ Co chcesz zrobić?
         else:
             print("Coś poszło nie tak!")
             exit()  # kończy natychmiast program aby uniknąć potencjalnych błedów z powodu wybrania opcji, której nie ma
+    # koniec reakcji na błędy w parametrach
 
     # pobierz wartość parematru latitude i zapisz do zmiennej globalnej LAT, podanie większej ilości wartości przez
     #  użytkownika będzie ignorowane - zostanie pobrana tlyko pierwsza wartość
     # jeżeli został podany parametr -lat to przepisz wartość do zmiennej globalnej LAT, jak nie został podany, czyli
     #  domyślnie jest None to pomiń ten krok i pozostaw niezmienioną wartość LAT
-    if args.latitude is not None:
-        LAT = args.latitude[0]
+#    if args.latitude is not None:
+#        LAT = args.latitude[0]
 
 # Jeżeli użytkownik nie podał argumentów, albo podał je błędnie to rozpocznij program od standardowego menu
 #
