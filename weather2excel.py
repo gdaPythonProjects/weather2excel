@@ -13,11 +13,6 @@ MODE = "forecast"  # "current" podaję aktualne dane, alternatywny tryb -> "fore
 LANG = "pl"  # język do komunikacji z API, TODO zastanowić się czy ta zmienna ma być tutaj, czy w weatherApis.py?
 DAYS = 5  # ilość dni do przodu na które można uzyskać prognoze pogody
 
-print("Kontrolne wyświetlanie parametrów startowych w czystej formie")
-print("Number of arguments: ", len(sys.argv))
-print("The arguments are: ", str(sys.argv))
-print("")
-
 # sprawdź ilość argumentów podanych na starcie przez użytkownika
 # zawsze jest minimum 1 - nazwa skryptu. Jeżeli ejst ich więcej to znaczy, ze użytkownik podał parametry startowe.
 # Jeżeli tylko 1 to znaczy, że uruchomił skrypt bez parametrów
@@ -54,9 +49,6 @@ if number_of_arguments > 1:
 
     # tworzy słownik argumentów
     args = parser.parse_args()
-
-    # kontrolnie drukuje cały złownik argumentów
-    print(args)
 
     # zmienna określająca czy pwszystkie parametry zostały podane poprawnie przez Użytkownika
     error_in_start_parameters = 0
@@ -138,9 +130,7 @@ Co chcesz zrobić?
 
         # sprawdzam, czy wartości podane przez użytkownika z pomocą parametrów są prawidłowe
         is_correct_value_LON, is_correct_range_LON, LON = check_GPS_value_from_user(args.longitude[0], 0, 180)
-        print("Dla LON: ", is_correct_value_LON, is_correct_range_LON, LON)
         is_correct_value_LAT, is_correct_range_LAT, LAT = check_GPS_value_from_user(args.latitude[0], 0, 90)
-        print("Dla LAT: ", is_correct_value_LAT, is_correct_range_LAT, LAT)
 
         # jeżeli wszystko jest ok to ustawiam flagę error_in_start_parameters na 0
         if (is_correct_value_LON == 1 and
