@@ -22,7 +22,7 @@ weatherDataset = []
 APIS = ["APIXU.csv", "OpenWeather.csv", "WAQI.csv", "Weatherbit.csv", "DarkSky.csv", "Climacell.csv","Airly.csv","Airvisual.csv"]
 
 
-#APIS = ["APIXU.csv"]
+#APIS = ["OpenWeather.csv"]
 
 
 """for API in os.listdir("config/API/"):"""
@@ -31,7 +31,7 @@ for API in APIS:
     wa = WeatherApis()
     if wa.read_conf(API) == False:
       continue
-    if wa.get_weather(MODE, LANG, DAYS, LON,LAT):
+    if wa.get_weather(MODE, LANG, DAYS, LAT, LON):
       weatherDataset.append( wa.parse_result(MODE, DAYS) )
     else:
       print("Problem z uzyskaniem danych z "+wa.config["api_name"]+". Adres: "+wa.url_search)

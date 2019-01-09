@@ -13,7 +13,7 @@ method_current,get,
 method_forecast,get,
 post_data_current,,
 post_data_foreast,,
-request_limit,41,1/h
+request_limit,1000,/24h
 pressure,data[0].pres,hPa
 humidity,data[0].rh,%
 temperature,data[0].temp,°C
@@ -65,3 +65,4 @@ timestamp-forecast,,
 timezone,timezone,
 ok_key,data,
 ok_value,<exist>,
+error-message,error,

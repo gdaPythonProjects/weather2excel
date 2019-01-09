@@ -11,6 +11,7 @@ class WeatherFactors:
     self._alert_min_val=self._convert_to_float(alert_min_val)
     self._alert_min_val=self._convert_to_float(alert_max_val)
 
+
   def print(self):
     if self.type == "w":
       ftype = "weather"
@@ -18,9 +19,11 @@ class WeatherFactors:
      ftype = "pollution"
 
     print(self.name+" ["+self.unit+"] - "+ftype)
-  
+ 
+
   def check_limits(self,value):
     return check_upper_limit(value) and check_lowwer_limit()
+
 
   def check_upper_limit(self,value):
     if self._max_val!=None and value>self._max_val:
@@ -28,17 +31,20 @@ class WeatherFactors:
     else:
      return True
 
+
   def check_lowwer_limit(self,value):
     if self._min_val!=None and value<self._min_val:
       return False
     else:
      return True
 
+
   def check_alerts(value):
     if value>=self._alert_min_val and value <=self._alert_min_val:
       return True
     else:
      return False
+
 
   def _convert_to_float(self,value):
     try:
@@ -55,6 +61,7 @@ def load_units_config():
         factorsDict[ row["par"].strip() ] = WeatherFactors(row["par"],row["unit"],row["type"],row["min_val"],row["max_val"],row["alert_min_val"],row["alert_max_val"])
   return factorsDict
 
+
 def load_timezones():
   factorsDict={}
   with open("config/.units/timezones.csv", 'r', encoding="utf8") as csvfile:
@@ -63,15 +70,18 @@ def load_timezones():
         factorsDict[ row["TZ"].strip() ] = row["UTC_offset"].strip() 
   return factorsDict
 
+
 def list_factors_unis(factorsDict):
   for key, value in factorsDict.items():
     if(factorsDict[key].type=="w" or factorsDict[key].type=="p"):
       factorsDict[key].print()
 
+
+#w-weather, p-pollution, wf-weather forecast, t-obseration time,  tf-time of forecast, tz- time zone
 def get_factors(factorsDict):
   f = []
   for key,value in factorsDict.items():
-    if(factorsDict[key].type=="w" or factorsDict[key].type=="p" or factorsDict[key].type=="wf" or factorsDict[key].type=="t" or factorsDict[key].type=="tz"):
+    if(factorsDict[key].type=="w" or factorsDict[key].type=="p" or factorsDict[key].type=="wf" or factorsDict[key].type=="tf" or factorsDict[key].type=="t" or factorsDict[key].type=="tz"):
       f.append(key)
   return f
 

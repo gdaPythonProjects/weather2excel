@@ -23,11 +23,10 @@ factorsDict=load_units_config()
 factors = get_factors(factorsDict)
 #TIME_ZONES = load_timezones()
 
-# API returning name of time zones
-
 
 class WeatherApis:
 
+  # API thas returns name of time zones
   TZ_API = ["APIXU","DarkSky"]
   TZ=""
 
@@ -66,19 +65,24 @@ class WeatherApis:
     return True
 
 
-  def get_weather(self, *args):  # MODE-0, LANG-1, DAYS-2, city-3     MODE-0, LANG-1, DAYS-2,lon-3, lat-4
+  def get_weather(self, *args):  # MODE-0, LANG-1, DAYS-2, city-3     MODE-0, LANG-1, DAYS-2,lat-3,lon-4
     if len(args) == 4:# building url with city
       self.url_search = self.config["url_"+args[0]+"_city_endpoint"].replace("{city}", args[3])
       if len(self.url_search)<10:
-        return self.get_weather(args[0],args[1],args[2],str(54.51889),str(18.53188)) #TODO #getLONLATfromCity
+        coord = _get_coord_from_city_name(args[3])
+        return self.get_weather(args[0],args[1],args[2],coord.lat,coor.lon) #TODO #getLONLATfromCity
+
     elif len(args) == 5:# building url with lon/lat
-      self.url_search = self.config["url_"+args[0]+"_lonlat_endpoint"].replace("{lat}", str(args[4])).replace("{lon}", str(args[3]))
+      self.url_search = self.config["url_"+args[0]+"_lonlat_endpoint"].replace("{lat}", str(args[3])).replace("{lon}", str(args[4]))
     else:
       return False  #print( "REPL:    "+self._replacer(self.url_search, {"{token}":self.api_token,"{lang}":args[1]} )  )
     
     self.url_search = self._replacer(self.url_search, {"{token}":self.api_token, "{lang}":args[1], "{days}":str(args[2]) })
 
-    print("URL_SEARCH: "+self.url_search)
+    #only for development purposes
+    #print("URL_SEARCH: "+self.url_search)
+    print("Wyszukiwanie danych za pomocą: "+self.config["api_name"])
+
     headers = self._set_headers(args[0])  #print("headers: "+str(headers))
     try:
       if self.config["method_"+args[0]] == "get":#print("GET REQUEST......")
@@ -88,13 +92,29 @@ class WeatherApis:
         r = requests.post(self.url_search, headers=headers, data = data )
 
       self.JSON = r.json()#print(self.JSON)
+
+      #only for development purposes
       self._write_JSON_resp_to_file()
-      print("STATUS CODE:"+str(r.status_code))
-      if r.status_code == 200 and self._check_result():
-        return True
+
+      if r.status_code == 200:
+        if self._check_result():
+          print(" OK!")
+          return True
+        else:
+          return False
+      else:
+        print("  API: "+self.config["api_name"]+" STATUS CODE:"+str(r.status_code))
+        try:
+          err_msg = parse(self.config["error-message"]).find(self.JSON)       #print(x)
+          for match in err_msg:
+            print("Błąd API: '"+match.value+"'")
+        except:
+          raise
+          return False
     except:
       #raise
       return False
+
 
   def _set_headers(self,mode):
     R={}
@@ -112,6 +132,7 @@ class WeatherApis:
     for key,val in replace.items():
       input_string = input_string.replace(key, str(val))    #print(key, '->', val)
     return input_string
+
 
   def _check_result(self): #print("ok_value=") print(self.config["ok_key"])#print("ok_JSON")print(self.JSON[ self.config["ok_key"]  ])
     if self.config["ok_key"]=="":
@@ -131,7 +152,7 @@ class WeatherApis:
   def parse_result(self, mode, days):
     DATA = {}
     #global TZ,TZ_API
-    DATA["api_name"]=self.config["api_name"]
+    #DATA["api_name"]=self.config["api_name"]
     for day_number in range(0,days):
       WDS = {}
       WDS["api_name"]=self.config["api_name"]
@@ -152,15 +173,11 @@ class WeatherApis:
               if "@" in self.config[f]:
                 json_path = self.config[f].replace("nnn",str(day_number))
               else:
-                json_path = "["+str(day_number)+"]."+self.config[f]
-          
-          #print("JSON_PATH: "+json_path)
+                json_path = "["+str(day_number)+"]."+self.config[f]       #print("JSON_PATH: "+json_path)
 
           try:
-            x = parse(json_path).find(self.JSON)   
-            #print(x)
-            for match in x:
-              #print("JSON_PATH: "+json_path+"  val:"+str(match.value) )
+            x = parse(json_path).find(self.JSON)       #print(x)
+            for match in x:     #print("JSON_PATH: "+json_path+"  val:"+str(match.value) )
               if str(factorsDict[f].unit) == str(self.config[f+"_u"]): 
                 WDS[f] = match.value
               else:
@@ -214,10 +231,11 @@ class WeatherApis:
       #raise
       return False
 
-
+  #to test check weather for Warsaw
   def _check_api_key(self):
-    self.get_weather("current","en",1,0,0)
+    self.get_weather("current","en",1, 52.2297700, 21.0117800)
     return self._check_result()
+
 
   def _get_timezone_offset(self, timezone):
     global TIME_ZONES
@@ -276,6 +294,18 @@ class WeatherApis:
 
       return "#"+str(time)
   
+ 
+  # retun FI(lat),LAMBDA(lon)
+  def _get_coord_from_city_name(self, city_name):
+    
+    #TODO request to ger coordinates
+    #example return for Gdynia
+    coordinates = {lat:54.51889, lon:18.53188 }
+    return coordinates
+
+
+
+
   #def setApiToken(token)
   #def santizizeSearch
   #def getLONLATfromCity
