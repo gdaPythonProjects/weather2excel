@@ -125,3 +125,13 @@ def get_place_from_user(city_name, longitude, latitude):
     return city_name, longitude, latitude
 
 # koniec funkcji get_place_from_user()
+
+
+# wyświetl wiadomość powitalną
+def welcome_message():
+    print("""
+Weather to Excel
+Tutaj możesz sprawdzić aktualną pogodę dla danego miejsca oraz aktualne zanieczysczenie powietrza, albo sprawdzić
+prognozę pogody.""")
+
+# koniec funkcji welcome_message()
