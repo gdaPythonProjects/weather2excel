@@ -135,3 +135,18 @@ Tutaj możesz sprawdzić aktualną pogodę dla danego miejsca oraz aktualne zani
 prognozę pogody.""")
 
 # koniec funkcji welcome_message()
+
+
+def check_user_choice_is_correct(data_from_user, *args):
+    i = 0
+    correct_choice = 0
+
+    for option in args:
+        if option == data_from_user:
+            correct_choice = 1
+            break
+
+    if correct_choice == 0:
+        return None
+    else:
+        return data_from_user
