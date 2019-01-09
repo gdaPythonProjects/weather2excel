@@ -218,7 +218,6 @@ Co chcesz zrobić?
 if number_of_arguments <= 1:
 
     # menu startowe
-    # TODO dodać opcję zamknięcia programu
     print("""Weather to Excel
 Tutaj możesz sprawdzić aktualną pogodę dla danego miejsca oraz aktualne zanieczysczenie powietrza, albo sprawdzić
 prognozę pogody.
@@ -227,18 +226,19 @@ Co chcesz zrobić?
   1. Pokaz aktualne dane.
   2. Pokaż prognozę pogody.
   3. Ostatnio wyszukiwane.
+  4. Zakończ działanie programu.
 """)
 
     option = ""  # resetuję zmienną
 
     # wykonuj pętlę dopóki użytkownik nie poda prawidłowego numeru opcji
-    while option != "1" and option != "2" and option != "3":
+    while option != "1" and option != "2" and option != "3" and option != "4":
         # użytkownik pworwadza numer komendy - numer jest w postaci string, aby uniknąć błędów związanych z podaniem
         #  nieprawdiłowego znaku lub ciągu znaków
-        option = input("Wprowadź numer opcji (1/2/3) i naciśnij ENTER: ")
+        option = input("Wprowadź numer opcji (1/2/3/4) i naciśnij ENTER: ")
 
         # sprawdź czy podana opcja jest poprawna, jeżeli nie to wyświetl komunikat o złym wyborze
-        if option != "1" and option != "2" and option != "3":
+        if option != "1" and option != "2" and option != "3" and option != "4":
             print("\nNie ma takiej opcji! Spróbuj jeszcze raz...\n")
 
     # dalej zbieram potrzebne informacje do wyświetlenia danych
@@ -259,6 +259,10 @@ Co chcesz zrobić?
     elif option == "3":
         print("Ostatnio wyszukiwane\n")
         # TODO wykonać funkcję pobierania infromacji o ostatnim wyszukiwaniu
+
+    elif option == "4":
+        print("Zakończono działanie programu.")
+        exit()
 
     else:
         print("Coś poszło nie tak przy wybieraniu opcji!")
