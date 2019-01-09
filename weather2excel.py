@@ -9,7 +9,11 @@ CITY = "gdynia"  # nazwy miast z małych liter aby łatwiej było operać na API
 # współrzedne dla Gdyni pobrane z portalu https://www.wspolrzedne-gps.pl/
 LON = 54.23  # długość geograficzna
 LAT = 19.23  # szerokość geograficzna
-MODE = "forecast"  # "current" podaję aktualne dane, alternatywny tryb -> "forecast" - prognoza, ale tylko dla pogody
+
+MODE = "current"  # "current" podaję aktualne dane, alternatywny tryb -> "forecast" - prognoza, ale tylko dla pogody
+WHAT_CHECK = "weather"  # "weather" podaje dane dla pogody, "pollution" dla zanieczyszczeń, "both" dla obu
+# należy pamiętać, że "pollution" i "both" mogą być tylko dla trybu "current" !
+
 LANG = "pl"  # język do komunikacji z API, TODO zastanowić się czy ta zmienna ma być tutaj, czy w weatherApis.py?
 DAYS = 5  # ilość dni do przodu na które można uzyskać prognoze pogody
 
@@ -34,24 +38,37 @@ if number_of_arguments > 1:
     # wartości dla danego parametru - tutaj potrzebne, bo nazwy miast mogą być wielowyrazowe
     # wartość domyślna zapisana w zmiennych globalnych na początku programu zamiast tutaj w parserze, aby uniknąć
     #  późniejszych problemów
-    parser.add_argument("-c", "--city", nargs="*", dest="city_name", default=None,
+    parser.add_argument("-city", "--city-name", nargs="*", dest="city_name", default=None,
                         help="pobiera nazwę miasta. Wartość domyślna: Gdynia")
 
     # deklaracja parametru startowego --longitude (długości geograficznej)
-    # wartość domyślna zapisana w zmiennych globalnych na początku programu zamiast tutaj w parserze, aby uniknąć
-    #  późniejszych problemów
+    # wartość domyślna (54.23) zapisana w zmiennych globalnych na początku programu zamiast tutaj w parserze, aby
+    #  uniknąć późniejszych problemów
     parser.add_argument("-lon", "--longitude", nargs="*", dest="longitude", default=None,
                         help="pobiera wartość długości geograficznej w formie liczby całkowitej lub ułamka "
                              "dziesiętnego. Pamiętaj, że część całości od ułamka oddziela '.' (KROPKA) ! "
                              "Wartość domyślna: 54.23 (dla Gdyni).")
 
     # deklaracja parametru startowego --latitude (szerokości geograficznej)
-    # wartość domyślna zapisana w zmiennych globalnych na początku programu zamiast tutaj w parserze, aby uniknąć
-    #  późniejszych problemów
+    # wartość domyślna zapisana w zmiennych globalnych to 19.23
     parser.add_argument("-lat", "--latitude", nargs="*", dest="latitude", default=None,
                         help="pobiera wartość szerokości geograficznej w formie liczby całkowitej lub ułamka "
                              "dziesiętnego. Pamiętaj, że część całości od ułamka oddziela '.' (KROPKA) ! "
                              "Wartość domyślna: 19.23 (dla Gdyni).")
+
+    # parametry decydujące, czy program ma działać w trybie "current", czy "forecast"
+    #  zapis nastepuje do 2 różnych zmiennych (mode_current oraz mode_forecast) aby zabezpieczyć użytkownika przed
+    #  błędnym podaniem na raz obu parametrów i próba uruchomienia programu  w 2 trybach na raz
+
+    # deklaracja parametru startowego --current (tryb aktualnych danych dla pogody i zanieczyszczeń)
+    parser.add_argument("-c", "--current", dest="mode_current", default="true",
+                        help="tryb programu pokazujący aktualne dane dla pogody oraz zanieczyszczeń powietrza")
+
+    # deklaracja parametru startowego --forecast (tryb prognozowanych danych tylko dla pogody)
+    parser.add_argument("-f", "--forecast", dest="mode_forecast", default="true",
+                        help="tryb programu pokazujący prognozę pogody (bez zanieczyszczeń powietrza)")
+
+    # koniec parametrów dla trybu (MODE)
 
     # tworzy słownik argumentów
     args = parser.parse_args()
@@ -267,3 +284,4 @@ print("Kontrolny wydruk zmiennych")
 print("CITY: ", CITY)
 print("LON: ", LON)
 print("LAT: ", LAT)
+print("MODE: ", MODE)
