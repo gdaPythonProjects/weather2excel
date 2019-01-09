@@ -25,7 +25,7 @@ welcome_message()
 # Jeżeli tylko 1 to znaczy, że uruchomił skrypt bez parametrów
 number_of_arguments = len(sys.argv)
 
-option = ""  # zmienna określająca, którą opcję wybrał uzytkownik
+option = None  # zmienna określająca, którą opcję wybrał uzytkownik
 
 # jeżeli użytkownik podał jakiekolwiek argumenty to rozpocznij działanie programu na parametrach
 if number_of_arguments > 1:
@@ -73,7 +73,7 @@ if number_of_arguments > 1:
     # tworzy słownik argumentów
     args = parser.parse_args()
 
-    # zmienna określająca czy pwszystkie parametry zostały podane poprawnie przez Użytkownika
+    # zmienna określająca czy wszystkie parametry zostały podane poprawnie przez Użytkownika
     error_in_start_parameters = 0
 
     # "zabezpieczenie" na wypadek gdyby użytkownik spróbował podać jednocześnie nazwę miasta oraz namiary GPS
@@ -89,14 +89,16 @@ Co chcesz zrobić?
 """)
 
         # wykonuj pętlę dopóki użytkownik nie poda prawidłowego numeru opcji
-        while option != "1" and option != "2" and option != "3" and option != "4":
+        while option is None:
+
             # użytkownik wporwadza numer komendy - numer jest w postaci string, aby uniknąć błędów związanych z podaniem
             #  nieprawdiłowego znaku lub ciągu znaków
-            option = input("Wprowadź numer opcji (1/2/3/4) i naciśnij ENTER: ")
+            option = check_user_choice_is_correct(input("Wprowadź numer opcji (1/2/3/4) i naciśnij ENTER: "),
+                                                  "1", "2", "3", "4")
             print("")  # nowa linia dla poprawy czytelności
 
-            # sprawdź, czy podana opcja jest poprawna, jeżeli nie to wyświetl komunikat o złym wyborze
-            if option != "1" and option != "2" and option != "3" and option != "4":
+            # jeżeli nie została zwrócona żadna opcja to znaczy, że użytkownik podał, opcję spoza dopuszczonych
+            if option is None:
                 print("Nie ma takiej opcji! Spróbuj jeszcze raz...\n")
 
         # reaguj na prawidłowo wybraną opcję
@@ -182,17 +184,15 @@ Co chcesz zrobić?
 """)
 
         # zerowanie
-        option = 0
+        option = None
 
         # wykonuj pętlę dopóki użytkownik nie poda prawidłowego numeru opcji
-        while option != "1" and option != "2":
-            # użytkownik wporwadza numer komendy - numer jest w postaci string, aby uniknąć błędów związanych z podaniem
-            #  nieprawdiłowego znaku lub ciągu znaków
-            option = input("Wprowadź numer opcji (1/2) i naciśnij ENTER: ")
+        while option is None:
+            option = check_user_choice_is_correct(input("Wprowadź numer opcji (1/2) i naciśnij ENTER: "), "1", "2")
             print("")  # nowa linia dla poprawy czytelności
 
             # sprawdź, czy podana opcja jest poprawna, jeżeli nie to wyświetl komunikat o złym wyborze
-            if option != "1" and option != "2":
+            if option is None:
                 print("Nie ma takiej opcji! Spróbuj jeszcze raz...\n")
 
         # reaguj na prawidłowo wybraną opcję
@@ -239,22 +239,22 @@ Co chcesz zrobić?
   4. Zakończ działanie programu.
 """)
 
-    option = ""  # resetuję zmienną
+    option = None  # resetuję zmienną
 
     # wykonuj pętlę dopóki użytkownik nie poda prawidłowego numeru opcji
-    while option != "1" and option != "2" and option != "3" and option != "4":
-        # użytkownik pworwadza numer komendy - numer jest w postaci string, aby uniknąć błędów związanych z podaniem
-        #  nieprawdiłowego znaku lub ciągu znaków
-        option = input("Wprowadź numer opcji (1/2/3/4) i naciśnij ENTER: ")
+    while option is None:
+        option = check_user_choice_is_correct(input("Wprowadź numer opcji (1/2/3/4) i naciśnij ENTER: "),
+                                              "1", "2", "3", "4")
+        print("")  # nowa linia dla poprawy czytelności
 
         # sprawdź czy podana opcja jest poprawna, jeżeli nie to wyświetl komunikat o złym wyborze
-        if option != "1" and option != "2" and option != "3" and option != "4":
-            print("\nNie ma takiej opcji! Spróbuj jeszcze raz...\n")
+        if option is None:
+            print("Nie ma takiej opcji! Spróbuj jeszcze raz...\n")
 
     # dalej zbieram potrzebne informacje do wyświetlenia danych
     if option == "1":
         MODE = "current"  # tryb pokazywania aktualnych danych
-        print("Aktualne dane\n")
+        print("Aktualne dane")
 
         # funkcja pobiera zmienne globalne, użytkownik wprowadza miejsce, dla którego chce otrzymać informacje pogodowe
         #  i funkcja zwraca wskazane miejsce ponownie do zmiennych globalnych
@@ -262,7 +262,7 @@ Co chcesz zrobić?
 
     elif option == "2":
         MODE = "forecast"  # tryb pokazywania prognozy pogody
-        print("Prognoza pogody\n")
+        print("Prognoza pogody")
 
         CITY, LON, LAT = get_place_from_user(CITY, LON, LAT)
 
