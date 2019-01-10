@@ -7,6 +7,7 @@ from weatherApis import *
 import csv
 import json # only for development
 import os
+import sys
 
 CITY = "gdynia"  # nazwy miast z małych liter aby łatwiej było operać na API
 # współrzedne dla Gdyni pobrane z portalu https://www.wspolrzedne-gps.pl/
@@ -18,11 +19,12 @@ DAYS = 3  # ilość dni do przodu na które można uzyskać prognoze pogody
 
 weatherDataset = []
 
-# TODO for loop all  .csv files from /config// directory
-APIS = ["APIXU.csv", "OpenWeather.csv", "WAQI.csv", "Weatherbit.csv", "DarkSky.csv", "Climacell.csv","Airly.csv","Airvisual.csv"]
-
-
 #APIS = ["OpenWeather.csv"]
+
+
+# check API keys to determine if the weather can be obtained(includning timezones)
+if( check_API_keys()==0 ):
+  sys.exit("Nie skonfigurowano żadnego systemu do pobierania danych o pogodzie.\n Program nie może działać.\n Wpisz xxx -help, aby dowiedzieć się, jak dokonać konfiguracji.")
 
 
 """for API in os.listdir("config/API/"):"""

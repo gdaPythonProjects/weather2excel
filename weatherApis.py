@@ -16,6 +16,9 @@ API_PATH ="config/API/"
 API_KEY_PATH ="config/API_keys/"
 TIME_ZONES = {}
 
+# TODO for loop all  .csv files from /config// directory
+APIS = ["APIXU.csv", "OpenWeather.csv", "WAQI.csv", "Weatherbit.csv", "DarkSky.csv", "Climacell.csv","Airly.csv","Airvisual.csv"]
+#APIS = ["OpenWeather.csv", "WAQI.csv"]
 
 #load units configuration
 factorsDict=load_units_config()
@@ -81,7 +84,7 @@ class WeatherApis:
 
     #only for development purposes
     #print("URL_SEARCH: "+self.url_search)
-    print("Wyszukiwanie danych za pomocą: "+self.config["api_name"])
+    print("Wyszukiwanie danych za pomocą: "+self.config["api_name"], end=" ")
 
     headers = self._set_headers(args[0])  #print("headers: "+str(headers))
     try:
@@ -225,8 +228,11 @@ class WeatherApis:
     file_key = file.replace(".csv",".key")
     try:
       with open(API_KEY_PATH+file_key, 'r') as keyfile:
-        key = keyfile.read().replace('\n', '').replace('\r\n', '')
-      return key
+        key = keyfile.read().replace('\r\n', '').replace('\n', '').replace(' ', '')
+        if key!="":
+          return key
+        else:
+          return False
     except:
       #raise
       return False
@@ -302,6 +308,42 @@ class WeatherApis:
     #example return for Gdynia
     coordinates = {lat:54.51889, lon:18.53188 }
     return coordinates
+
+### END OD CLASS DEFINITION ###
+
+
+def check_API_keys():
+  N=0  #number of API found
+  t=0  #number of API with time zone return found
+  n=0  #properly configured API
+  avail = [] #array with configured API names
+  for API in APIS:
+    if API.endswith(".csv"):
+      N=N+1
+      wa = WeatherApis()
+      if wa.read_conf(API) == False:
+        continue
+      if wa.config["api_name"] in WeatherApis.TZ_API:
+        t=t+1
+      
+      n=n+1
+      avail.append(wa.config["api_name"])
+  
+  if N>0:
+    print("# Skonfigurowano "+str(n)+"/"+str(N)+" serwisów pogodowych ##\n "+str(avail))
+    if t>0:
+      print("## Prognozy i bieżące wyniki będą podwane w czasie lokalnym dla wyszukiwanych miejsc.")
+    else:
+      print("## Prognozy i bieżące wyniki będą podawane w czasie UTC.\n Aby wyświetlić z czasem lokalnym dla wyszukiwanych miejsc, należy skonfigurować co najmniej jednen z serwisów:")
+      for i in range(0, len(WeatherApis.TZ_API)):
+        print("- "+WeatherApis.TZ_API[i])
+
+  if N==0:
+    return 0  # can't get weather no API configured
+  if N>0 and t==0:
+    return 1 # can use program but times will be given in UTC not in local time
+  if N>0 and t>0:
+    return 2 # can use program 
 
 
 
