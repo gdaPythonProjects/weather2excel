@@ -16,6 +16,7 @@ LAT = 54.5188900  # szerokość geograficzna
 MODE = "current"  # "current" podaję aktualne dane, alternatywny tryb -> "forecast" - prognoza, ale tylko dla pogody
 LANG = "pl"  # język do komunikacji z API, TODO zastanowić się czy ta zmienna ma być tutaj, czy w weatherApis.py?
 DAYS = 3  # ilość dni do przodu na które można uzyskać prognoze pogody
+SILENT = False #  false - print to console information during request to API
 
 weatherDataset = []
 
@@ -23,7 +24,7 @@ weatherDataset = []
 
 
 # check API keys to determine if the weather can be obtained(includning timezones)
-if( check_API_keys()==0 ):
+if( check_API_keys(verify_online=False)==0 ):
   sys.exit("Nie skonfigurowano żadnego systemu do pobierania danych o pogodzie.\n Program nie może działać.\n Wpisz xxx -help, aby dowiedzieć się, jak dokonać konfiguracji.")
 
 
@@ -33,7 +34,7 @@ for API in APIS:
     wa = WeatherApis()
     if wa.read_conf(API) == False:
       continue
-    if wa.get_weather(MODE, LANG, DAYS, LAT, LON):
+    if wa.get_weather(MODE, LANG, DAYS, SILENT, LAT, LON):
       weatherDataset.append( wa.parse_result(MODE, DAYS) )
     else:
       print("Problem z uzyskaniem danych z "+wa.config["api_name"]+". Adres: "+wa.url_search)

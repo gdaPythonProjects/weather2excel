@@ -18,7 +18,6 @@ TIME_ZONES = {}
 
 # TODO for loop all  .csv files from /config// directory
 APIS = ["APIXU.csv", "OpenWeather.csv", "WAQI.csv", "Weatherbit.csv", "DarkSky.csv", "Climacell.csv","Airly.csv","Airvisual.csv"]
-#APIS = ["OpenWeather.csv", "WAQI.csv"]
 
 #load units configuration
 factorsDict=load_units_config()
@@ -68,15 +67,15 @@ class WeatherApis:
     return True
 
 
-  def get_weather(self, *args):  # MODE-0, LANG-1, DAYS-2, city-3     MODE-0, LANG-1, DAYS-2,lat-3,lon-4
-    if len(args) == 4:# building url with city
-      self.url_search = self.config["url_"+args[0]+"_city_endpoint"].replace("{city}", args[3])
+  def get_weather(self, *args):  # MODE-0, LANG-1, DAYS-2, SILENT-3,city-4     MODE-0, LANG-1, DAYS-2,SILENT-3,lat-4,lon-5
+    if len(args) == 5:# building url with city
+      self.url_search = self.config["url_"+args[0]+"_city_endpoint"].replace("{city}", args[4])
       if len(self.url_search)<10:
-        coord = _get_coord_from_city_name(args[3])
-        return self.get_weather(args[0],args[1],args[2],coord.lat,coor.lon) #TODO #getLONLATfromCity
+        coord = _get_coord_from_city_name(args[4])
+        return self.get_weather(args[0],args[1],args[2],args[3],coord.lat,coor.lon) #TODO #getLONLATfromCity
 
-    elif len(args) == 5:# building url with lon/lat
-      self.url_search = self.config["url_"+args[0]+"_lonlat_endpoint"].replace("{lat}", str(args[3])).replace("{lon}", str(args[4]))
+    elif len(args) == 6:# building url with lon/lat
+      self.url_search = self.config["url_"+args[0]+"_lonlat_endpoint"].replace("{lat}", str(args[4])).replace("{lon}", str(args[5]))
     else:
       return False  #print( "REPL:    "+self._replacer(self.url_search, {"{token}":self.api_token,"{lang}":args[1]} )  )
     
@@ -84,14 +83,15 @@ class WeatherApis:
 
     #only for development purposes
     #print("URL_SEARCH: "+self.url_search)
-    print("Wyszukiwanie danych za pomocą: "+self.config["api_name"], end=" ")
+    if args[3] == False:
+      print("Wyszukiwanie danych za pomocą: "+self.config["api_name"], end=" ")
 
     headers = self._set_headers(args[0])  #print("headers: "+str(headers))
     try:
       if self.config["method_"+args[0]] == "get":#print("GET REQUEST......")
         r = requests.get(self.url_search,headers=headers)
       else: #POST
-        data = self._replacer(self.config["post_data_"+args[0]], {"{lon}":args[3], "{lat}":args[4] })   #print("POST DATA: "+data)
+        data = self._replacer(self.config["post_data_"+args[0]], {"{lon}":args[4], "{lat}":args[5] })   #print("POST DATA: "+data)
         r = requests.post(self.url_search, headers=headers, data = data )
 
       self.JSON = r.json()#print(self.JSON)
@@ -100,19 +100,22 @@ class WeatherApis:
       self._write_JSON_resp_to_file()
 
       if r.status_code == 200:
-        if self._check_result():
-          print(" OK!")
+        if self._check_result(silent=args[3]):
+          if args[3] == False:
+            print(" OK!")
           return True
         else:
           return False
       else:
-        print("  API: "+self.config["api_name"]+" STATUS CODE:"+str(r.status_code))
+        if args[3] == False:
+          print("  API: "+self.config["api_name"]+" STATUS CODE:"+str(r.status_code))
         try:
           err_msg = parse(self.config["error-message"]).find(self.JSON)       #print(x)
           for match in err_msg:
-            print("Błąd API: '"+match.value+"'")
+            if args[3] == False:
+              print("Błąd API: '"+match.value+"'")
         except:
-          raise
+          #raise
           return False
     except:
       #raise
@@ -137,7 +140,7 @@ class WeatherApis:
     return input_string
 
 
-  def _check_result(self): #print("ok_value=") print(self.config["ok_key"])#print("ok_JSON")print(self.JSON[ self.config["ok_key"]  ])
+  def _check_result(self, silent): #print("ok_value=") print(self.config["ok_key"])#print("ok_JSON")print(self.JSON[ self.config["ok_key"]  ])
     if self.config["ok_key"]=="":
       return True
     
@@ -147,8 +150,9 @@ class WeatherApis:
       elif  str(self.JSON[ self.config["ok_key"]  ]) == str(self.config["ok_value"]) :
         return True
     except:
-      print("*** W odpowiedzi z serwera brak wymaganego pola: '"+self.config["ok_key"]+"'" )
-      raise
+      if silent==False:
+        print("*** W odpowiedzi z serwera brak wymaganego pola: '"+self.config["ok_key"]+"'" )
+      #raise
       return False
 
 
@@ -238,9 +242,9 @@ class WeatherApis:
       return False
 
   #to test check weather for Warsaw
-  def _check_api_key(self):
-    self.get_weather("current","en",1, 52.2297700, 21.0117800)
-    return self._check_result()
+  def _check_api_key(self,silent):
+    self.get_weather("current","en",1,silent, 52.2297700, 21.0117800)
+    return self._check_result(silent=silent)
 
 
   def _get_timezone_offset(self, timezone):
@@ -309,28 +313,40 @@ class WeatherApis:
     coordinates = {lat:54.51889, lon:18.53188 }
     return coordinates
 
-### END OD CLASS DEFINITION ###
+############################################## END OD CLASS DEFINITION ############################################## 
 
 
-def check_API_keys():
+def check_API_keys(verify_online):
   N=0  #number of API found
   t=0  #number of API with time zone return found
   n=0  #properly configured API
   avail = [] #array with configured API names
+
   for API in APIS:
     if API.endswith(".csv"):
       N=N+1
       wa = WeatherApis()
       if wa.read_conf(API) == False:
         continue
+      
+      if verify_online == True:
+        if wa._check_api_key(silent=True) == True:
+          n=n+1
+        else:
+          continue
+      else:
+        n=n+1
+
       if wa.config["api_name"] in WeatherApis.TZ_API:
         t=t+1
-      
-      n=n+1
+
       avail.append(wa.config["api_name"])
   
+
   if N>0:
     print("# Skonfigurowano "+str(n)+"/"+str(N)+" serwisów pogodowych ##\n "+str(avail))
+    if verify_online == True:
+      print("# Klucze zostały zweryfikowane online.")
     if t>0:
       print("## Prognozy i bieżące wyniki będą podwane w czasie lokalnym dla wyszukiwanych miejsc.")
     else:
