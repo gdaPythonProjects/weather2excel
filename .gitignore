@@ -3,8 +3,14 @@ tmp/
 *.json
 .idea/
 
-# tu ukryte są klucze API, które tak jak Łukasz napisał mają być tylko lokalnie
-config/API_keys/
+#tu ukryte są klucze API, które tak jak Łukasz napisał mają być tylko lokalnie
+#config/API_keys/
+
+# exclude everything
+config/API_keys/*
+
+# exception to the rule
+!config/API_keys/empty.key
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
