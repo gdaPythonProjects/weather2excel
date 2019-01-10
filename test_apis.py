@@ -8,6 +8,7 @@ import csv
 import json # only for development
 import os
 import sys
+import statistics
 
 CITY = "gdynia"  # nazwy miast z małych liter aby łatwiej było operać na API
 # współrzedne dla Gdyni pobrane z portalu https://www.wspolrzedne-gps.pl/
@@ -15,7 +16,7 @@ LON = 18.5318800  # długość geograficzna
 LAT = 54.5188900  # szerokość geograficzna
 MODE = "current"  # "current" podaję aktualne dane, alternatywny tryb -> "forecast" - prognoza, ale tylko dla pogody
 LANG = "pl"  # język do komunikacji z API, TODO zastanowić się czy ta zmienna ma być tutaj, czy w weatherApis.py?
-DAYS = 3  # ilość dni do przodu na które można uzyskać prognoze pogody
+DAYS = 1  # ilość dni do przodu na które można uzyskać prognoze pogody
 SILENT = False #  false - print to console information during request to API
 
 weatherDataset = []
@@ -40,16 +41,45 @@ for API in APIS:
       print("Problem z uzyskaniem danych z "+wa.config["api_name"]+". Adres: "+wa.url_search)
 
 CSV="api_name,"
-for f in factors:
-    CSV = CSV +f+","
-    CSV=CSV+"\r\n"
+for factor in factors:
+    if(MODE=="forecast" and len(factorsDict[factor].type)==2 ) or (MODE=="current" and len(factorsDict[factor].type)==1):
+        CSV = CSV +factor+","
+CSV=CSV+"\r\n"
 
-for wynikiAPI in weatherDataset:
-    for dzien in wynikiAPI:
-        if(dzien!="api_name"):#print("-----    Wyniki/prognoza z "+wynikiAPI["api_name"]+"  DLA DNIA NUMER: "+str(dzien))
-            for prognoza in wynikiAPI[dzien]:
-                CSV = CSV + "\"" + str(wynikiAPI[dzien][prognoza]) + "\","
-                CSV=CSV+"\r\n"
+def is_number(str):
+    try:
+        float(str)
+        return True
+    except:
+        return False
+
+for day in range(0,DAYS):
+    STAT = {}
+    for factor in factors:
+        STAT[factor]=[]
+    for wynikiAPI in weatherDataset:
+        CSV = CSV + "\"" + str(wynikiAPI[day]["api_name"]) + "\","
+        for factor in wynikiAPI[day]:
+            if(MODE=="forecast" and len(factorsDict[factor].type)==2 ) or (MODE=="current" and len(factorsDict[factor].type)==1):
+                CSV = CSV + "\"" + str(wynikiAPI[day][factor]) + "\","
+                if( is_number(wynikiAPI[day][factor]) ):
+                    STAT[factor].append( float(wynikiAPI[day][factor]) )
+        CSV=CSV+"\r\n"
+    CSV=CSV+"MEAN ± SD:,"
+    #calculating statistics
+    for factor in factors:
+        if(MODE=="forecast" and len(factorsDict[factor].type)==2 ) or (MODE=="current" and len(factorsDict[factor].type)==1):
+            if len(STAT[factor])>0:
+                #STAT[factor+"_mean"] = round(statistics.pstdev(STAT[factor]),1)
+                #STAT[factor+"_mean"] = round(statistics.pstdev(STAT[factor]),1)
+                CSV=CSV+"\""+str( round(statistics.mean(STAT[factor]),1))+"±"+str( round(statistics.pstdev(STAT[factor]),1) )+"\","
+            else:
+                CSV=CSV+"\"\","
+
+    CSV=CSV+"\r\n\r\n"
+
+
+
 
 f = open( 'wyniki.csv', 'w' )
 f.write( CSV )
