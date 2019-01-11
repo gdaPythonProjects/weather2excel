@@ -26,32 +26,42 @@ class WeatherFactors:
 
 
   def check_upper_limit(self,value):
-    if self._max_val!=None and value>self._max_val:
+    try:
+      if value<=self._max_val:
+        return True
+      else:
+        return False
+    except:
       return False
-    else:
-     return True
 
 
   def check_lowwer_limit(self,value):
-    if self._min_val!=None and value<self._min_val:
+    try:
+      if value>=self._min_val:
+        return True
+      else:
+        return False
+    except:
       return False
-    else:
-     return True
 
 
   def check_alerts(self,value):
-    if value<self._alert_min_val or value>self._alert_max_val:
-      return True
-    else:
-     return False
+    try:
+      if value<self._alert_min_val or value>self._alert_max_val:
+        return True
+      else:
+       return False
+    except:
+      return False
 
 
   def _convert_to_float(self,value):
     try:
       return float(value)
-    except (ValueError) as e:
+    except:
       return None
 
+############################################## END OD CLASS DEFINITION ############################################## 
 
 def load_units_config():
   factorsDict={}
