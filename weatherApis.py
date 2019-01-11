@@ -18,6 +18,7 @@ TIME_ZONES = {}
 
 # TODO for loop all  .csv files from /config// directory
 APIS = ["APIXU.csv", "OpenWeather.csv", "WAQI.csv", "Weatherbit.csv", "DarkSky.csv", "Climacell.csv","Airly.csv","Airvisual.csv"]
+#APIS = ["APIXU.csv"]
 
 #load units configuration
 factorsDict=load_units_config()
