@@ -9,7 +9,7 @@ class WeatherFactors:
     self._min_val=self._convert_to_float(min_val)
     self._max_val=self._convert_to_float(max_val)
     self._alert_min_val=self._convert_to_float(alert_min_val)
-    self._alert_min_val=self._convert_to_float(alert_max_val)
+    self._alert_max_val=self._convert_to_float(alert_max_val)
 
 
   def print(self):
@@ -22,7 +22,7 @@ class WeatherFactors:
  
 
   def check_limits(self,value):
-    return check_upper_limit(value) and check_lowwer_limit()
+    return self.check_upper_limit(value) and self.check_lowwer_limit(value)
 
 
   def check_upper_limit(self,value):
@@ -39,8 +39,8 @@ class WeatherFactors:
      return True
 
 
-  def check_alerts(value):
-    if value>=self._alert_min_val and value <=self._alert_min_val:
+  def check_alerts(self,value):
+    if value<self._alert_min_val or value>self._alert_max_val:
       return True
     else:
      return False
