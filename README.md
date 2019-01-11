@@ -1,4 +1,4 @@
-# weather2excel
+# weather2excel [![Build Status](https://travis-ci.org/gdaPythonProjects/weather2excel.svg?branch=master)](https://travis-ci.org/gdaPythonProjects/weather2excel)
 W celu wykorzystnia aplikacji należy zarejestorwać się w co najmniej jednym z 8 serwisów:
 <table>
  <tr>
