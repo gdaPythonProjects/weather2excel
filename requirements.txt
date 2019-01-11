@@ -1,4 +1,4 @@
 unit-converter
-jsonpath-ng=>1.4.3
-requests>=2.21.0
+jsonpath-ng
+requests
 python-dateutil
