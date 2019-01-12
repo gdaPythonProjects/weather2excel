@@ -136,9 +136,12 @@ class WeatherApis:
 
 
   def _replacer(self, input_string, replace):
-    for key,val in replace.items():
-      input_string = input_string.replace(key, str(val))    #print(key, '->', val)
-    return input_string
+    try:
+      for key,val in replace.items():
+        input_string = input_string.replace(key, str(val))    #print(key, '->', val)
+      return input_string
+    except:
+      return input_string
 
 
   def _check_result(self, silent): #print("ok_value=") print(self.config["ok_key"])#print("ok_JSON")print(self.JSON[ self.config["ok_key"]  ])
@@ -191,8 +194,8 @@ class WeatherApis:
               else:
                 if self.config[f+"_u"]!="": #print(" f:"+self.config[f]+" u:"+self.config[f+"_u"]+" UNIT:"+factorsDict[f].unit+"   build_str:"+str(match.value)+" "+self.config[f+"_u"])
                   number_string = str(match.value)+" "+self.config[f+"_u"]
-                  number_string = re.sub(r'/(.){1,3}', '*\g<1>^-1', number_string)
-                  unit_to = re.sub(r'/(.){1,3}', '*\g<1>^-1', factorsDict[f].unit) #print("conversion: number_string: "+number_string+"  unitto:"+unit_to)
+                  number_string = re.sub(r'/(.){1,3}', '*\\g<1>^-1', number_string)
+                  unit_to = re.sub(r'/(.){1,3}', '*\\g<1>^-1', factorsDict[f].unit) #print("conversion: number_string: "+number_string+"  unitto:"+unit_to)
                   WDS[f] = round( float( converts(number_string, unit_to)),2 ) #"_"+str(match.value)#str("_"+match.value)#TODO convert values
                 else:
                   if str(factorsDict[f].unit)=='%':
@@ -285,7 +288,7 @@ class WeatherApis:
       except ValueError:
         print("--> Time zone parsing problem...")
 
-      isEpoch = re.search("\d{10,}", str(time))
+      isEpoch = re.search("\\d{10,}", str(time))
       if isEpoch:
         try:
           t = dt.datetime.utcfromtimestamp(time) + timedelta(seconds=0, minutes=M, hours=H)
@@ -294,7 +297,7 @@ class WeatherApis:
           print("--> Adding timezone to time problem")
         return t_str
 
-      isISO8601 = re.search("^\d{4}-\d{2}-\d{2}T", time)
+      isISO8601 = re.search("^\\d{4}-\\d{2}-\\d{2}T", time)
       if isISO8601:
         try:
           t = dateutil.parser.parse(time) + timedelta(seconds=0, minutes=M, hours=H)
@@ -368,4 +371,3 @@ def check_API_keys(verify_online):
   #def setApiToken(token)
   #def santizizeSearch
   #def getLONLATfromCity
-  #def checkToken

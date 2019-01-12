@@ -1,6 +1,8 @@
 #!/usr/bin/python
-from ..factors import *
 import pytest
+
+from ..factors import *
+
 
 @pytest.mark.parametrize("name,unit,type,min_val,max_val,alert_min_val,alert_max_val", [
     ("Temperatura","C","w",-273,100,-10,30),
@@ -65,6 +67,5 @@ def test_load_units_config():
 def test_load_timezones():
     result = load_timezones()
     assert result != False
-    #T = ("Temperatura","C","w",-273,100,-10,30)
 
 

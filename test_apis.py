@@ -1,14 +1,14 @@
 # plik w którym znajdują się elementy na których można testować działanie API pogodowych
 
 #!/usr/bin/python
-
-from weatherApis import *
-# from Factors import *
-import csv
-import json # only for development
 import os
 import sys
+
+import csv
+import json # only for development
 import statistics
+
+from weatherApis import *
 
 CITY = "gdynia"  # nazwy miast z małych liter aby łatwiej było operać na API
 # współrzedne dla Gdyni pobrane z portalu https://www.wspolrzedne-gps.pl/
