@@ -3,9 +3,9 @@ import csv
 
 class WeatherFactors:
   def __init__(self,name,unit,type,min_val,max_val,alert_min_val,alert_max_val):
-    self.name=name
-    self.unit=unit
-    self.type=type
+    self.name=str(name)
+    self.unit=str(unit)
+    self.type=str(type)
     self._min_val=self._convert_to_float(min_val)
     self._max_val=self._convert_to_float(max_val)
     self._alert_min_val=self._convert_to_float(alert_min_val)
@@ -65,20 +65,26 @@ class WeatherFactors:
 
 def load_units_config():
   factorsDict={}
-  with open("config/.units/units.csv", 'r') as csvfile:
-      reader = csv.DictReader(csvfile, delimiter=',', quotechar='\"')
-      for row in reader:
-        factorsDict[ row["par"].strip() ] = WeatherFactors(row["par"],row["unit"],row["type"],row["min_val"],row["max_val"],row["alert_min_val"],row["alert_max_val"])
-  return factorsDict
+  try:
+    with open("config/.units/units.csv", 'r') as csvfile:
+        reader = csv.DictReader(csvfile, delimiter=',', quotechar='\"')
+        for row in reader:
+          factorsDict[ row["par"].strip() ] = WeatherFactors(row["par"],row["unit"],row["type"],row["min_val"],row["max_val"],row["alert_min_val"],row["alert_max_val"])
+    return factorsDict
+  except:
+    return False
 
 
 def load_timezones():
   factorsDict={}
-  with open("config/.units/timezones.csv", 'r', encoding="utf8") as csvfile:
-      reader = csv.DictReader(csvfile, delimiter=',', quotechar='\"')
-      for row in reader:
-        factorsDict[ row["TZ"].strip() ] = row["UTC_offset"].strip() 
-  return factorsDict
+  try:
+    with open("config/.units/timezones.csv", 'r', encoding="utf8") as csvfile:
+        reader = csv.DictReader(csvfile, delimiter=',', quotechar='\"')
+        for row in reader:
+          factorsDict[ row["TZ"].strip() ] = row["UTC_offset"].strip() 
+    return factorsDict
+  except:
+    return False
 
 
 def list_factors_unis(factorsDict):
