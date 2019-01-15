@@ -27,6 +27,11 @@ Klucz/token do korzystania z danego API powinien zostać zapisany w odpowiednim 
 <br>Tabela przedstawiająca ogólne możliwe do wykorzystania funkcjonalności Weather API<br>
 <img src='logo/tabela_api.png'>
 
+<br><br>
+Geokodowanie odbywa się za pomocą:
+<a href='https://www.openstreetmap.org' target='_blank'><img src='logo/OpenStreetMap_logo.jpg'></a>
+<br>
+
 # Zależności:
 > pip3 install unit-converter\
 > pip3 install --upgrade jsonpath-ng\
