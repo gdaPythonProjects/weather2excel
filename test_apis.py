@@ -9,11 +9,41 @@ import json # only for development
 import statistics
 
 from weatherApis import *
+from geocoder import *
 
-CITY = "gdynia"  # nazwy miast z małych liter aby łatwiej było operać na API
+CITY = "Sopot"  # nazwy miast z małych liter aby łatwiej było operać na API
+COUNTRY =""
+
+geocoder = geocoder()
+num_results = geocoder .getQueryResults(CITY)
+if(num_results>1):
+  geocoder.listResults()
+  choice = ""
+  while (not isinstance(choice, int) or choice<0 or choice>num_results-1):
+    option = input("Wybierz numer z właściwym miejscem i naciśnij ENTER: ")
+    try:
+      choice = int(option)-1
+    except:
+      print("Nie wprowadzono prawidłowej wartości z przedziału <1;"+num_results+">")
+elif num_results == 1:
+  choice = 0
+else:
+  print("Nie udało się wyznaczyć współrzednych dla podanej frazy wyszukiwania")
+  quit()
+
+
+
+coord = geocoder.getCoordindates(choice)
+
+LAT = coord["lat"]
+LON = coord["lon"]
+
+print("\nWyszukiwanie dla: "+geocoder.RESULT_LIST[choice]["display_name"]+"\n(DŁUG,SZER) = ("+LAT+","+LON+")")
+#quit()
+
 # współrzedne dla Gdyni pobrane z portalu https://www.wspolrzedne-gps.pl/
-LON = 18.5318800  # długość geograficzna
-LAT = 54.5188900  # szerokość geograficzna
+#LON = 18.5318800  # długość geograficzna
+#LAT = 54.5188900  # szerokość geograficzna
 MODE = "current"  # "current" podaję aktualne dane, alternatywny tryb -> "forecast" - prognoza, ale tylko dla pogody
 LANG = "pl"  # język do komunikacji z API, TODO zastanowić się czy ta zmienna ma być tutaj, czy w weatherApis.py?
 DAYS = 1  # ilość dni do przodu na które można uzyskać prognoze pogody
