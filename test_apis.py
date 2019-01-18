@@ -11,11 +11,11 @@ import statistics
 from weatherApis import *
 from geocoder import *
 
-CITY = "Sopot"  # nazwy miast z małych liter aby łatwiej było operać na API
+CITY = "SOPOT"  # nazwy miast z małych liter aby łatwiej było operać na API
 COUNTRY =""
 
 geocoder = geocoder()
-num_results = geocoder .getQueryResults(CITY)
+num_results = geocoder .getQueryResults(CITY,COUNTRY)
 if(num_results>1):
   geocoder.listResults()
   choice = ""
@@ -28,12 +28,17 @@ if(num_results>1):
 elif num_results == 1:
   choice = 0
 else:
-  print("Nie udało się wyznaczyć współrzednych dla podanej frazy wyszukiwania")
+  print("Nie udało się wyznaczyć współrzednych dla podanej frazy wyszukiwania.")
+  print("Proszę spróbować wyszukiwania dla innej frazy lub za pomocą współrzednych geograficznych.")
   quit()
 
 
 
 coord = geocoder.getCoordindates(choice)
+if coord==False:
+  print("Nie udało się uzyskać współrzędnych wybranej miejscowości.")
+  print("Proszę spróbować wyszukiwania dla innej frazy lub za pomocą współrzednych geograficznych.")
+  quit()
 
 LAT = coord["lat"]
 LON = coord["lon"]

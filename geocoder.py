@@ -18,7 +18,7 @@ class geocoder:
             self.url_search = self.url_search1.replace("{city}", str(args[0]))
         else:
             return -3
-        print("URL: "+self.url_search)
+        #print("URL: "+self.url_search)
 
         try:
             r = requests.get(self.url_search)
@@ -27,7 +27,8 @@ class geocoder:
                 res = r.text
                 J = json.loads(res)
 
-                for row in J:   #print("     TYPE="+row["type"]+":"+row["display_name"])
+                for row in J:   
+                    #print("     TYPE="+row["type"]+":"+row["display_name"])
                     if(row["type"] in self.place_types):
                         self.RESULT_LIST.append(row)
 
@@ -35,7 +36,7 @@ class geocoder:
             else:
                 return -1
         except:
-            print("....")
+            print("Unknown error...")
             return -2
 
 
@@ -47,10 +48,15 @@ class geocoder:
 
 
     def getCoordindates(self,choice):
-        lon = self.RESULT_LIST[choice]["lon"]
-        lat = self.RESULT_LIST[choice]["lat"]
-        coordinates = {'lat':lat,'lon':lon}
-        return coordinates
+        try:
+            lon = self.RESULT_LIST[choice]["lon"]
+            lat = self.RESULT_LIST[choice]["lat"]
+            coordinates = {'lat':lat,'lon':lon}
+            return coordinates
+        except:
+            return False
+
+
 
 
 
