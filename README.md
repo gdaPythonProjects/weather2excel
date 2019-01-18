@@ -23,23 +23,24 @@ W celu wykorzystnia aplikacji należy zarejestorwać się w co najmniej jednym z
  7. https://airly.eu <br>
  8. https://www.airvisual.com<br>
 <br>
-Klucz/token do korzystania z danego API powinien zostać zapisany w odpowiednim pliku w /config/API_keys/ w postaci: nazwa_portalu.key
+Klucz/token do korzystania z danego API powinien zostać dopisany w odpowiednim pliku w /config/API_keys/.<br>
+Prognozy i bieżące wyniki będą podawane w czasie UTC. Aby uzyskać je w czasie lokalnym dla wyszukiwanych miejsc, należy skonfigurować co najmniej jednen z serwisów: APIXU, DarkSky.
 <br>Tabela przedstawiająca ogólne możliwe do wykorzystania funkcjonalności Weather API<br>
 <img src='logo/tabela_api.png'>
 
 <br><br>
-Geokodowanie odbywa się za pomocą:
-<a href='https://www.openstreetmap.org' target='_blank'><img src='logo/OpenStreetMap_logo.jpg'></a>
+Geokodowanie odbywa się za pomocą:<br>
+<a href='https://www.openstreetmap.org' target='_blank'><img src='logo/OpenStreetMap_logo.jpg' width='126' height='90'></a>
 <br>
 
 # Zależności:
-> pip3 install unit-converter\
-> pip3 install --upgrade jsonpath-ng\
-> pip3 install requests\
-> pip3 install python-dateutil
+    pip3 install unit-converter
+    pip3 install --upgrade jsonpath-ng
+    pip3 install requests
+    pip3 install python-dateutil
 
 # Uruchomienie
-> python3 weather2excel.py
+    python3 weather2excel.py
 
 Wyjaśnienie symboli w wynikach:\
 <span> <b>*</b>  API nie oferuje danych</span>\
