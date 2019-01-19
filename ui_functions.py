@@ -38,11 +38,10 @@ def get_coords_by_city_name(CITY, COUNTRY):
     return coord["lon"], coord["lat"]
 
 
+# pobieram dane dla współrzędnej geograficznej, oczekuję liczby w zakresie od MIN_expected_value do
+#  MAX_expected_value (dla longitude 0-180, dla latitude 0-90)
+# funkcja zwraca w kolejności: type_is_correct, range_is_correct, value_GPS
 def check_GPS_value_from_user(data_from_user, MIN_expected_value, MAX_expected_value):
-    # pobieram dane dla współrzędnej geograficznej, oczekuję liczby w zakresie od MIN_expected_value do
-    #  MAX_expected_value (dla longitude 0-180, dla latitude 0-90)
-    # funkcja zwraca w kolejności: type_is_correct, range_is_correct, value_GPS
-
     range_is_correct = 0
     value_GPS = None
 
@@ -173,12 +172,15 @@ prognozę pogody.""")
 # koniec funkcji welcome_message()
 
 
-# TODO dodać komenatrze
 # TODO przerobić *args na listę
+# sprawdź czy Użytkownik podał wartość, która jest na liście
+# zwróć None jeżeli nie ma takiej wartości, zwróć tą wartość jeżeli występuje
 def check_user_choice_is_correct(data_from_user, *args):
-    i = 0
+
+    # flaga określająca, czy wartość występuje na liście, założenie początkowe, że nie (dlatego 0)
     correct_choice = 0
 
+    # sprawdź czy wartośc występuje na liście, jeżeli tak to przerwij pętlę
     for option in args:
         if option == data_from_user:
             correct_choice = 1
