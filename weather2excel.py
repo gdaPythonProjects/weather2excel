@@ -84,7 +84,7 @@ Co chcesz zrobić?
             # użytkownik wporwadza numer komendy - numer jest w postaci string, aby uniknąć błędów związanych z podaniem
             #  nieprawdiłowego znaku lub ciągu znaków
             option = check_user_choice_is_correct(input("Wprowadź numer opcji (1/2/3/4) i naciśnij ENTER: "),
-                                                  "1", "2", "3", "4")
+                                                  ["1", "2", "3", "4"])
             print("")  # nowa linia dla poprawy czytelności
 
             # jeżeli nie została zwrócona żadna opcja to znaczy, że użytkownik podał, opcję spoza dopuszczonych
@@ -189,7 +189,7 @@ Co chcesz zrobić?
 
         # wykonuj pętlę dopóki użytkownik nie poda prawidłowego numeru opcji
         while option is None:
-            option = check_user_choice_is_correct(input("Wprowadź numer opcji (1/2) i naciśnij ENTER: "), "1", "2")
+            option = check_user_choice_is_correct(input("Wprowadź numer opcji (1/2) i naciśnij ENTER: "), ["1", "2"])
             print("")  # nowa linia dla poprawy czytelności
 
             # sprawdź, czy podana opcja jest poprawna, jeżeli nie to wyświetl komunikat o złym wyborze
@@ -236,7 +236,7 @@ Co chcesz zrobić?
     # wykonuj pętlę dopóki użytkownik nie poda prawidłowego numeru opcji
     while option is None:
         option = check_user_choice_is_correct(input("Wprowadź numer opcji (1/2/3/4) i naciśnij ENTER: "),
-                                              "1", "2", "3", "4")
+                                              ["1", "2", "3", "4"])
         print("")  # nowa linia dla poprawy czytelności
 
         # sprawdź czy podana opcja jest poprawna, jeżeli nie to wyświetl komunikat o złym wyborze

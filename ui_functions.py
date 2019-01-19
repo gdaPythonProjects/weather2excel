@@ -186,13 +186,13 @@ prognozę pogody.""")
 # TODO przerobić *args na listę
 # sprawdź czy Użytkownik podał wartość, która jest na liście
 # zwróć None jeżeli nie ma takiej wartości, zwróć tą wartość jeżeli występuje
-def check_user_choice_is_correct(data_from_user, *args):
+def check_user_choice_is_correct(data_from_user, choices):
 
     # flaga określająca, czy wartość występuje na liście, założenie początkowe, że nie (dlatego 0)
     correct_choice = 0
 
     # sprawdź czy wartośc występuje na liście, jeżeli tak to przerwij pętlę
-    for option in args:
+    for option in choices:
         if option == data_from_user:
             correct_choice = 1
             break
