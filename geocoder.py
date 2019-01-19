@@ -9,7 +9,17 @@ class geocoder:
         self.url_search1 = "https://nominatim.openstreetmap.org/search/?city={city}&format=json"
         self.url_search2 = "https://nominatim.openstreetmap.org/search/?city={city}&countrycodes={countrycode}&format=json"
         self.RESULT_LIST=[]
-        self.place_types=["city","village","town","hamlet","isolated_dwelling","borough","suburb","quarter","neighbourhood"]
+        self.JSON=""
+
+        self.headers = {
+            'Accept-Language': 'pl-PL'
+            }
+
+        self.place_dict = {
+            "country" : ["country"],
+            "province": ["province","state","district","county"],
+            "city"    : ["city","village","town","hamlet","isolated_dwelling","borough","suburb","quarter","neighbourhood"]
+        }
 
     
     def getQueryResults(self,*args):#city[0]  countrycode[1]
@@ -30,7 +40,7 @@ class geocoder:
 
                 for row in J:   
                     #print("     TYPE="+row["type"]+":"+row["display_name"])
-                    if(row["type"] in self.place_types):
+                    if(row["type"] in self.place_dict["city"]):
                         self.RESULT_LIST.append(row)
 
                 return len( self.RESULT_LIST )
@@ -40,25 +50,42 @@ class geocoder:
             print("Unknown error...")
             return -2
 
-    def getQueryReverseResults(self,lat,lon):#city[0]  countrycode[1]
+
+    def getQueryReverseResults(self,lat,lon):
         self.url_search = self.url_search_reverse.replace("{lat}", str(lat)).replace("{lon}", str(lon))
 
-        print("URL: "+self.url_search)
+        RESULT ={"country":"","province":"","city":""}#print("URL: "+self.url_search)
 
         try:
-            r = requests.get(self.url_search)
+            r = requests.get(self.url_search, headers = self.headers)
 
             if r.status_code == 200:
                 res = r.text
-                J = json.loads(res)
-                place_name=J["display_name"]
-                return place_name
+                self.JSON = json.loads(res)
+
+                for place_type in RESULT:
+                    RESULT[place_type] = self.getValueFromJSON(place_type)
+
+                return RESULT
             else:
                 return -1
         except:
             raise
             print("Unknown error...")
             return -2
+
+
+    def getValueFromJSON(self,place_type):
+
+        result=""
+        for place in self.place_dict[place_type]:
+            try:
+                result = self.JSON["address"][place]
+                return result
+            except Exception as e:
+                result=""
+
+        return result
 
 
     def listResults(self):
