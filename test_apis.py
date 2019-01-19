@@ -14,7 +14,6 @@ from geocoder import *
 CITY = "SOPOT"  # nazwy miast z małych liter aby łatwiej było operać na API
 COUNTRY = ""
 
-# region
 geocoder = geocoder()
 num_results = geocoder .getQueryResults(CITY, COUNTRY)
 if num_results>1:
@@ -41,8 +40,6 @@ if coord is False:
 
 LAT = coord["lat"]
 LON = coord["lon"]
-
-# endregion
 
 print("\nWyszukiwanie dla: "+geocoder.RESULT_LIST[choice]["display_name"]+"\n(DŁUG,SZER) = ("+LAT+","+LON+")")
 #quit()

@@ -4,6 +4,38 @@
 # Stworzona by utrzymacz czystość i przejrzystość w weather2excel.py
 
 
+def get_coords_by_city_name(CITY, COUNTRY):
+    import geocoder
+
+    choice = "0"
+
+    geocoder = geocoder.geocoder()
+    num_results = geocoder.getQueryResults(CITY, COUNTRY)
+    if num_results > 1:
+        geocoder.listResults()
+        choice = ""
+        while not isinstance(choice, int) or choice < 0 or choice > num_results - 1:
+            option = input("Wybierz numer z właściwym miejscem i naciśnij ENTER: ")
+            try:
+                choice = int(option) - 1
+            except ValueError:
+                print("Nie wprowadzono prawidłowej wartości z przedziału <1;" + num_results + ">")
+    elif num_results == 1:
+        choice = 0
+    else:
+        print("Nie udało się wyznaczyć współrzednych dla podanej frazy wyszukiwania.")
+        print("Proszę spróbować wyszukiwania dla innej frazy lub za pomocą współrzednych geograficznych.")
+        quit()
+
+    coord = geocoder.getCoordindates(choice)
+    if coord is False:
+        print("Nie udało się uzyskać współrzędnych wybranej miejscowości.")
+        print("Proszę spróbować wyszukiwania dla innej frazy lub za pomocą współrzednych geograficznych.")
+        quit()
+
+    return coord["lon"], coord["lat"]
+
+
 def check_GPS_value_from_user(data_from_user, MIN_expected_value, MAX_expected_value):
     # pobieram dane dla współrzędnej geograficznej, oczekuję liczby w zakresie od MIN_expected_value do
     #  MAX_expected_value (dla longitude 0-180, dla latitude 0-90)
