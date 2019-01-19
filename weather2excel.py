@@ -39,7 +39,7 @@ if number_of_arguments > 1:
     # wartości dla danego parametru - tutaj potrzebne, bo nazwy miast mogą być wielowyrazowe
     # wartość domyślna zapisana w zmiennych globalnych na początku programu zamiast tutaj w parserze, aby uniknąć
     #  późniejszych problemów
-    parser.add_argument("-city", "--city-name", nargs="*", dest="city_name", default=None,
+    parser.add_argument("-c", "--city", nargs="*", dest="city", default=None,
                         help="pobiera nazwę miasta. Wartość domyślna: Gdynia")
 
     # deklaracja parametru startowego --longitude (długości geograficznej)
@@ -67,7 +67,7 @@ if number_of_arguments > 1:
 # endregion
 
 # region gdy użytkownik spróbował jednocześnie podać nazwę miasta oraz namiary GPS w parametrach startpwych...
-    if (args.city_name is not None) and ((args.longitude is not None) or (args.latitude is not None)):
+    if (args.city is not None) and ((args.longitude is not None) or (args.latitude is not None)):
         print("""
 OSTRZEZENIE! Podjęto próbę jednoczesnego podania: nazwy miasta i współrzędnych GPS!
 
@@ -99,7 +99,7 @@ Co chcesz zrobić?
 
         elif option == "2":
             # wyczyść nazwę miasta
-            args.city_name = None
+            args.city = None
 
         elif option == "3":
             # ustawienie number_of_arguments na 0 spowoduje wywołanie menu start w dalszej części programu poprzez
@@ -108,7 +108,7 @@ Co chcesz zrobić?
             number_of_arguments = 0
 
             # wyczyść wszystkie dane podane w parametrach przez użytkownika
-            args.city_name = None
+            args.city = None
             args.longitude = None
             args.latitude = None
 
@@ -125,13 +125,13 @@ Co chcesz zrobić?
     #  to przepisz jego wartość do zmiennej globalnej CITY, a jak nie została podana nowa wartość dla niego (domyślnie
     #  w parserze argumentów startowych jest None) to pomiń ten krok i pozostaw niezmienioną wartość CITY (zgodną
     #  z wartością domyslną podaną dla zmiennych globalnych na poczatku)
-    if (args.city_name is not None) and (args.longitude is None) and (args.latitude is None):
+    if (args.city is not None) and (args.longitude is None) and (args.latitude is None):
         # wyczyść nazwę miasta
         CITY = ""
 
         # przejdź przez całą listę wyrazów, z których może się składać nazwa miasta. Miasto mogą być 1 wyrazowe
         #  np.: Gdynia, Sopot, Wejherowo, albo wielowyrazowe: Stalowa Wola, Kędzierzyn Koźle
-        for word_of_city_name in args.city_name:
+        for word_of_city_name in args.city:
 
             # dodawaj kolejne wyrazy do zmiennej CITY (zmienna typu string)
             CITY = CITY + " " + word_of_city_name
@@ -143,7 +143,7 @@ Co chcesz zrobić?
     #  to pobierz dane z tych parametrów i przekaż je do zmiennych globlanych LON i LAT. Podanie przez użytkownika
     #  większej ilości liczb dla danego parametru (np.: -lon 34.5 78 43.2) będzie zignorowane i zostanie pobrana tylko
     #  pierwsza wartość (tu w przykładzie 34.5)
-    elif (args.city_name is None) and (args.longitude is not None) and (args.latitude is not None):
+    elif (args.city is None) and (args.longitude is not None) and (args.latitude is not None):
 
         # sprawdzam, czy wartości podane przez użytkownika z pomocą parametrów są prawidłowe
         is_correct_value_LON, is_correct_range_LON, LON = check_GPS_value_from_user(args.longitude[0], 0, 180)
@@ -202,7 +202,7 @@ Co chcesz zrobić?
             number_of_arguments = 0
 
             # wyczyść wszystkie dane podane w parametrach przez użytkownika
-            args.city_name = None
+            args.city = None
             args.longitude = None
             args.latitude = None
 
