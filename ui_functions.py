@@ -9,8 +9,8 @@
 def get_coords_by_city_name(CITY, COUNTRY):
     import geocoder
 
-    # wybór w menu miast, wartość 0 oznacza brak wyboru (czyli jest 1 miasto)
-    choice = 0
+    # wybór w menu miast
+    choice = None
 
     geocoder = geocoder.geocoder()
 
