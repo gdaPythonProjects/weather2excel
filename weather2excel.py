@@ -62,19 +62,10 @@ if number_of_arguments > 1:
                              "dziesiętnego. Pamiętaj, że część całości od ułamka oddziela '.' (KROPKA) ! "
                              "Wartość domyślna: 19.23 (dla Gdyni).")
 
-    # parametry decydujące, czy program ma działać w trybie "current", czy "forecast"
-    #  zapis nastepuje do 2 różnych zmiennych (mode_current oraz mode_forecast) aby zabezpieczyć użytkownika przed
-    #  błędnym podaniem na raz obu parametrów i próba uruchomienia programu  w 2 trybach na raz
-
-    # deklaracja parametru startowego --current (tryb aktualnych danych dla pogody i zanieczyszczeń)
-    parser.add_argument("-c", "--current", dest="mode_current", default="true",
-                        help="tryb programu pokazujący aktualne dane dla pogody oraz zanieczyszczeń powietrza")
-
-    # deklaracja parametru startowego --forecast (tryb prognozowanych danych tylko dla pogody)
-    parser.add_argument("-f", "--forecast", dest="mode_forecast", default="true",
-                        help="tryb programu pokazujący prognozę pogody (bez zanieczyszczeń powietrza)")
-
-    # koniec parametrów dla trybu (MODE)
+    # parametr decydujące, czy program ma działać w trybie "current", czy "forecast"
+    parser.add_argument("-m", "--mode", dest="mode", choices=['current', 'forecast'], default=None,
+                        help="ustawia tryb działania programu - 'current' pokazuje aktualne dane,"
+                             "'forecast' pokazuje prognozę (tylko dla pogody!)")
 
     # tworzy słownik argumentów
     args = parser.parse_args()
@@ -178,6 +169,11 @@ Co chcesz zrobić?
     else:
         error_in_start_parameters = 1
 # endregion
+
+# region jeżeli został wywołany parametr --mode
+    if args.mode is not None:
+        MODE = args.mode
+# enrregion
 
 # region obsługa błędnie podanych parametrów
     # wyświetl info o błędzie we współrzędnych wtedy gdy taki błąd znajdziesz oraz gdy użytkownik rzeczywiście
