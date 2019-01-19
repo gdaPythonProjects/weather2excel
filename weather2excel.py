@@ -13,10 +13,8 @@ LON = 54.23  # długość geograficzna
 LAT = 19.23  # szerokość geograficzna
 
 MODE = "current"  # "current" podaję aktualne dane, alternatywny tryb -> "forecast" - prognoza, ale tylko dla pogody
-WHAT_CHECK = "weather"  # "weather" podaje dane dla pogody, "pollution" dla zanieczyszczeń, "both" dla obu
-# należy pamiętać, że "pollution" i "both" mogą być tylko dla trybu "current" !
 
-LANG = "pl"  # język do komunikacji z API, TODO zastanowić się czy ta zmienna ma być tutaj, czy w weatherApis.py?
+LANG = "pl"  # język do komunikacji z API
 DAYS = 5  # ilość dni do przodu na które można uzyskać prognoze pogody
 
 option = None  # zmienna określająca, którą opcję wybrał uzytkownik
@@ -36,9 +34,6 @@ number_of_arguments = len(sys.argv)
 # jeżeli użytkownik podał jakiekolwiek argumenty to rozpocznij działanie programu na parametrach
 if number_of_arguments > 1:
     parser = argparse.ArgumentParser()
-
-    # TODO dodać opcję wyboru prognoza / aktualna
-    # TODO dodać opcję pogoda / zanieczyszczenie powietrza
 
     # deklaracja parametru startowego --city (nazwy miasta). nargs z wartością "*" pozwala na pobranie 1 lub więcej
     # wartości dla danego parametru - tutaj potrzebne, bo nazwy miast mogą być wielowyrazowe
