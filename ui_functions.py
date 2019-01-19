@@ -4,6 +4,7 @@
 # Stworzona by utrzymacz czystość i przejrzystość w weather2excel.py
 
 
+# funkcja zwraca w kolejności: LON, LAT
 def get_coords_by_city_name(CITY, COUNTRY):
     import geocoder
 
@@ -101,7 +102,7 @@ def get_place_from_user(city_name, longitude, latitude):
     if option == "1":
         city_name = input("\nPodaj miasto: ").lower()  # małe litery dla ułatwienia komunikacji z API
 
-        # TODO funkcja pobierająca współrzędne GPS wskazanej miejscowości i zwracająca je do longitude i latitude
+        longitude, latitude = get_coords_by_city_name(city_name, "")
 
     elif option == "2":
 

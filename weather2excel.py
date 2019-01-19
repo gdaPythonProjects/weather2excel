@@ -136,6 +136,8 @@ Co chcesz zrobić?
             # dodawaj kolejne wyrazy do zmiennej CITY (zmienna typu string)
             CITY = CITY + " " + word_of_city_name
 
+        LON, LAT = get_coords_by_city_name(CITY, "")
+
         error_in_start_parameters = 0
 # endregion
 
