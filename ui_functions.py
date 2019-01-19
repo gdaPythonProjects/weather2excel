@@ -4,6 +4,7 @@
 # Stworzona by utrzymacz czystość i przejrzystość w weather2excel.py
 
 
+# TODO dodać komentarze
 # funkcja zwraca w kolejności: LON, LAT
 def get_coords_by_city_name(CITY, COUNTRY):
     import geocoder
@@ -152,6 +153,8 @@ def get_place_from_user(city_name, longitude, latitude):
         if latitude == 90:
             latitude = 0
 
+        # TODO zrobić funkcję, która zwróci nazwę miasta po podaniu koordynatów GPS
+        city_name = None
         # koniec pobierania SZEROKOŚCI geograficznej
 
     # zwróć wartości zmiennych
@@ -170,6 +173,8 @@ prognozę pogody.""")
 # koniec funkcji welcome_message()
 
 
+# TODO dodać komenatrze
+# TODO przerobić *args na listę
 def check_user_choice_is_correct(data_from_user, *args):
     i = 0
     correct_choice = 0
