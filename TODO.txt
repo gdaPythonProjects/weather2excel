@@ -56,10 +56,10 @@ TODO
 	* obsługa błędów związanych z wykorzystaniem strony (status code HTTP, ale także inne wynikające z odpwiedzi z danego API np. brak miasta itp.)
 
 
-2. Stworzenie klasy "factors" z danymi o jednostkach fizycznych(nazwa, jednostka, typ, wartość min, wartość max) w celu ułatwienia ujednolicenia(konwersji) jednostek 
+[2]. Stworzenie klasy "factors" z danymi o jednostkach fizycznych(nazwa, jednostka, typ, wartość min, wartość max) w celu ułatwienia ujednolicenia(konwersji) jednostek 
    Metody do wypisywania infomracji o danej wielkości, sprawdzenie czy mieści się w przedziale <min;max>
    Dane ładowane z pliku units.csv - możliwość dodawania nowych wielkości bez zmian w kodzie
-3. Utworzenie trybów a) pogoda obecna b) prognoza pogody 
+[3]. Utworzenie trybów a) pogoda obecna b) prognoza pogody 
 4. Przekazywanie danych do programu w postaci argumentów: 
   weather2excel.py --mode=current --city="Gdynia" --lang=pl      - aktualna pogoda w Gdynia z opisem w języku polskim
   weather2excel.py --mode=forecast --city="Gdynia" --days=5        - prognoza pogody dla Gdyni na 5 dni
@@ -81,3 +81,6 @@ TODO
 [12]. Stworzenie tabeli z podsumowaniem API
 13. Airly sprawdzić jednostki zanieczyszczeń
 14. Error codes http
+
+15. TIMEZONES FORM LAT LON
+https://api.teleport.org/api/locations/59.4372,24.7453/?embed=location:nearest-cities/location:nearest-city/city:timezone/tz:offsets-now

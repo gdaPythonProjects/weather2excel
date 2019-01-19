@@ -4,7 +4,8 @@ import requests
 class geocoder:
 
 
-    def __init__(self): 
+    def __init__(self):
+        self.url_search_reverse = "https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat={lat}&lon={lon}"
         self.url_search1 = "https://nominatim.openstreetmap.org/search/?city={city}&format=json"
         self.url_search2 = "https://nominatim.openstreetmap.org/search/?city={city}&countrycodes={countrycode}&format=json"
         self.RESULT_LIST=[]
@@ -18,7 +19,7 @@ class geocoder:
             self.url_search = self.url_search1.replace("{city}", str(args[0]))
         else:
             return -3
-        #print("URL: "+self.url_search)
+        print("URL: "+self.url_search)
 
         try:
             r = requests.get(self.url_search)
@@ -36,6 +37,26 @@ class geocoder:
             else:
                 return -1
         except:
+            print("Unknown error...")
+            return -2
+
+    def getQueryReverseResults(self,lat,lon):#city[0]  countrycode[1]
+        self.url_search = self.url_search_reverse.replace("{lat}", str(lat)).replace("{lon}", str(lon))
+
+        print("URL: "+self.url_search)
+
+        try:
+            r = requests.get(self.url_search)
+
+            if r.status_code == 200:
+                res = r.text
+                J = json.loads(res)
+                place_name=J["display_name"]
+                return place_name
+            else:
+                return -1
+        except:
+            raise
             print("Unknown error...")
             return -2
 

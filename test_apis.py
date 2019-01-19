@@ -15,7 +15,11 @@ CITY = "SOPOT"  # nazwy miast z małych liter aby łatwiej było operać na API
 COUNTRY = ""
 
 geocoder = geocoder()
-num_results = geocoder .getQueryResults(CITY, COUNTRY)
+place = geocoder.getQueryReverseResults(54.5142351,18.53589)
+print("MIEJSCE NA PODSTAWIE WSP GEOGR TO: "+place)
+quit()
+
+num_results = geocoder.getQueryResults(CITY, COUNTRY)
 if num_results>1:
     geocoder.listResults()
     choice = ""
