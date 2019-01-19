@@ -4,37 +4,48 @@
 # Stworzona by utrzymacz czystość i przejrzystość w weather2excel.py
 
 
-# TODO dodać komentarze
+# Zwróć szerokość i długość geograficzną podanego miasta
 # funkcja zwraca w kolejności: LON, LAT
 def get_coords_by_city_name(CITY, COUNTRY):
     import geocoder
 
-    choice = "0"
+    # wybór w menu miast, wartość 0 oznacza brak wyboru (czyli jest 1 miasto)
+    choice = 0
 
     geocoder = geocoder.geocoder()
+
+    # zwróć ilość miast o takiej samej nazwie
     num_results = geocoder.getQueryResults(CITY, COUNTRY)
+
+    # jeżeli jest ich więcej niż 1 to daj użytkownikowi wybór, dla któ©ego miasta chce uzyskać dane
     if num_results > 1:
+
         geocoder.listResults()
-        choice = ""
+
+        # powtarzaj póki użytkownik nie poda prawidłowego numeru miasta
         while not isinstance(choice, int) or choice < 0 or choice > num_results - 1:
             option = input("Wybierz numer z właściwym miejscem i naciśnij ENTER: ")
             try:
                 choice = int(option) - 1
-            except ValueError:
+            except:
                 print("Nie wprowadzono prawidłowej wartości z przedziału <1;" + num_results + ">")
-    elif num_results == 1:
-        choice = 0
-    else:
+
+    # jeżeli zwrócono ilość miast 0 lub mniej
+    elif num_results < 1:
         print("Nie udało się wyznaczyć współrzednych dla podanej frazy wyszukiwania.")
         print("Proszę spróbować wyszukiwania dla innej frazy lub za pomocą współrzednych geograficznych.")
         quit()
 
+    # pobierz koordynaty dla wybranego miasta
     coord = geocoder.getCoordindates(choice)
+
+    # jeżeli zwrócono False to znaczy, że wystąpił jakiś błąd
     if coord is False:
         print("Nie udało się uzyskać współrzędnych wybranej miejscowości.")
         print("Proszę spróbować wyszukiwania dla innej frazy lub za pomocą współrzednych geograficznych.")
         quit()
 
+    # zwróć koordynaty jeżeli wszsytko poszło dobrze
     return coord["lon"], coord["lat"]
 
 
