@@ -12,36 +12,37 @@ from weatherApis import *
 from geocoder import *
 
 CITY = "SOPOT"  # nazwy miast z małych liter aby łatwiej było operać na API
-COUNTRY =""
+COUNTRY = ""
 
+# region
 geocoder = geocoder()
-num_results = geocoder .getQueryResults(CITY,COUNTRY)
-if(num_results>1):
-  geocoder.listResults()
-  choice = ""
-  while (not isinstance(choice, int) or choice<0 or choice>num_results-1):
-    option = input("Wybierz numer z właściwym miejscem i naciśnij ENTER: ")
-    try:
-      choice = int(option)-1
-    except:
-      print("Nie wprowadzono prawidłowej wartości z przedziału <1;"+num_results+">")
+num_results = geocoder .getQueryResults(CITY, COUNTRY)
+if num_results>1:
+    geocoder.listResults()
+    choice = ""
+    while not isinstance(choice, int) or choice<0 or choice>num_results-1:
+        option = input("Wybierz numer z właściwym miejscem i naciśnij ENTER: ")
+        try:
+          choice = int(option)-1
+        except:
+          print("Nie wprowadzono prawidłowej wartości z przedziału <1;"+num_results+">")
 elif num_results == 1:
-  choice = 0
+    choice = 0
 else:
-  print("Nie udało się wyznaczyć współrzednych dla podanej frazy wyszukiwania.")
-  print("Proszę spróbować wyszukiwania dla innej frazy lub za pomocą współrzednych geograficznych.")
-  quit()
-
-
+    print("Nie udało się wyznaczyć współrzednych dla podanej frazy wyszukiwania.")
+    print("Proszę spróbować wyszukiwania dla innej frazy lub za pomocą współrzednych geograficznych.")
+    quit()
 
 coord = geocoder.getCoordindates(choice)
-if coord==False:
-  print("Nie udało się uzyskać współrzędnych wybranej miejscowości.")
-  print("Proszę spróbować wyszukiwania dla innej frazy lub za pomocą współrzednych geograficznych.")
-  quit()
+if coord is False:
+    print("Nie udało się uzyskać współrzędnych wybranej miejscowości.")
+    print("Proszę spróbować wyszukiwania dla innej frazy lub za pomocą współrzednych geograficznych.")
+    quit()
 
 LAT = coord["lat"]
 LON = coord["lon"]
+
+# endregion
 
 print("\nWyszukiwanie dla: "+geocoder.RESULT_LIST[choice]["display_name"]+"\n(DŁUG,SZER) = ("+LAT+","+LON+")")
 #quit()
