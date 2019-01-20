@@ -26,6 +26,8 @@ class WeatherFactors:
 
 
   def check_upper_limit(self,value):
+    if(self._max_val=="" or self._max_val is None):
+      return True
     try:
       if value<=self._max_val:
         return True
@@ -36,6 +38,8 @@ class WeatherFactors:
 
 
   def check_lowwer_limit(self,value):
+    if(self._min_val=="" or self._min_val is None):
+      return True
     try:
       if value>=self._min_val:
         return True
