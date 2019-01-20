@@ -4,6 +4,7 @@
 from ui_functions import *
 import sys  # potrzebna do sprawdzenia, czy użytkownik podał jakiekolwiek parametry na wejściu
 import argparse  # do obsługi parametrów wejściowych
+import geocoder
 # endregion
 
 # region zmienne startowe
@@ -24,15 +25,17 @@ error_in_start_parameters = 0  # zmienna określająca czy wszystkie parametry z
 # wyświetl wiadomość powitalną
 welcome_message()
 
-# region parametry startowe - przechwytywanie i wstępna obsługa
-
 # sprawdź ilość argumentów podanych na starcie przez użytkownika
-# zawsze jest minimum 1 - nazwa skryptu. Jeżeli ejst ich więcej to znaczy, ze użytkownik podał parametry startowe.
-# Jeżeli tylko 1 to znaczy, że uruchomił skrypt bez parametrów
+#  zawsze jest minimum 1 - nazwa skryptu. Jeżeli ejst ich więcej to znaczy, ze użytkownik podał parametry startowe.
+#  Jeżeli tylko 1 to znaczy, że uruchomił skrypt bez parametrów
 number_of_arguments = len(sys.argv)
 
 # jeżeli użytkownik podał jakiekolwiek argumenty to rozpocznij działanie programu na parametrach
+
+# region parametry startowe przechwytywanie i wstępna obsługa
 if number_of_arguments > 1:
+
+    # region przechwytywanie parametrów
     parser = argparse.ArgumentParser()
 
     # deklaracja parametru startowego --city (nazwy miasta). nargs z wartością "*" pozwala na pobranie 1 lub więcej
@@ -64,7 +67,7 @@ if number_of_arguments > 1:
 
     # tworzy słownik argumentów
     args = parser.parse_args()
-# endregion
+    # endregion
 
 # region gdy użytkownik spróbował jednocześnie podać nazwę miasta oraz namiary GPS w parametrach startpwych...
     if (args.city is not None) and ((args.longitude is not None) or (args.latitude is not None)):
@@ -159,6 +162,16 @@ Co chcesz zrobić?
 
             error_in_start_parameters = 0
 
+            # pobierz miejsce na podstawie koordynatów GPS
+            g = geocoder.geocoder()
+            place = g.getQueryReverseResults(LAT, LON)
+
+            # jeżeli nie nie zwróciło żadnego miasta
+            if place['city'] == '':
+                CITY = 'Brak miasta w tym miejscu'
+            else:
+                CITY = place['city']
+
         # jeżeli jest jakikolwiek błąd przy sprawdzaniu poprawności to ustawiam error_in_start_parameters na 1
         else:
             error_in_start_parameters = 1
@@ -170,9 +183,10 @@ Co chcesz zrobić?
 # region jeżeli został wywołany parametr --mode
     if args.mode is not None:
         MODE = args.mode
-# enrregion
+# endregion
 
 # region obsługa błędnie podanych parametrów
+
     # wyświetl info o błędzie we współrzędnych wtedy gdy taki błąd znajdziesz oraz gdy użytkownik rzeczywiście
     #  podał jakikolwiek argument
     if error_in_start_parameters == 1 and number_of_arguments > 1:

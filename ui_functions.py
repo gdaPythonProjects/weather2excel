@@ -92,6 +92,7 @@ def check_GPS_value_from_user(data_from_user, MIN_expected_value, MAX_expected_v
 
 # funkcja pobierająca dane o miejscu od użytkownika i zmieniająca odpowiednie zmienne dla API pogodowych
 def get_place_from_user(city_name, longitude, latitude):
+    import geocoder
 
     print("""
     W jaki sposób chcesz wskazać miejsce?
@@ -163,8 +164,10 @@ def get_place_from_user(city_name, longitude, latitude):
         if latitude == 90:
             latitude = 0
 
-        # TODO zrobić funkcję, która zwróci nazwę miasta po podaniu koordynatów GPS
-        city_name = None
+        g = geocoder.geocoder()
+        place = g.getQueryReverseResults(latitude, longitude)
+
+        city_name = place['city']
         # koniec pobierania SZEROKOŚCI geograficznej
 
     # zwróć wartości zmiennych
