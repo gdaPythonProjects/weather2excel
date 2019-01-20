@@ -11,12 +11,14 @@ import statistics
 from weatherApis import *
 from geocoder import *
 
-CITY = "SOPOT"  # nazwy miast z małych liter aby łatwiej było operać na API
+CITY = "sopot"  # nazwy miast z małych liter aby łatwiej było operać na API
 COUNTRY = ""
 
 geocoder = geocoder()
-place = geocoder.getQueryReverseResults(54.5142351,18.53589)
-print("MIEJSCE NA PODSTAWIE WSP GEOGR TO: "+place)
+place = geocoder.getQueryReverseResults(54.5142351,18.535885)
+print("MIEJSCE NA PODSTAWIE WSP GEOGR TO: "+str(place))
+
+####################### 
 quit()
 
 num_results = geocoder.getQueryResults(CITY, COUNTRY)
