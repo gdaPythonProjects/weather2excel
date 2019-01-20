@@ -183,7 +183,6 @@ prognozę pogody.""")
 # koniec funkcji welcome_message()
 
 
-# TODO przerobić *args na listę
 # sprawdź czy Użytkownik podał wartość, która jest na liście
 # zwróć None jeżeli nie ma takiej wartości, zwróć tą wartość jeżeli występuje
 def check_user_choice_is_correct(data_from_user, choices):
