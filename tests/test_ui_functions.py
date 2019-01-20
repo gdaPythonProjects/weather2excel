@@ -19,37 +19,37 @@ def test_check_GPS_value_from_user(test_data_from_user, test_MIN_expected_value,
 
 # region test of check_user_choice_is_correct(data_from_user, *args)
 def test_check_user_choice_is_correct_param1():
-    result = check_user_choice_is_correct("4", "1", "2", "3")
+    result = check_user_choice_is_correct("4", ["1", "2", "3"])
     assert result is None
 
 
 def test_check_user_choice_is_correct_param2():
-    result = check_user_choice_is_correct(3, "1", "2", "3", "4")
+    result = check_user_choice_is_correct(3, ["1", "2", "3", "4"])
     assert result is None
 
 
 def test_check_user_choice_is_correct_param3():
-    result = check_user_choice_is_correct("3", 1, 2, 3, 4)
+    result = check_user_choice_is_correct("3", [1, 2, 3, 4])
     assert result is None
 
 
 def test_check_user_choice_is_correct_param4():
-    result = check_user_choice_is_correct("3", "1", "2", "3", "4")
+    result = check_user_choice_is_correct("3", ["1", "2", "3", "4"])
     assert result == "3"
 
 
 def test_check_user_choice_is_correct_param5():
-    result = check_user_choice_is_correct("two", "one", "two", "three", "four")
+    result = check_user_choice_is_correct("two", ["one", "two", "three", "four"])
     assert result == "two"
 
 
 def test_check_user_choice_is_correct_param6():
-    result = check_user_choice_is_correct("two", "one", "two", "three", "two", "four")
+    result = check_user_choice_is_correct("two", ("one", "two", "three", "two", "four"))
     assert result == "two"
 
 
 def test_check_user_choice_is_correct_param7():
-    result = check_user_choice_is_correct(3, 1, 2, 3, 4, 5)
+    result = check_user_choice_is_correct(3, (1, 2, 3, 4, 5))
     assert result == 3
 
 # endregion
