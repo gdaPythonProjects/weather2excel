@@ -5,6 +5,7 @@ class geocoder:
 
 
     def __init__(self):
+
         self.url_search_reverse = "https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat={lat}&lon={lon}"
         self.url_search1 = "https://nominatim.openstreetmap.org/search/?city={city}&format=json"
         self.url_search2 = "https://nominatim.openstreetmap.org/search/?city={city}&countrycodes={countrycode}&format=json"
@@ -29,10 +30,10 @@ class geocoder:
             self.url_search = self.url_search1.replace("{city}", str(args[0]))
         else:
             return -3
-        print("URL: "+self.url_search)
+        #print("URL: "+self.url_search)
 
         try:
-            r = requests.get(self.url_search)
+            r = requests.get(self.url_search, headers = self.headers)
 
             if r.status_code == 200:
                 res = r.text

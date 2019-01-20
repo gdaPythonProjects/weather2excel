@@ -10,7 +10,7 @@ def get_coords_by_city_name(CITY, COUNTRY):
     import geocoder
 
     # wybór w menu miast
-    choice = None
+    choice = 0
 
     geocoder = geocoder.geocoder()
 
@@ -18,7 +18,7 @@ def get_coords_by_city_name(CITY, COUNTRY):
     num_results = geocoder.getQueryResults(CITY, COUNTRY)
 
     # jeżeli jest ich więcej niż 1 to daj użytkownikowi wybór, dla któ©ego miasta chce uzyskać dane
-    if num_results > 1:
+    if num_results >= 1:
 
         geocoder.listResults()
 
@@ -30,7 +30,7 @@ def get_coords_by_city_name(CITY, COUNTRY):
             except:
                 print("Nie wprowadzono prawidłowej wartości z przedziału <1;" + num_results + ">")
 
-    # jeżeli zwrócono ilość miast 0 lub mniej
+    # jeżeli zwrócono ilość miast 0 lub liczbę ujemną (oznacza błąd)
     elif num_results < 1:
         print("Nie udało się wyznaczyć współrzednych dla podanej frazy wyszukiwania.")
         print("Proszę spróbować wyszukiwania dla innej frazy lub za pomocą współrzednych geograficznych.")
