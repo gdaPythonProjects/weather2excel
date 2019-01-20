@@ -23,28 +23,36 @@ W celu wykorzystnia aplikacji należy zarejestorwać się w co najmniej jednym z
  7. https://airly.eu <br>
  8. https://www.airvisual.com<br>
 <br>
-Klucz/token do korzystania z danego API powinien zostać dopisany w odpowiednim pliku w /config/API_keys/.<br>
-Prognozy i bieżące wyniki będą podawane w czasie UTC. Aby uzyskać je w czasie lokalnym dla wyszukiwanych miejsc, należy skonfigurować co najmniej jednen z serwisów: APIXU, DarkSky.
+<b>Aplikacja nie korzysta z gotowych modułów Python do API pogodowych.</b>
 <br>Tabela przedstawiająca ogólne możliwe do wykorzystania funkcjonalności Weather API<br>
 <img src='logo/tabela_api.png'>
 
-<br><br>
+<br>
 Geokodowanie odbywa się za pomocą:<br>
 <a href='https://www.openstreetmap.org' target='_blank'><img src='logo/OpenStreetMap_logo.jpg' width='126' height='90'></a>
 <br>
 
+# Konfiguracja
+Klucz/token do korzystania z danego API powinien zostać dopisany w odpowiednim pliku w katalogu <b>config/API_keys/</b>.<br>
+Prognozy i bieżące wyniki będą podawane w czasie UTC. Aby uzyskać je w <b><i>czasie lokalnym</i></b> dla wyszukiwanych miejsc, należy skonfigurować co najmniej jednen z serwisów: <b>APIXU</b>, <b>DarkSky</b>.
+
+
+
 # Zależności:
-    pip3 install unit-converter
-    pip3 install --upgrade jsonpath-ng
-    pip3 install requests
-    pip3 install python-dateutil
+    pip install unit-converter
+    pip install --upgrade jsonpath-ng
+    pip install requests
+    pip install python-dateutil
 
 # Uruchomienie
-    python3 weather2excel.py
+    python weather2excel.py
 
-Wyjaśnienie symboli w wynikach:\
-<span> <b>*</b>  API nie oferuje danych</span>\
-<span> <b>#</b>  dane chwilowo niedostępne</span>\
-<span> <b>_</b>  problem z konwersją danych</span>\
-<span> <b><</b>  wartość poniżej dopuszczalnego przedziału</span>\
-<span> <b>></b>  wartość powyżej dopuszczalnego przedziału</span>
+# Wyniki
+Przykładowe pliki wynikowe zostaną umieszczone w folderze examples.
+
+Wyjaśnienie symboli pojawiających się w wynikach w plikach .csv lub .xls:\
+<span> <b>*</b>&nbsp;  API nie oferuje danych</span>\
+<span> <b>#</b>&nbsp;  dane chwilowo niedostępne</span>\
+<span> <b>_</b>&nbsp; problem z konwersją danych</span>\
+<span> <b><</b>&nbsp;  wartość poniżej dopuszczalnego przedziału</span>\
+<span> <b>></b>&nbsp;  wartość powyżej dopuszczalnego przedziału</span>
