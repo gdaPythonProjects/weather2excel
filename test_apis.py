@@ -19,7 +19,7 @@ place = geocoder.getQueryReverseResults(54.5142351,18.535885)
 print("MIEJSCE NA PODSTAWIE WSP GEOGR TO: "+str(place))
 
 ####################### 
-quit()
+#quit()
 
 num_results = geocoder.getQueryResults(CITY, COUNTRY)
 if num_results>1:

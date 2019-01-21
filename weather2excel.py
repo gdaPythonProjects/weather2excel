@@ -5,6 +5,8 @@ from ui_functions import *
 import sys  # potrzebna do sprawdzenia, czy użytkownik podał jakiekolwiek parametry na wejściu
 import argparse  # do obsługi parametrów wejściowych
 import geocoder
+from weatherApis import *
+import statistics
 # endregion
 
 # region zmienne startowe
@@ -17,6 +19,9 @@ MODE = "current"  # "current" podaję aktualne dane, alternatywny tryb -> "forec
 
 LANG = "pl"  # język do komunikacji z API
 DAYS = 5  # ilość dni do przodu na które można uzyskać prognoze pogody
+SILENT = False
+
+weatherDataset = []
 
 option = None  # zmienna określająca, którą opcję wybrał uzytkownik
 is_start_with_parameters = False  # flaga informująca czy program został uruchomiony z parametrami
@@ -304,4 +309,64 @@ print("CITY: ", CITY)
 print("LON: ", LON)
 print("LAT: ", LAT)
 print("MODE: ", MODE)
+# endregion
+
+# region pobieranie danych z API
+# check API keys to determine if the weather can be obtained(includning timezones)
+if( check_API_keys(verify_online=False)==0 ):
+  sys.exit("Nie skonfigurowano żadnego systemu do pobierania danych o pogodzie.\n Program nie może działać.\n Wpisz xxx -help, aby dowiedzieć się, jak dokonać konfiguracji.")
+
+
+"""for API in os.listdir("config/API/"):"""
+for API in APIS:
+  if API.endswith(".csv"):
+    wa = WeatherApis()
+    if wa.read_conf(API) == False:
+      continue
+    if wa.get_weather(MODE, LANG, DAYS, SILENT, LAT, LON):
+      weatherDataset.append( wa.parse_result(MODE, DAYS) )
+    else:
+      print("Problem z uzyskaniem danych z "+wa.config["api_name"]+". Adres: "+wa.url_search)
+
+CSV="api_name,"
+for factor in factors:
+    if(MODE=="forecast" and len(factorsDict[factor].type)==2 ) or (MODE=="current" and len(factorsDict[factor].type)==1):
+        CSV = CSV +factor+","
+CSV=CSV+"\r\n"
+
+def is_number(str):
+    try:
+        float(str)
+        return True
+    except:
+        return False
+
+for day in range(0,DAYS):
+    STAT = {}
+    for factor in factors:
+        STAT[factor]=[]
+    for wynikiAPI in weatherDataset:
+        CSV = CSV + "\"" + str(wynikiAPI[day]["api_name"]) + "\","
+        for factor in wynikiAPI[day]:
+            if(MODE=="forecast" and len(factorsDict[factor].type)==2 ) or (MODE=="current" and len(factorsDict[factor].type)==1):
+                CSV = CSV + "\"" + str(wynikiAPI[day][factor]) + "\","
+                if( is_number(wynikiAPI[day][factor]) ):
+                    STAT[factor].append( float(wynikiAPI[day][factor]) )
+        CSV=CSV+"\r\n"
+    CSV=CSV+"MEAN ± SD:,"
+    #calculating statistics
+    for factor in factors:
+        if(MODE=="forecast" and len(factorsDict[factor].type)==2 ) or (MODE=="current" and len(factorsDict[factor].type)==1):
+            if len(STAT[factor])>0:
+                #STAT[factor+"_mean"] = round(statistics.pstdev(STAT[factor]),1)
+                #STAT[factor+"_mean"] = round(statistics.pstdev(STAT[factor]),1)
+                CSV=CSV+"\""+str( round(statistics.mean(STAT[factor]),1))+"±"+str( round(statistics.pstdev(STAT[factor]),1) )+"\","
+            else:
+                CSV=CSV+"\"\","
+
+    CSV=CSV+"\r\n\r\n"
+
+f = open( 'wyniki.csv', 'w' )
+f.write( CSV )
+f.close()
 # endregion
