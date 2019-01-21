@@ -68,6 +68,11 @@ if number_of_arguments > 1:
                         help="ustawia tryb działania programu - 'current' pokazuje aktualne dane,"
                              "'forecast' pokazuje prognozę (tylko dla pogody!)")
 
+    # parametr informujący na ile dni do przodu ma pokazać prognozę pogody (zakres 1-6, bo 6 się nie wlicza)
+    parser.add_argument("-d", "--days", dest="days", type=int, choices=range(1, 6), default=5,
+                        help="ustala na ile dni do przeodu ma wyświetlić progrnozę pogody. Działa tylko z"
+                             "'--mode=forecast'. Trybie danych bieżących (--mode=current) parametr będzie ignorowany.")
+
     # tworzy słownik argumentów
     args = parser.parse_args()
     # endregion
@@ -193,6 +198,8 @@ Co chcesz zrobić?
 # region jeżeli został wywołany parametr --mode
     if args.mode is not None:
         MODE = args.mode
+        if args.mode == 'forecast':
+            DAYS = args.days
 # endregion
 
 # region obsługa błędnie podanych parametrów
