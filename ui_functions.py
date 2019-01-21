@@ -10,7 +10,7 @@ def get_coords_by_city_name(CITY, COUNTRY):
     import geocoder
 
     # wybór w menu miast
-    choice = 0
+    choice = None
 
     geocoder = geocoder.geocoder()
 
@@ -23,12 +23,15 @@ def get_coords_by_city_name(CITY, COUNTRY):
         geocoder.listResults()
 
         # powtarzaj póki użytkownik nie poda prawidłowego numeru miasta
-        while not isinstance(choice, int) or choice <= 0 or choice > num_results - 1:
+        while not isinstance(choice, int) or choice < 0 or choice > num_results - 1:
             option = input("Wybierz numer z właściwym miejscem i naciśnij ENTER: ")
             try:
                 choice = int(option) - 1
-            except:
-                print("Nie wprowadzono prawidłowej wartości z przedziału <1;" + num_results + ">")
+            except ValueError:
+                print("Nie wprowadzono prawidłowej wartości z przedziału <1;" + str(num_results) + ">")
+
+            if num_results - 1 < choice <= 0:
+                print("Nie wprowadzono prawidłowej wartości z przedziału <1;" + str(num_results) + ">")
 
     # jeżeli zwrócono ilość miast 0 lub liczbę ujemną (oznacza błąd)
     elif num_results < 1:

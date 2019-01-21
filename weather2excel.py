@@ -10,7 +10,7 @@ import geocoder
 # region zmienne startowe
 CITY = "gdynia"  # nazwy miast z małych liter aby łatwiej było operać na API
 # współrzedne dla Gdyni pobrane z portalu https://www.wspolrzedne-gps.pl/
-LON = 54.5142351 # długość geograficzna
+LON = 54.5142351  # długość geograficzna
 LAT = 18.5358849  # szerokość geograficzna
 
 MODE = "current"  # "current" podaję aktualne dane, alternatywny tryb -> "forecast" - prognoza, ale tylko dla pogody
@@ -139,6 +139,7 @@ Co chcesz zrobić?
             # dodawaj kolejne wyrazy do zmiennej CITY (zmienna typu string)
             CITY = CITY + word_of_city_name + " " 
 
+        # oczyszczanie zmiennej z białych znaków na początku i na końcu
         CITY = CITY.strip()
 
         LON, LAT = get_coords_by_city_name(CITY, "")
