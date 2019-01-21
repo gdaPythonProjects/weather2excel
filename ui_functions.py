@@ -23,7 +23,7 @@ def get_coords_by_city_name(CITY, COUNTRY):
         geocoder.listResults()
 
         # powtarzaj póki użytkownik nie poda prawidłowego numeru miasta
-        while not isinstance(choice, int) or choice < 0 or choice > num_results - 1:
+        while not isinstance(choice, int) or choice <= 0 or choice > num_results - 1:
             option = input("Wybierz numer z właściwym miejscem i naciśnij ENTER: ")
             try:
                 choice = int(option) - 1
