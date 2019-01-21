@@ -2,3 +2,4 @@ unit-converter
 jsonpath-ng
 requests
 python-dateutil
+openpyxl

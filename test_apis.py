@@ -3,24 +3,26 @@
 #!/usr/bin/python
 import os
 import sys
-
 import csv
 import json # only for development
 import statistics
 
+from openpyxl import Workbook
+
 from weatherApis import *
 from geocoder import *
 
-CITY = "sopot"  # nazwy miast z małych liter aby łatwiej było operać na API
+CITY = "gdynia"  # nazwy miast z małych liter aby łatwiej było operać na API
 COUNTRY = ""
-
+'''
 geocoder = geocoder()
 place = geocoder.getQueryReverseResults(54.5142351,18.535885)
 print("MIEJSCE NA PODSTAWIE WSP GEOGR TO: "+str(place))
 
 ####################### 
-#quit()
-
+quit()
+'''
+'''
 num_results = geocoder.getQueryResults(CITY, COUNTRY)
 if num_results>1:
     geocoder.listResults()
@@ -49,10 +51,11 @@ LON = coord["lon"]
 
 print("\nWyszukiwanie dla: "+geocoder.RESULT_LIST[choice]["display_name"]+"\n(DŁUG,SZER) = ("+LAT+","+LON+")")
 #quit()
+'''
 
 # współrzedne dla Gdyni pobrane z portalu https://www.wspolrzedne-gps.pl/
-#LON = 18.5318800  # długość geograficzna
-#LAT = 54.5188900  # szerokość geograficzna
+LON = 18.5318800  # długość geograficzna
+LAT = 54.5188900  # szerokość geograficzna
 MODE = "current"  # "current" podaję aktualne dane, alternatywny tryb -> "forecast" - prognoza, ale tylko dla pogody
 LANG = "pl"  # język do komunikacji z API, TODO zastanowić się czy ta zmienna ma być tutaj, czy w weatherApis.py?
 DAYS = 1  # ilość dni do przodu na które można uzyskać prognoze pogody
@@ -68,9 +71,10 @@ if( check_API_keys(verify_online=False)==0 ):
   sys.exit("Nie skonfigurowano żadnego systemu do pobierania danych o pogodzie.\n Program nie może działać.\n Wpisz xxx -help, aby dowiedzieć się, jak dokonać konfiguracji.")
 
 
-"""for API in os.listdir("config/API/"):"""
-for API in APIS:
-  if API.endswith(".csv"):
+for API in os.listdir("config/API/"):
+#for API in APIS:
+  if API.endswith(".csv") and not API.startswith("."):
+    print(API)
     wa = WeatherApis()
     if wa.read_conf(API) == False:
       continue
@@ -79,11 +83,20 @@ for API in APIS:
     else:
       print("Problem z uzyskaniem danych z "+wa.config["api_name"]+". Adres: "+wa.url_search)
 
+
+wb = Workbook()
+dest_filename = 'results.xlsx'
+ws = wb.active
+
 CSV="api_name,"
+row_xls = []
+row_xls.append("api_name")
 for factor in factors:
     if(MODE=="forecast" and len(factorsDict[factor].type)==2 ) or (MODE=="current" and len(factorsDict[factor].type)==1):
         CSV = CSV +factor+","
+        row_xls.append(factor)
 CSV=CSV+"\r\n"
+ws.append(row_xls)
 
 def is_number(str):
     try:
@@ -92,19 +105,26 @@ def is_number(str):
     except:
         return False
 
+
 for day in range(0,DAYS):
     STAT = {}
     for factor in factors:
         STAT[factor]=[]
     for wynikiAPI in weatherDataset:
+        row_xls = []
+        row_xls.append(str(wynikiAPI[day]["api_name"]))
         CSV = CSV + "\"" + str(wynikiAPI[day]["api_name"]) + "\","
         for factor in wynikiAPI[day]:
             if(MODE=="forecast" and len(factorsDict[factor].type)==2 ) or (MODE=="current" and len(factorsDict[factor].type)==1):
                 CSV = CSV + "\"" + str(wynikiAPI[day][factor]) + "\","
+                row_xls.append( str(wynikiAPI[day][factor]) )
                 if( is_number(wynikiAPI[day][factor]) ):
                     STAT[factor].append( float(wynikiAPI[day][factor]) )
         CSV=CSV+"\r\n"
+        ws.append(row_xls)
+    row_xls = []
     CSV=CSV+"MEAN ± SD:,"
+    row_xls.append("MEAN ± SD:")
     #calculating statistics
     for factor in factors:
         if(MODE=="forecast" and len(factorsDict[factor].type)==2 ) or (MODE=="current" and len(factorsDict[factor].type)==1):
@@ -112,12 +132,15 @@ for day in range(0,DAYS):
                 #STAT[factor+"_mean"] = round(statistics.pstdev(STAT[factor]),1)
                 #STAT[factor+"_mean"] = round(statistics.pstdev(STAT[factor]),1)
                 CSV=CSV+"\""+str( round(statistics.mean(STAT[factor]),1))+"±"+str( round(statistics.pstdev(STAT[factor]),1) )+"\","
+                row_xls.append( str( round(statistics.mean(STAT[factor]),1))+"±"+str( round(statistics.pstdev(STAT[factor]),1) ) )
             else:
                 CSV=CSV+"\"\","
+                row_xls.append("")
 
     CSV=CSV+"\r\n\r\n"
+    ws.append(row_xls)
 
-
+wb.save(filename = dest_filename)
 
 
 f = open( 'wyniki.csv', 'w' )

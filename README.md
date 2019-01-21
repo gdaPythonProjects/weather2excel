@@ -34,7 +34,7 @@ Prognozy i bieżące wyniki będą podawane w czasie UTC. Aby uzyskać je w <b><
     pip install unit-converter
     pip install python-dateutil
     pip install --upgrade jsonpath-ng
-
+    pip install openpyxl
 # Uruchomienie i sposób użycia:
     python weather2excel.py                 #wybór paramentrów przez interaktywne menu
     python weather2excel.py --mode=current  --city="Gdynia" --lang=pl  #aktualna pogoda w Gdynia z opisem w języku polskim

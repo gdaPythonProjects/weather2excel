@@ -7,6 +7,8 @@ import argparse  # do obsługi parametrów wejściowych
 import geocoder
 from weatherApis import *
 import statistics
+from openpyxl import Workbook
+import os
 # endregion
 
 # region zmienne startowe
@@ -18,7 +20,7 @@ LAT = 18.5358849  # szerokość geograficzna
 MODE = "current"  # "current" podaję aktualne dane, alternatywny tryb -> "forecast" - prognoza, ale tylko dla pogody
 
 LANG = "pl"  # język do komunikacji z API
-DAYS = 5  # ilość dni do przodu na które można uzyskać prognoze pogody
+DAYS = 1  # ilość dni do przodu na które można uzyskać prognoze pogody
 SILENT = False
 
 weatherDataset = []
@@ -317,9 +319,10 @@ if( check_API_keys(verify_online=False)==0 ):
   sys.exit("Nie skonfigurowano żadnego systemu do pobierania danych o pogodzie.\n Program nie może działać.\n Wpisz xxx -help, aby dowiedzieć się, jak dokonać konfiguracji.")
 
 
-"""for API in os.listdir("config/API/"):"""
-for API in APIS:
-  if API.endswith(".csv"):
+for API in os.listdir("config/API/"):
+#for API in APIS:
+  if API.endswith(".csv") and not API.startswith("."):
+    print(API)
     wa = WeatherApis()
     if wa.read_conf(API) == False:
       continue
@@ -328,11 +331,20 @@ for API in APIS:
     else:
       print("Problem z uzyskaniem danych z "+wa.config["api_name"]+". Adres: "+wa.url_search)
 
+
+wb = Workbook()
+dest_filename = 'results.xlsx'
+ws = wb.active
+
 CSV="api_name,"
+row_xls = []
+row_xls.append("api_name")
 for factor in factors:
     if(MODE=="forecast" and len(factorsDict[factor].type)==2 ) or (MODE=="current" and len(factorsDict[factor].type)==1):
         CSV = CSV +factor+","
+        row_xls.append(factor)
 CSV=CSV+"\r\n"
+ws.append(row_xls)
 
 def is_number(str):
     try:
@@ -341,19 +353,26 @@ def is_number(str):
     except:
         return False
 
+
 for day in range(0,DAYS):
     STAT = {}
     for factor in factors:
         STAT[factor]=[]
     for wynikiAPI in weatherDataset:
+        row_xls = []
+        row_xls.append(str(wynikiAPI[day]["api_name"]))
         CSV = CSV + "\"" + str(wynikiAPI[day]["api_name"]) + "\","
         for factor in wynikiAPI[day]:
             if(MODE=="forecast" and len(factorsDict[factor].type)==2 ) or (MODE=="current" and len(factorsDict[factor].type)==1):
                 CSV = CSV + "\"" + str(wynikiAPI[day][factor]) + "\","
+                row_xls.append( str(wynikiAPI[day][factor]) )
                 if( is_number(wynikiAPI[day][factor]) ):
                     STAT[factor].append( float(wynikiAPI[day][factor]) )
         CSV=CSV+"\r\n"
+        ws.append(row_xls)
+    row_xls = []
     CSV=CSV+"MEAN ± SD:,"
+    row_xls.append("MEAN ± SD:")
     #calculating statistics
     for factor in factors:
         if(MODE=="forecast" and len(factorsDict[factor].type)==2 ) or (MODE=="current" and len(factorsDict[factor].type)==1):
@@ -361,12 +380,23 @@ for day in range(0,DAYS):
                 #STAT[factor+"_mean"] = round(statistics.pstdev(STAT[factor]),1)
                 #STAT[factor+"_mean"] = round(statistics.pstdev(STAT[factor]),1)
                 CSV=CSV+"\""+str( round(statistics.mean(STAT[factor]),1))+"±"+str( round(statistics.pstdev(STAT[factor]),1) )+"\","
+                row_xls.append( str( round(statistics.mean(STAT[factor]),1))+"±"+str( round(statistics.pstdev(STAT[factor]),1) ) )
             else:
                 CSV=CSV+"\"\","
+                row_xls.append("")
 
     CSV=CSV+"\r\n\r\n"
+    ws.append(row_xls)
+
+wb.save(filename = dest_filename)
+
 
 f = open( 'wyniki.csv', 'w' )
 f.write( CSV )
 f.close()
-# endregion
+
+
+with open('data.json', 'w') as outfile:
+    for WD in weatherDataset:
+        json.dump(WD, outfile)
+        #print(json.dumps(WD, sort_keys=False, indent=4))
