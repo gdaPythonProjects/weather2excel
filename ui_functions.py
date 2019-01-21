@@ -6,11 +6,15 @@
 
 # Zwróć szerokość i długość geograficzną podanego miasta
 # funkcja zwraca w kolejności: LON, LAT
-def get_coords_by_city_name(CITY, COUNTRY):
+def get_coords_by_city_name(CITY, COUNTRY, parameter_mode):
     import geocoder
 
     # wybór w menu miast
-    choice = None
+
+    if parameter_mode is True:
+        choice = 0
+    else:
+        choice = None
 
     geocoder = geocoder.geocoder()
 
@@ -18,7 +22,7 @@ def get_coords_by_city_name(CITY, COUNTRY):
     num_results = geocoder.getQueryResults(CITY, COUNTRY)
 
     # jeżeli jest ich więcej niż 1 to daj użytkownikowi wybór, dla któ©ego miasta chce uzyskać dane
-    if num_results >= 1:
+    if num_results >= 1 and parameter_mode is False:
 
         geocoder.listResults()
 
@@ -117,7 +121,7 @@ def get_place_from_user(city_name, longitude, latitude):
     if option == "1":
         city_name = input("\nPodaj miasto: ").lower()  # małe litery dla ułatwienia komunikacji z API
 
-        longitude, latitude = get_coords_by_city_name(city_name, "")
+        longitude, latitude = get_coords_by_city_name(city_name, "", False)
 
     elif option == "2":
 

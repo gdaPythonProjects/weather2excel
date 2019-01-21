@@ -19,6 +19,7 @@ LANG = "pl"  # język do komunikacji z API
 DAYS = 5  # ilość dni do przodu na które można uzyskać prognoze pogody
 
 option = None  # zmienna określająca, którą opcję wybrał uzytkownik
+is_start_with_parameters = False  # flaga informująca czy program został uruchomiony z parametrami
 error_in_start_parameters = 0  # zmienna określająca czy wszystkie parametry zostały podane poprawnie przez Użytkownika
 # endregion
 
@@ -34,6 +35,8 @@ number_of_arguments = len(sys.argv)
 
 # region parametry startowe przechwytywanie i wstępna obsługa
 if number_of_arguments > 1:
+
+    is_start_with_parameters = True
 
     # region przechwytywanie parametrów
     parser = argparse.ArgumentParser()
@@ -69,8 +72,12 @@ if number_of_arguments > 1:
     args = parser.parse_args()
     # endregion
 
-# region gdy użytkownik spróbował jednocześnie podać nazwę miasta oraz namiary GPS w parametrach startpwych...
+# region gdy użytkownik spróbował jednocześnie podać nazwę miasta oraz namiary GPS w parametrach startowych...
     if (args.city is not None) and ((args.longitude is not None) or (args.latitude is not None)):
+
+        # wyłączam opcję startu z parametrami
+        is_start_with_parameters = False
+
         print("""
 OSTRZEZENIE! Podjęto próbę jednoczesnego podania: nazwy miasta i współrzędnych GPS!
 
@@ -142,7 +149,7 @@ Co chcesz zrobić?
         # oczyszczanie zmiennej z białych znaków na początku i na końcu
         CITY = CITY.strip()
 
-        LON, LAT = get_coords_by_city_name(CITY, "")
+        LON, LAT = get_coords_by_city_name(CITY, "", is_start_with_parameters)
 
         error_in_start_parameters = 0
 # endregion
