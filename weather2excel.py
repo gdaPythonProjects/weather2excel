@@ -20,7 +20,7 @@ LAT = 18.5358849  # szerokość geograficzna
 MODE = "current"  # "current" podaję aktualne dane, alternatywny tryb -> "forecast" - prognoza, ale tylko dla pogody
 
 LANG = "pl"  # język do komunikacji z API
-DAYS = 1  # ilość dni do przodu na które można uzyskać prognoze pogody
+DAYS = 5  # ilość dni do przodu na które można uzyskać prognoze pogody
 SILENT = False
 
 weatherDataset = []
@@ -304,6 +304,10 @@ Co chcesz zrobić?
         exit()  # kończy natychmiast program aby uniknąć potencjalnych błedów z powodu wybrania opcji, której nie ma
 # endregion
 
+# jeżeli został wybrany tryb danych aktualnych to zmień ilość dni dla API na 1
+if MODE == 'current':
+    DAYS = 1
+
 # region kontrolny wydruk zmiennych podanych przez użytkownika
 print("")
 print("Kontrolny wydruk zmiennych")
@@ -311,9 +315,11 @@ print("CITY: ", CITY)
 print("LON: ", LON)
 print("LAT: ", LAT)
 print("MODE: ", MODE)
+print("DAYS: ", DAYS)
 # endregion
 
 # region pobieranie danych z API
+
 # check API keys to determine if the weather can be obtained(includning timezones)
 if( check_API_keys(verify_online=False)==0 ):
   sys.exit("Nie skonfigurowano żadnego systemu do pobierania danych o pogodzie.\n Program nie może działać.\n Wpisz xxx -help, aby dowiedzieć się, jak dokonać konfiguracji.")
