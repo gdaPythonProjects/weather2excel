@@ -1,14 +1,17 @@
 #!/usr/bin/python
 
 # region import
-from ui_functions import *
+import os
 import sys  # potrzebna do sprawdzenia, czy użytkownik podał jakiekolwiek parametry na wejściu
 import argparse  # do obsługi parametrów wejściowych
-import geocoder
-from weatherApis import *
 import statistics
+
 from openpyxl import Workbook
-import os
+from openpyxl.styles import Border, Side, PatternFill, Font, GradientFill, Alignment
+
+import geocoder
+from ui_functions import *
+from weatherApis import *
 # endregion
 
 # region zmienne startowe
@@ -325,8 +328,8 @@ if( check_API_keys(verify_online=False)==0 ):
   sys.exit("Nie skonfigurowano żadnego systemu do pobierania danych o pogodzie.\n Program nie może działać.\n Wpisz xxx -help, aby dowiedzieć się, jak dokonać konfiguracji.")
 
 
-for API in os.listdir("config/API/"):
-#for API in APIS:
+#for API in os.listdir("config/API/"):
+for API in APIS:
   if API.endswith(".csv") and not API.startswith("."):
     print(API)
     wa = WeatherApis()
@@ -338,33 +341,38 @@ for API in os.listdir("config/API/"):
       print("Problem z uzyskaniem danych z "+wa.config["api_name"]+". Adres: "+wa.url_search)
 
 
-wb = Workbook()
-dest_filename = 'results.xlsx'
-ws = wb.active
-
-CSV="api_name,"
-row_xls = []
-row_xls.append("api_name")
-for factor in factors:
-    if(MODE=="forecast" and len(factorsDict[factor].type)==2 ) or (MODE=="current" and len(factorsDict[factor].type)==1):
-        CSV = CSV +factor+","
-        row_xls.append(factor)
-CSV=CSV+"\r\n"
-ws.append(row_xls)
-
 def is_number(str):
     try:
         float(str)
         return True
     except:
         return False
+################################################################## SAVE DATA TO EXCEL #############################################################
 
+wb = Workbook()
+dest_filename = 'results.xlsx'
+ws = wb.active
+
+CSV="api_name,"
+row_xls0 = []
+row_xls_empty = []
+row_xls0.append("api_name")
+for factor in factors:
+    if(MODE=="forecast" and len(factorsDict[factor].type)==2 ) or (MODE=="current" and len(factorsDict[factor].type)==1):
+        CSV = CSV +factor+","
+        row_xls0.append(factor+" ["+factorsDict[factor].unit+"]" )
+        row_xls_empty.append("")
+CSV=CSV+"\r\n"
+ws.append(row_xls0)
+
+rowNum = 0
 
 for day in range(0,DAYS):
     STAT = {}
     for factor in factors:
         STAT[factor]=[]
     for wynikiAPI in weatherDataset:
+        rowNum  = rowNum + 1
         row_xls = []
         row_xls.append(str(wynikiAPI[day]["api_name"]))
         CSV = CSV + "\"" + str(wynikiAPI[day]["api_name"]) + "\","
@@ -376,33 +384,59 @@ for day in range(0,DAYS):
                     STAT[factor].append( float(wynikiAPI[day][factor]) )
         CSV=CSV+"\r\n"
         ws.append(row_xls)
-    row_xls = []
     CSV=CSV+"MEAN ± SD:,"
-    row_xls.append("MEAN ± SD:")
+
+
     #calculating statistics
+    rowNum = rowNum + 2
+    colNum = 1
+    ws.cell(row=rowNum, column=colNum, value="MEAN ± SD:").fill = PatternFill(fgColor="FFFFFF", fill_type = 'solid')
+    colNum = 2
     for factor in factors:
         if(MODE=="forecast" and len(factorsDict[factor].type)==2 ) or (MODE=="current" and len(factorsDict[factor].type)==1):
             if len(STAT[factor])>0:
-                #STAT[factor+"_mean"] = round(statistics.pstdev(STAT[factor]),1)
-                #STAT[factor+"_mean"] = round(statistics.pstdev(STAT[factor]),1)
-                CSV=CSV+"\""+str( round(statistics.mean(STAT[factor]),1))+"±"+str( round(statistics.pstdev(STAT[factor]),1) )+"\","
-                row_xls.append( str( round(statistics.mean(STAT[factor]),1))+"±"+str( round(statistics.pstdev(STAT[factor]),1) ) )
+                value = round(statistics.mean(STAT[factor]),1)
+                stdev = round(statistics.pstdev(STAT[factor]),1)
+                color = factorsDict[factor].convert_to_rgb(value)
+                fill = PatternFill("solid", fgColor=color)
+                ws.cell(row=rowNum, column=colNum, value=value).fill = PatternFill(fgColor=color, fill_type = 'solid')
+                CSV=CSV+"\""+str(value)+"±"+str(stdev)+"\","
             else:
                 CSV=CSV+"\"\","
-                row_xls.append("")
+            colNum = colNum + 1
 
     CSV=CSV+"\r\n\r\n"
-    ws.append(row_xls)
+    row_xls0[0]=""
+    ws.append(row_xls_empty)
+    ws.append(row_xls_empty)
+    if(day==DAYS):
+        ws.append(row_xls0)
+
+
+
+#adjust columns
+for col in ws.columns:
+     max_length = 0
+     column = col[0].column # Get the column name
+     for cell in col:
+         try: # Necessary to avoid error on empty cells
+             if len(str(cell.value)) > max_length:
+                 max_length = len(cell.value)
+         except:
+             pass
+     adjusted_width = (max_length + 1) * 1.05
+     ws.column_dimensions[column].width = adjusted_width   
 
 wb.save(filename = dest_filename)
 
 
-f = open( 'wyniki.csv', 'w' )
+f = open( 'results.csv', 'w' )
 f.write( CSV )
 f.close()
 
-
-with open('data.json', 'w') as outfile:
-    for WD in weatherDataset:
-        json.dump(WD, outfile)
-        #print(json.dumps(WD, sort_keys=False, indent=4))
+debug=0
+if(debug>0)
+    with open('data.json', 'w') as outfile:
+        for WD in weatherDataset:
+            json.dump(WD, outfile)
+            #print(json.dumps(WD, sort_keys=False, indent=4))

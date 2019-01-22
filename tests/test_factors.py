@@ -4,16 +4,16 @@ import pytest
 from ..factors import *
 
 
-@pytest.mark.parametrize("name,unit,type,min_val,max_val,alert_min_val,alert_max_val", [
-    ("Temperatura","C","w",-273,100,-10,30),
-    ("Temperatura","C",0,-273,100,-10,30),
-    ("Temperatura","C",0,-273,100,-10,"silly_value"),
-    ("","C",0,-273,100,-10,"silly_value"),
-    (None,"C",0,-273,None,False,"silly_value"),
+@pytest.mark.parametrize("name,unit,type,min_val,max_val,alert_min_val,alert_max_val,color_scale", [
+    ("Temperatura","C","w",-273,100,-10,30,"rgb"),
+    ("Temperatura","C",0,-273,100,-10,30,"rgb"),
+    ("Temperatura","C",0,-273,100,-10,"silly_value","silly_value"),
+    ("","C",0,-273,100,-10,"silly_value",""),
+    (None,"C",0,-273,None,False,"silly_value",None),
 ])
-def test_create_object_weatherFactors(name,unit,type,min_val,max_val,alert_min_val,alert_max_val):
+def test_create_object_weatherFactors(name,unit,type,min_val,max_val,alert_min_val,alert_max_val,color_scale):
     try:
-        T = WeatherFactors(name,unit,type,min_val,max_val,alert_min_val,alert_max_val)
+        T = WeatherFactors(name,unit,type,min_val,max_val,alert_min_val,alert_max_val,color_scale)
     except:
         pytest.fail("Unexpected weatherFactorsError...")
 
@@ -26,7 +26,7 @@ def test_create_object_weatherFactors(name,unit,type,min_val,max_val,alert_min_v
     (None,False),
 ])
 def test_factor_limits(temperature_limit,expected):
-	T = WeatherFactors("Temperatura","C","w",-273.15,1000,-10,30)
+	T = WeatherFactors("Temperatura","C","w",-273.15,1000,-10,30,"rgb")
 	assert T.check_limits(temperature_limit) == expected
 
 
@@ -42,7 +42,7 @@ def test_factor_limits(temperature_limit,expected):
     (None,False),
 ])
 def test_check_alerts(temperature_alert,expected):
-	T = WeatherFactors("Temperatura","C","w",-273,100,-10,30)
+	T = WeatherFactors("Temperatura","C","w",-273,100,-10,30,"rgb")
 	assert T.check_alerts(temperature_alert) == expected
 
 
@@ -55,7 +55,7 @@ def test_check_alerts(temperature_alert,expected):
     (-30,-30),
 ])
 def test__convert_to_float(float_value,expected):
-	T = WeatherFactors("Temperatura","C","w",-273,100,-10,30)
+	T = WeatherFactors("Temperatura","C","w",-273,100,-10,30,"rgb")
 	assert T._convert_to_float(float_value) == expected
 
 
