@@ -351,10 +351,10 @@ if( check_API_keys(verify_online=False)==0 ):
   sys.exit("Nie skonfigurowano żadnego systemu do pobierania danych o pogodzie.\n Program nie może działać.\n Wpisz xxx -help, aby dowiedzieć się, jak dokonać konfiguracji.")
 
 
-#for API in os.listdir("config/API/"):
-for API in APIS:
+for API in os.listdir("config/API/"):
+#for API in APIS:
   if API.endswith(".csv") and not API.startswith("."):
-    print(API)
+    #print(API)
     wa = WeatherApis()
     if wa.read_conf(API) == False:
       continue
@@ -458,7 +458,7 @@ f.write( CSV )
 f.close()
 
 debug=0
-if(debug>0)
+if debug>0:
     with open('data.json', 'w') as outfile:
         for WD in weatherDataset:
             json.dump(WD, outfile)
