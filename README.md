@@ -37,34 +37,15 @@ Prognozy i bieżące wyniki będą podawane w czasie UTC. Aby uzyskać je w <b><
     pip install openpyxl
 # Uruchomienie i sposób użycia:
     python weather2excel.py                 #wybór paramentrów przez interaktywne menu
-    python weather2excel.py --mode=current  --city="Gdynia" --lang=pl  #aktualna pogoda w Gdynia z opisem w języku polskim
+    python weather2excel.py --mode=current  --city="Sopot"             #aktualna pogoda w Gdynia z opisem w języku polskim
     python weather2excel.py --mode=forecast --city="Gdynia" --days=5   #prognoza pogody dla Gdyni na 5 dni
     python weather2excel.py --mode=current  --lon=19.23 --lat=54.23    #aktulna pogoda dla współrzędnych dł.geog. 19.23 i szer. geogr. 54.23 
     python weather2excel.py --mode=forecast --lon=19.23 --lat=54.23    #prognoza pogody dla współrzędnych dł.geog. 19.23 i szer. geogr. 54.23 
 
 # Wyniki
-Przykładowe pliki wynikowe zostaną umieszczone w folderze examples.
 
 <b>Jednostki fizyczne wielkości przedstawiono poniżej:</b> (aplikacja automatycznie konwertuje do podanych jednostek)\
-pressure [hPa] - weather\
-humidity [%] - weather\
-temperature [°C] - weather\
-apparent-temperature [°C] - weather\
-dew-point [°C] - weather\
-clouds [%] - weather\
-wind-speed [m/s] - weather\
-wind-direction [°] - weather\
-precip-intensity [mm/h] - weather\
-precip-accumulation [mm] - weather\
-visibility [km] - weather\
-uv [] - weather\
-so2 [ppm] - pollution\
-no2 [ppm] - pollution\
-co [ppm] - pollution\
-o3 [ppm] - pollution\
-pm25 [ppm] - pollution\
-pm10 [ppm] - pollution\
-pm1 [ppm] - pollution\
+<img src='logo/factors-units.png' width='639' height='732'>
 
 <b>Wyjaśnienie symboli pojawiających się w wynikach w plikach .csv lub .xls:</b>\
 <span> <b>*</b>&nbsp;  API nie oferuje danych</span>\
@@ -72,3 +53,6 @@ pm1 [ppm] - pollution\
 <span> <b>_</b>&nbsp; problem z konwersją danych</span>\
 <span> <b><</b>&nbsp;  wartość poniżej dopuszczalnego przedziału</span>\
 <span> <b>></b>&nbsp;  wartość powyżej dopuszczalnego przedziału</span>
+ 
+ # Przykład
+Przykładowe pliki wynikowe zostały umieszczone w folderze examples (.xlsx, .csv)
