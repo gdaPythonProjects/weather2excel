@@ -308,6 +308,29 @@ Co chcesz zrobić?
 if MODE == 'current':
     DAYS = 1
 
+elif MODE == 'forecast':
+
+    # zeruję wartość aby Użytkownik mógł sobie wybrać ilość dni
+    DAYS = 0
+
+    # dla poprawy czytelności
+    print('')
+
+    # czekaj na podanie wartości liczbowej w prawidłowym zakresie (od 1 do 5)
+    while DAYS < 1 or DAYS > 5:
+        try:
+            DAYS = int(input("Na ile dni do przodu chcesz uzyskać prognozę pogody? (Zakres od 1 do 5): "))
+
+        except ValueError:
+            print('Podana wartość nie jest liczbą dziesiętną! Spróbuj jeszcze raz.\n')
+
+        if DAYS < 1 or DAYS > 5:
+            print("Nieprawidłowa wartość! Spróbuj jeszcze raz.\n")
+
+else:
+    print('Coś poszło nie tak...\nZakończono działanie programu.')
+    exit()
+
 # region kontrolny wydruk zmiennych podanych przez użytkownika
 print("")
 print("Kontrolny wydruk zmiennych")
