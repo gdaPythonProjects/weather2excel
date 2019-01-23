@@ -311,7 +311,7 @@ Co chcesz zrobić?
 if MODE == 'current':
     DAYS = 1
 
-elif MODE == 'forecast':
+elif MODE == 'forecast' and is_start_with_parameters is False:
 
     # zeruję wartość aby Użytkownik mógł sobie wybrać ilość dni
     DAYS = 0
@@ -329,6 +329,9 @@ elif MODE == 'forecast':
 
         if DAYS < 1 or DAYS > 5:
             print("Nieprawidłowa wartość! Spróbuj jeszcze raz.\n")
+
+elif MODE == 'forecast' and is_start_with_parameters is True:
+    DAYS = 5
 
 else:
     print('Coś poszło nie tak...\nZakończono działanie programu.')
