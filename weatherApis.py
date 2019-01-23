@@ -1,23 +1,25 @@
 #!/usr/bin/python
+import os
 import re
 import csv
-import requests
-from jsonpath_ng import jsonpath#, parse
-from jsonpath_ng.ext import parse
-from factors import *
-import json # only for development
-from unit_converter.converter import convert, converts
 import time
+import json # only for development
 import datetime as dt
 import dateutil.parser
 from datetime import timedelta
+
+import requests
+from jsonpath_ng import jsonpath#, parse
+from jsonpath_ng.ext import parse
+from unit_converter.converter import convert, converts
+
+from factors import *
 
 API_PATH ="config/API/"
 API_KEY_PATH ="config/API_keys/"
 TIME_ZONES = {}
 
-# TODO for loop all  .csv files from /config// directory
-APIS = ["APIXU.csv", "OpenWeather.csv", "WAQI.csv", "Weatherbit.csv", "DarkSky.csv", "Climacell.csv","Airly.csv","Airvisual.csv"]
+#APIS = ["APIXU.csv", "OpenWeather.csv", "WAQI.csv", "Weatherbit.csv", "DarkSky.csv", "Climacell.csv","Airly.csv","Airvisual.csv"]
 #APIS = ["APIXU.csv"]
 
 #load units configuration
@@ -68,6 +70,16 @@ class WeatherApis:
     return True
 
 
+  def isForecastAvaliable(self,MODE):
+    if(MODE=="current"):
+      return True
+    else:  #MODE=="forecast"
+      if(self.config["url_forecast_lonlat_endpoint"]!=""):
+        return True
+      else:
+        return False
+
+
   def get_weather(self, *args):  # MODE-0, LANG-1, DAYS-2, SILENT-3,city-4     MODE-0, LANG-1, DAYS-2,SILENT-3,lat-4,lon-5
     if len(args) == 5:# building url with city
       self.url_search = self.config["url_"+args[0]+"_city_endpoint"].replace("{city}", args[4])
@@ -92,13 +104,13 @@ class WeatherApis:
       if self.config["method_"+args[0]] == "get":#print("GET REQUEST......")
         r = requests.get(self.url_search,headers=headers)
       else: #POST
-        data = self._replacer(self.config["post_data_"+args[0]], {"{lon}":args[4], "{lat}":args[5] })   #print("POST DATA: "+data)
+        data = self._replacer(self.config["post_data_"+args[0]], {"{lon}":args[5], "{lat}":args[4] })   #print("POST DATA: "+data)
         r = requests.post(self.url_search, headers=headers, data = data )
 
       self.JSON = r.json()#print(self.JSON)
 
       #only for development purposes
-      self._write_JSON_resp_to_file()
+      #self._write_JSON_resp_to_file()
 
       if r.status_code == 200:
         if self._check_result(silent=args[3]):
@@ -326,7 +338,8 @@ def check_API_keys(verify_online):
   n=0  #properly configured API
   avail = [] #array with configured API names
 
-  for API in APIS:
+  #for API in APIS:
+  for API in os.listdir("config/API/"):
     if API.endswith(".csv"):
       N=N+1
       wa = WeatherApis()

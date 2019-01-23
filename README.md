@@ -39,8 +39,8 @@ Prognozy i bieżące wyniki będą podawane w czasie UTC. Aby uzyskać je w <b><
     python weather2excel.py                 #wybór paramentrów przez interaktywne menu
     python weather2excel.py --mode=current  --city="Sopot"             #aktualna pogoda w Gdynia z opisem w języku polskim
     python weather2excel.py --mode=forecast --city="Gdynia" --days=5   #prognoza pogody dla Gdyni na 5 dni
-    python weather2excel.py --mode=current  --lon=19.23 --lat=54.23    #aktulna pogoda dla współrzędnych dł.geog. 19.23 i szer. geogr. 54.23 
-    python weather2excel.py --mode=forecast --lon=19.23 --lat=54.23    #prognoza pogody dla współrzędnych dł.geog. 19.23 i szer. geogr. 54.23 
+    python weather2excel.py --mode=current  --lat=54.23 --lon=19.23    #aktulna  pogoda dla współrzędnych szer. geogr. 54.23 północnej i dł.geog. 19.23 wschodniej
+    python weather2excel.py --mode=forecast --lat=36.18 --lon=-87.06   #prognoza pogody dla współrzędnych szer. geogr. 54.23 północnej i dł.geog. 87.06 zachodniej
 
 # Wyniki
 
@@ -51,8 +51,7 @@ Prognozy i bieżące wyniki będą podawane w czasie UTC. Aby uzyskać je w <b><
 <span> <b>*</b>&nbsp;  API nie oferuje danych</span>\
 <span> <b>#</b>&nbsp;  dane chwilowo niedostępne</span>\
 <span> <b>_</b>&nbsp; problem z konwersją danych</span>\
-<span> <b><</b>&nbsp;  wartość poniżej dopuszczalnego przedziału</span>\
-<span> <b>></b>&nbsp;  wartość powyżej dopuszczalnego przedziału</span>
- 
+<span> <b><</b>&nbsp;  wartość poniżej dopuszczalnego przedziału</span><br>
+<span> <b>></b>&nbsp;  wartość powyżej dopuszczalnego przedziału</span><br>
  # Przykład
 Przykładowe pliki wynikowe zostały umieszczone w folderze examples (.xlsx, .csv)

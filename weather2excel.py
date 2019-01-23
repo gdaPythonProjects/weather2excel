@@ -161,6 +161,7 @@ Co chcesz zrobić?
             # dodawaj kolejne wyrazy do zmiennej CITY (zmienna typu string)
             CITY = CITY + word_of_city_name + " " 
 
+        #print("CITY="+CITY)
         # oczyszczanie zmiennej z białych znaków na początku i na końcu
         CITY = CITY.strip()
 
@@ -349,13 +350,11 @@ print("")
 if( check_API_keys(verify_online=False)==0 ):
   sys.exit("Nie skonfigurowano żadnego systemu do pobierania danych o pogodzie.\n Program nie może działać.\n Wpisz xxx -help, aby dowiedzieć się, jak dokonać konfiguracji.")
 
-
-for API in os.listdir("config/API/"):
 #for API in APIS:
-  if API.endswith(".csv") and not API.startswith("."):
-    #print(API)
+for API in os.listdir("config/API/"):
+  if API.endswith(".csv") and not API.startswith("."):     #print(API)
     wa = WeatherApis()
-    if wa.read_conf(API) == False:
+    if wa.read_conf(API) == False or wa.isForecastAvaliable(MODE)==False:
       continue
     if wa.get_weather(MODE, LANG, DAYS, SILENT, LAT, LON):
       weatherDataset.append( wa.parse_result(MODE, DAYS) )
@@ -413,15 +412,17 @@ for day in range(0,DAYS):
     rowNum = rowNum + 2
     colNum = 1
     ws.cell(row=rowNum, column=colNum, value="MEAN ± SD:").fill = PatternFill(fgColor="FFFFFF", fill_type = 'solid')
+    ws.cell(row=rowNum, column=colNum+1, value=CITY).fill = PatternFill(fgColor="FFFF00", fill_type = 'solid')
     colNum = 2
     for factor in factors:
         if(MODE=="forecast" and len(factorsDict[factor].type)==2 ) or (MODE=="current" and len(factorsDict[factor].type)==1):
             if len(STAT[factor])>0:
                 value = round(statistics.mean(STAT[factor]),1)
                 stdev = round(statistics.pstdev(STAT[factor]),1)
+                VAL_ST = str(value) +"±"+ str(stdev)
                 color = factorsDict[factor].convert_to_rgb(value)
                 fill = PatternFill("solid", fgColor=color)
-                ws.cell(row=rowNum, column=colNum, value=value).fill = PatternFill(fgColor=color, fill_type = 'solid')
+                ws.cell(row=rowNum, column=colNum, value=VAL_ST).fill = PatternFill(fgColor=color, fill_type = 'solid')
                 CSV=CSV+"\""+str(value)+"±"+str(stdev)+"\","
             else:
                 CSV=CSV+"\"\","
@@ -446,7 +447,7 @@ for col in ws.columns:
                  max_length = len(cell.value)
          except:
              pass
-     adjusted_width = (max_length + 1) * 1.05
+     adjusted_width = (max_length + 1) * 1.01
      ws.column_dimensions[column].width = adjusted_width   
 
 wb.save(filename = dest_filename)

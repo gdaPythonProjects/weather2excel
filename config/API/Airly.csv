@@ -8,7 +8,7 @@ url_forecast_city_endpoint,,
 url_forecast_lonlat_endpoint,https://airapi.airly.eu/v2/measurements/point?lat={lat}&lng={lon},
 header_request_current,apikey:{token};accept:application/json,
 header_request_forecast,apikey:{token};accept:application/json,
-forecast_root,,
+forecast_root,$.forecast,
 method_current,get,
 method_forecast,get,
 post_data_current,,
@@ -49,9 +49,9 @@ o3,,
 pm25,$.current.values[?(@.name=='PM25')].value,ppm
 pm10,$.current.values[?(@.name=='PM10')].value,ppm
 pm1,$.current.values[?(@.name=='PM1')].value,ppm
-pm25-forecast,$.forecast[nnn].values[?(@.name=='PM25')].value,ppm
-pm10-forecast,$.forecast[nnn].values[?(@.name=='PM10')].value,ppm
-pm1-forecast,$.forecast[nnn].values[?(@.name=='PM1')].value,ppm
+pm25-forecast,values[?(@.name=='PM25')].value,ppm
+pm10-forecast,values[?(@.name=='PM10')].value,ppm
+pm1-forecast,values[?(@.name=='PM1')].value,ppm
 weather-text,,
 weather-alert,,
 weather-icon,,
@@ -61,7 +61,7 @@ weather-icon-forecast,,
 lon,,
 lat,,
 timestamp,$.current.fromDateTime,
-timestamp-forecast,,
+timestamp-forecast,fromDateTime,
 timezone,,
 ok_key,current,
 ok_value,<exist>,
