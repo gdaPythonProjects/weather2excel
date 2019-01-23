@@ -188,7 +188,7 @@ def welcome_message():
     print("""
 Weather to Excel
 Tutaj możesz sprawdzić aktualną pogodę dla danego miejsca oraz aktualne zanieczysczenie powietrza, albo sprawdzić
-prognozę pogody.""")
+prognozę pogody. Wyniki zostaną zapisane do plików results.xlsx oraz results.csv.""")
 
 # koniec funkcji welcome_message()
 
