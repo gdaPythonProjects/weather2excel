@@ -218,7 +218,7 @@ Co chcesz zrobić?
     #  podał jakikolwiek argument
     if error_in_start_parameters == 1 and number_of_arguments > 1:
         print("""
-BŁĄD! Podana tylko jedna współrzędna GPS lub współrzędne podane niepoprawnie (wartość nieliczbowa bądź poza zakresem).
+BŁĄD! Nie podano poprawnie miasta lub współrzędnych GPS.
 
 Co chcesz zrobić?
     1. Przejść do menu startowego.
