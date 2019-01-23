@@ -336,12 +336,15 @@ else:
 
 # region kontrolny wydruk zmiennych podanych przez użytkownika
 print("")
-print("Kontrolny wydruk zmiennych")
-print("CITY: ", CITY)
-print("LON: ", LON)
-print("LAT: ", LAT)
-print("MODE: ", MODE)
-print("DAYS: ", DAYS)
+print("Pobieram dane dla następujących parametrów: ")
+print("Miasto: ", CITY)
+print("Długość geograficzna: ", LON)
+print("Szerokość geograficzna: ", LAT)
+print("Tryb pobierania danych: ", MODE)
+if MODE == 'forecast':
+    print("Z ilu następnych dni zostanie pobrana prognoza: ", DAYS)
+print("")
+
 # endregion
 
 # region pobieranie danych z API
