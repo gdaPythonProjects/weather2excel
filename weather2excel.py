@@ -177,8 +177,8 @@ Co chcesz zrobić?
     elif (args.city is None) and (args.longitude is not None) and (args.latitude is not None):
 
         # sprawdzam, czy wartości podane przez użytkownika z pomocą parametrów są prawidłowe
-        is_correct_value_LON, is_correct_range_LON, LON = check_GPS_value_from_user(args.longitude[0], 0, 180)
-        is_correct_value_LAT, is_correct_range_LAT, LAT = check_GPS_value_from_user(args.latitude[0], 0, 90)
+        is_correct_value_LON, is_correct_range_LON, LON = check_GPS_value_from_user(args.longitude[0], -180, 180)
+        is_correct_value_LAT, is_correct_range_LAT, LAT = check_GPS_value_from_user(args.latitude[0], -90, 90)
 
         # jeżeli wszystko jest ok to ustawiam flagę error_in_start_parameters na 0
         if (is_correct_value_LON == 1 and
