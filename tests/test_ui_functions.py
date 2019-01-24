@@ -8,7 +8,7 @@ import pytest
                              ('55,7', -90, 90, (1, 1, 55.7)),  # przecinek zamiast kropki - OK
                              ('-45', -90, 90, (1, 1, -45)),  # ujemne wartości - OK
                              ('134', -90, 90, (1, 0, None)),  # wartość poza zakresem - BŁĄD
-                             ('-1', -90, 90, (1, 0, None)),  # wartość poza zakresem - BŁĄD
+                             ('-100', -90, 90, (1, 0, None)),  # wartość poza zakresem - BŁĄD
                              ('deed', -90, 90, (0, 0, None))  # słowo - BŁĄÐ
                          ]
                          )
